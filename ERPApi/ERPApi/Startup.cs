@@ -1,4 +1,5 @@
 ﻿using ERPApi.Extensions;
+using ERPApi.Helpers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -33,6 +34,8 @@ namespace ERPApi
             services.ConfigureDBContext(Configuration);
 
             services.ConfigureRepositoryWrapper();
+
+            services.AddScoped<ModelValidationAttribute>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
