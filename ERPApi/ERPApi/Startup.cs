@@ -52,6 +52,8 @@ namespace ERPApi
                 app.UseHsts();
             }
 
+            app.ConfigureCustomExceptionMiddleware();
+
             app.UseHttpsRedirection();
 
             app.UseMvc();
