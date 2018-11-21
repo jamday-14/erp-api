@@ -30,6 +30,10 @@ namespace ERPApi
 
             services.ConfigureLoggerService();
 
+            services.ConfigureDBContext(Configuration);
+
+            services.ConfigureRepositoryWrapper();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 

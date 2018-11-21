@@ -1,7 +1,11 @@
 ﻿using Contracts;
+using Entities.Models;
 using LoggerService;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Repository;
 
 namespace ERPApi.Extensions
 {
@@ -30,6 +34,17 @@ namespace ERPApi.Extensions
         public static void ConfigureLoggerService(this IServiceCollection services)
         {
             services.AddSingleton<ILoggerManager, LoggerManager>();
+        }
+
+        public static void ConfigureDBContext(this IServiceCollection services, IConfiguration config)
+        {
+            var connectionString = config["sqlserverconnection:connectionString"];
+            services.AddDbContext<ERPContext>(o=> o.UseSqlServer(connectionString));
+        }
+
+        public static void ConfigureRepositoryWrapper(this IServiceCollection services)
+        {
+            services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
         }
     }
 }
