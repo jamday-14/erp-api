@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text;
 using Entities.ExtendedModels;
 using Microsoft.AspNetCore.Authorization;
@@ -46,7 +48,7 @@ namespace ERPApi.Controllers
             var token = new JwtSecurityToken(
                 _config["Jwt:Issuer"],
                 _config["Jwt:Audience"],
-                null,
+                new List<Claim> { new Claim("username", userInfo.UserName) },
                 expires: DateTime.Now.AddMinutes(15),
                 signingCredentials: credentials);
 
