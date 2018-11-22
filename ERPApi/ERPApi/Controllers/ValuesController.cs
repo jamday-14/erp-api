@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ERPApi.Controllers
@@ -22,6 +23,7 @@ namespace ERPApi.Controllers
 
         // GET api/values
         [HttpGet]
+        [Authorize]
         public ActionResult<IEnumerable<string>> Get()
         {
             _logger.LogInfo("Here is info message from our values controller.");

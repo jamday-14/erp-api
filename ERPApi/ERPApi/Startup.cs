@@ -35,7 +35,9 @@ namespace ERPApi
 
             services.ConfigureRepositoryWrapper();
 
-            services.AddScoped<ModelValidationAttribute>();
+            services.ConfigureModelValidation();
+
+            services.ConfigureAuthentication(Configuration);
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
@@ -53,6 +55,8 @@ namespace ERPApi
             }
 
             app.ConfigureCustomExceptionMiddleware();
+
+            app.UseAuthentication();
 
             app.UseHttpsRedirection();
 
