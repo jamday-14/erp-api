@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Services;
+using Swashbuckle.AspNetCore.Swagger;
 using System.Text;
 
 namespace ERPApi.Extensions
@@ -67,6 +68,15 @@ namespace ERPApi.Extensions
             app.UseMiddleware<ExceptionMiddleware>();
         }
 
+        public static void ConfigureSwaggerUI(this IApplicationBuilder app)
+        {
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "ERP API V1");
+                c.RoutePrefix = string.Empty;
+            });
+        }
+
         public static void ConfigureAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -82,6 +92,26 @@ namespace ERPApi.Extensions
                     ValidAudience = configuration["Jwt:Audience"],
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]))
                 };
+            });
+        }
+
+        public static void ConfigureSwagger(this IServiceCollection services)
+        {
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info
+                {
+                    Title = "ERP API",
+                    Version = "v1",
+                    Description = "ERP API Documentation",
+                    Contact = new Contact
+                    {
+                        Name = "Jamal Dayanghirang",
+                        Email = "jamday14@hotmail.com",
+                        Url = "https://www.facebook.com/jamal.dayanghirang"
+                    },
+                    License = new License { Name = "Altron Software Solutions Inc." }
+                });
             });
         }
     }

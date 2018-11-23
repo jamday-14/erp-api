@@ -1,6 +1,8 @@
 ﻿using Contracts;
+using Entities.ExtendedModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace ERPApi.Controllers
 {
@@ -20,6 +22,9 @@ namespace ERPApi.Controllers
         [HttpGet, Route("customer")]
         [ActionName("Maintenance.Customer")]
         [Authorize]
+        [Produces(typeof(IList<Customer>))]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         public ActionResult GetCustomers()
         {
             var customers = _service.GetCustomers();

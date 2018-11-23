@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Text;
 using Contracts;
 using Entities.ExtendedModels;
+using Entities.Response;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -25,8 +26,10 @@ namespace ERPApi.Controllers
             _userService = userService;
         }
 
-        [AllowAnonymous]
         [HttpPost, Route("login")]
+        [AllowAnonymous]
+        [Produces(typeof(LoginResponse))]
+        [ProducesResponseType(401)]
         public IActionResult Login([FromBody] Entities.Request.LoginRequest login)
         {
             IActionResult response = Unauthorized();

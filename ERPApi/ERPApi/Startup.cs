@@ -42,6 +42,8 @@ namespace ERPApi
 
             services.AddAutoMapper(cfg => new MapperConfiguration(mc => { mc.AddProfile(new MapperProfile()); }));
 
+            services.ConfigureSwagger();
+
             services.AddMvc(options => options.Filters.Add(typeof(AuthorizationAttribute)))
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
@@ -63,6 +65,10 @@ namespace ERPApi
             app.UseAuthentication();
 
             app.UseHttpsRedirection();
+
+            app.UseSwagger();
+
+            app.ConfigureSwaggerUI();
 
             app.UseMvc();
         }
