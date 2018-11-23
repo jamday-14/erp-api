@@ -13,9 +13,9 @@ namespace ERPApi.Controllers
     public class ValuesController : ControllerBase
     {
         private ILoggerManager _logger;
-        private IRepositoryWrapper _repo;
+        private IUserService _repo;
 
-        public ValuesController(ILoggerManager logger, IRepositoryWrapper repo)
+        public ValuesController(ILoggerManager logger, IUserService repo)
         {
             _logger = logger;
             _repo = repo;

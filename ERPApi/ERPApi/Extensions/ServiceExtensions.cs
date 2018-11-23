@@ -48,7 +48,7 @@ namespace ERPApi.Extensions
 
         public static void ConfigureRepositoryWrapper(this IServiceCollection services)
         {
-            services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
+            services.AddScoped<IUserService, UserService>();
         }
 
         public static void ConfigureModelValidation(this IServiceCollection services)

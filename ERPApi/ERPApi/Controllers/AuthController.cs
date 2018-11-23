@@ -18,12 +18,12 @@ namespace ERPApi.Controllers
     public class AuthController : ControllerBase
     {
         private IConfiguration _config;
-        IRepositoryWrapper _repo;
+        IUserService _userService;
 
-        public AuthController(IConfiguration config, IRepositoryWrapper repo)
+        public AuthController(IConfiguration config, IUserService userService)
         {
             _config = config;
-            _repo = repo;
+            _userService = userService;
         }
 
         [AllowAnonymous]
@@ -32,7 +32,7 @@ namespace ERPApi.Controllers
         {
             IActionResult response = Unauthorized();
 
-            var loginResponse = AuthenticateUser(login);
+            var loginResponse = _userService.Login(login.UserName, login.Password);
 
             if (loginResponse.User.Id > 0)
             {
@@ -59,10 +59,5 @@ namespace ERPApi.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        private LoginResponse AuthenticateUser(Entities.Request.LoginRequest login)
-        {
-            var response = _repo.User.Login(login.UserName, login.Password);
-            return response;
-        }
     }
 }

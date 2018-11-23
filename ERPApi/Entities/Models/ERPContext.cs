@@ -17,6 +17,12 @@ namespace Entities.Models
 
         public virtual DbSet<TblAccounts> TblAccounts { get; set; }
         public virtual DbSet<TblAccountTypes> TblAccountTypes { get; set; }
+
+        public object Where(Func<object, object> p)
+        {
+            throw new NotImplementedException();
+        }
+
         public virtual DbSet<TblAreas> TblAreas { get; set; }
         public virtual DbSet<TblAuditTrailUserLogs> TblAuditTrailUserLogs { get; set; }
         public virtual DbSet<TblBanks> TblBanks { get; set; }

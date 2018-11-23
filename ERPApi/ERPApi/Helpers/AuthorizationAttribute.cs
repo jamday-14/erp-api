@@ -9,9 +9,9 @@ namespace ERPApi.Helpers
 {
     public class AuthorizationAttribute : IAuthorizationFilter
     {
-        private IRepositoryWrapper _repo;
+        private IUserService _repo;
 
-        public AuthorizationAttribute(IRepositoryWrapper repo)
+        public AuthorizationAttribute(IUserService repo)
         {
             _repo = repo;
         }
