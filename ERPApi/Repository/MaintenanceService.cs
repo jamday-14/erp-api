@@ -38,5 +38,10 @@ namespace Services
 
             return _mapper.Map<List<Customer>>(customers);
         }
+
+        public void Save()
+        {
+            _repoContext.SaveChanges();
+        }
     }
 }

@@ -8,5 +8,7 @@ namespace Contracts
         ICustomerRepository Customer { get; }
 
         IList<Customer> GetCustomers();
+
+        void Save();
     }
 }

@@ -28,7 +28,7 @@ namespace Services
 
         public void Create(T entity)
         {
-            this.RepositoryContext.Set<T>().Add(entity);
+           this.RepositoryContext.Set<T>().Add(entity);
         }
 
         public void Update(T entity)
@@ -39,11 +39,6 @@ namespace Services
         public void Delete(T entity)
         {
             this.RepositoryContext.Set<T>().Remove(entity);
-        }
-
-        public void Save()
-        {
-            this.RepositoryContext.SaveChanges();
         }
     }
 }

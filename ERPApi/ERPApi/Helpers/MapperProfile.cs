@@ -11,6 +11,8 @@ namespace ERPApi.Helpers
             AllowNullCollections = true;
             CreateMap<User, TblSecurityUsers>();
             CreateMap<UserGroup, TblSecurityGroups>();
+            CreateMap<Customer, TblCustomers>();
+            CreateMap<CustomerDetail, TblCustomers>();
         }
     }
 }

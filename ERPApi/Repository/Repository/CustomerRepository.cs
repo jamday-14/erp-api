@@ -10,6 +10,11 @@ namespace Services
         {
         }
 
+        public TblCustomers FindById(int id)
+        {
+            return RepositoryContext.TblCustomers.Find(id);
+        }
+
         public IQueryable<TblCustomers> GetAllCustomers()
         {
             return RepositoryContext.TblCustomers.Where(x => x.Active);
