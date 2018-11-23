@@ -13,5 +13,7 @@ namespace Entities.Models
         public DateTime? CreationDate { get; set; }
         public int? ModifiedById { get; set; }
         public DateTime? ModificationDate { get; set; }
+
+        public TblSecurityUserSecurityGroups TblSecurityUserSecurityGroups { get; set; }
     }
 }

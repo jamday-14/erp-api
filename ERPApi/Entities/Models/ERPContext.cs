@@ -2424,6 +2424,10 @@ namespace Entities.Models
 
                 entity.Property(e => e.PasswordDate).HasColumnType("datetime");
 
+                entity.Property(e => e.PasswordHash)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.PasswordNeverExpires)
                     .IsRequired()
                     .HasDefaultValueSql("((1))");
@@ -2437,9 +2441,23 @@ namespace Entities.Models
 
             modelBuilder.Entity<TblSecurityUserSecurityGroups>(entity =>
             {
+                entity.HasKey(e => e.SecurityGroupId);
+
                 entity.ToTable("tblSecurityUserSecurityGroups");
 
-                entity.Property(e => e.Id).HasColumnName("ID");
+                entity.Property(e => e.SecurityGroupId).ValueGeneratedNever();
+
+                entity.HasOne(d => d.SecurityGroup)
+                    .WithOne(p => p.TblSecurityUserSecurityGroups)
+                    .HasForeignKey<TblSecurityUserSecurityGroups>(d => d.SecurityGroupId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_tblSecurityUserSecurityGroups_tblSecurityGroups");
+
+                entity.HasOne(d => d.SecurityUser)
+                    .WithMany(p => p.TblSecurityUserSecurityGroups)
+                    .HasForeignKey(d => d.SecurityUserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_tblSecurityUserSecurityGroups_tblSecurityUsers");
             });
 
             modelBuilder.Entity<TblSecurityUserSecurityKeys>(entity =>

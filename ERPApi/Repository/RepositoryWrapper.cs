@@ -1,4 +1,5 @@
-﻿using Contracts;
+﻿using AutoMapper;
+using Contracts;
 using Entities.Models;
 
 namespace Repository
@@ -6,11 +7,15 @@ namespace Repository
     public class RepositoryWrapper : IRepositoryWrapper
     {
         private ERPContext _repoContext;
-        private ICompanyRepository _company;
+        private readonly IMapper _mapper;
 
-        public RepositoryWrapper(ERPContext repositoryContext)
+        private ICompanyRepository _company;
+        private IUserRepository _user;
+
+        public RepositoryWrapper(ERPContext repositoryContext, IMapper mapper)
         {
             _repoContext = repositoryContext;
+            _mapper = mapper;
         }
 
         public ICompanyRepository Company
@@ -22,6 +27,18 @@ namespace Repository
                     _company = new CompanyRepository(_repoContext);
                 }
                 return _company;
+            }
+        }
+
+        public IUserRepository User
+        {
+            get
+            {
+                if (_user == null)
+                {
+                    _user = new UserRepository(_repoContext, _mapper);
+                }
+                return _user;
             }
         }
     }

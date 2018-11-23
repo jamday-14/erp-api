@@ -5,9 +5,14 @@ namespace Entities.Models
 {
     public partial class TblSecurityUsers
     {
+        public TblSecurityUsers()
+        {
+            TblSecurityUserSecurityGroups = new HashSet<TblSecurityUserSecurityGroups>();
+        }
+
         public int Id { get; set; }
         public string LoginName { get; set; }
-        public int? PasswordHash { get; set; }
+        public string PasswordHash { get; set; }
         public bool? Active { get; set; }
         public bool UserCantChangePassword { get; set; }
         public bool? PasswordNeverExpires { get; set; }
@@ -24,5 +29,7 @@ namespace Entities.Models
         public int? SecurityUserGroupId { get; set; }
         public DateTime? PasswordDate { get; set; }
         public int? BranchId { get; set; }
+
+        public ICollection<TblSecurityUserSecurityGroups> TblSecurityUserSecurityGroups { get; set; }
     }
 }

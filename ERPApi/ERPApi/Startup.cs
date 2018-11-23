@@ -1,4 +1,5 @@
-﻿using ERPApi.Extensions;
+﻿using AutoMapper;
+using ERPApi.Extensions;
 using ERPApi.Helpers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -38,6 +39,8 @@ namespace ERPApi
             services.ConfigureModelValidation();
 
             services.ConfigureAuthentication(Configuration);
+
+            services.AddAutoMapper(cfg => new MapperConfiguration(mc => { mc.AddProfile(new MapperProfile()); }));
 
             services.AddMvc(options => options.Filters.Add(typeof(AuthorizationAttribute)))
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);

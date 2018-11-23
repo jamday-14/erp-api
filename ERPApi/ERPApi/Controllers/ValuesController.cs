@@ -22,14 +22,15 @@ namespace ERPApi.Controllers
         }
 
         // GET api/values
-        [HttpGet]
+        [HttpGet, ActionName("GetValues")]
         [Authorize]
         public ActionResult<IEnumerable<string>> Get()
         {
-            _logger.LogInfo("Here is info message from our values controller.");
-            _logger.LogDebug("Here is debug message from our values controller.");
-            _logger.LogWarn("Here is warn message from our values controller.");
-            _logger.LogError("Here is error message from our values controller.");
+            var password = CryptoHelper.Crypto.HashPassword("adminPassword1");
+            //_logger.LogInfo("Here is info message from our values controller.");
+            //_logger.LogDebug("Here is debug message from our values controller.");
+            //_logger.LogWarn("Here is warn message from our values controller.");
+            //_logger.LogError("Here is error message from our values controller.");
 
             var companies = _repo.Company.FindAll();
 

@@ -7,5 +7,6 @@ namespace Contracts
     public interface IRepositoryWrapper
     {
         ICompanyRepository Company { get; }
+        IUserRepository User { get; }
     }
 }
