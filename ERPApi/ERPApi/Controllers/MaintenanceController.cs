@@ -10,6 +10,8 @@ namespace ERPApi.Controllers
 {
     [Route("api/maintenance")]
     [ApiController]
+    [ProducesResponseType(401)]
+    [ProducesResponseType(403)]
     public class MaintenanceController : ControllerBase
     {
         private ILoggerManager _logger;
@@ -26,8 +28,6 @@ namespace ERPApi.Controllers
         [ActionName("Maintenance.Customer")]
         [Authorize]
         [Produces(typeof(IList<Customer>))]
-        [ProducesResponseType(401)]
-        [ProducesResponseType(403)]
         public ActionResult GetCustomers()
         {
             var customers = _service.GetCustomers();
@@ -39,8 +39,6 @@ namespace ERPApi.Controllers
         [ActionName("Customer.Open")]
         [Authorize]
         [Produces(typeof(Customer))]
-        [ProducesResponseType(401)]
-        [ProducesResponseType(403)]
         public ActionResult GetCustomer(int id)
         {
             CustomerDetail customer = _mapper.Map<CustomerDetail>(_service.Customer.FindById(id));
@@ -51,8 +49,6 @@ namespace ERPApi.Controllers
         [ActionName("Customer.New")]
         [Authorize]
         [ProducesResponseType(201)]
-        [ProducesResponseType(401)]
-        [ProducesResponseType(403)]
         public ActionResult PostCustomer(CustomerDetail request)
         {
             var customer = _mapper.Map<TblCustomers>(request);
@@ -67,8 +63,6 @@ namespace ERPApi.Controllers
         [ActionName("Customer.Edit")]
         [Authorize]
         [ProducesResponseType(204)]
-        [ProducesResponseType(401)]
-        [ProducesResponseType(403)]
         public ActionResult PatchCustomer(int id, Customer request)
         {
             return NoContent();
