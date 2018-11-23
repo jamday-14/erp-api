@@ -50,6 +50,11 @@ namespace ERPApi.Extensions
         {
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IMaintenanceService, MaintenanceService>();
+            services.AddScoped<ISalesService, SalesService>();
+            services.AddScoped<IPurchasingService, PurchasingService>();
+            services.AddScoped<IInventoryService, InventoryService>();
+            services.AddScoped<IAccountingService, AccountingService>();
+            services.AddScoped<IReportService, ReportService>();
         }
 
         public static void ConfigureModelValidation(this IServiceCollection services)
