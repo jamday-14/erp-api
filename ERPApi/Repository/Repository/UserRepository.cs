@@ -2,7 +2,7 @@
 using Entities.Models;
 using System.Linq;
 
-namespace Repository
+namespace Services
 {
     public class UserRepository : RepositoryBase<TblSecurityUsers>, IUserRepository
     {

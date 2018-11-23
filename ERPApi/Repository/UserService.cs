@@ -6,7 +6,7 @@ using Entities.Response;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Repository
+namespace Services
 {
     public class UserService : IUserService
     {

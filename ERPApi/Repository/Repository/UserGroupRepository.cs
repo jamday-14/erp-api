@@ -2,7 +2,7 @@
 using Contracts;
 using Entities.Models;
 
-namespace Repository
+namespace Services
 {
     public class UserGroupRepository : RepositoryBase<TblSecurityGroups>, IUserGroupRepository
     {

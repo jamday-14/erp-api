@@ -34,7 +34,7 @@ namespace ERPApi
 
             services.ConfigureDBContext(Configuration);
 
-            services.ConfigureRepositoryWrapper();
+            services.ConfigureBusinessService();
 
             services.ConfigureModelValidation();
 

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using Repository;
+using Services;
 using System.Text;
 
 namespace ERPApi.Extensions
@@ -46,9 +46,10 @@ namespace ERPApi.Extensions
             services.AddDbContext<ERPContext>(o => o.UseSqlServer(connectionString));
         }
 
-        public static void ConfigureRepositoryWrapper(this IServiceCollection services)
+        public static void ConfigureBusinessService(this IServiceCollection services)
         {
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IMaintenanceService, MaintenanceService>();
         }
 
         public static void ConfigureModelValidation(this IServiceCollection services)

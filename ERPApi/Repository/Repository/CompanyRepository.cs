@@ -1,7 +1,7 @@
 ﻿using Contracts;
 using Entities.Models;
 
-namespace Repository
+namespace Services
 {
     public class CompanyRepository : RepositoryBase<TblCompanies>, ICompanyRepository
     {
