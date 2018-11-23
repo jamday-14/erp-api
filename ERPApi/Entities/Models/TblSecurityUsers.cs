@@ -8,6 +8,7 @@ namespace Entities.Models
         public TblSecurityUsers()
         {
             TblSecurityUserSecurityGroups = new HashSet<TblSecurityUserSecurityGroups>();
+            TblSecurityUserSecurityKeys = new HashSet<TblSecurityUserSecurityKeys>();
         }
 
         public int Id { get; set; }
@@ -31,5 +32,6 @@ namespace Entities.Models
         public int? BranchId { get; set; }
 
         public ICollection<TblSecurityUserSecurityGroups> TblSecurityUserSecurityGroups { get; set; }
+        public ICollection<TblSecurityUserSecurityKeys> TblSecurityUserSecurityKeys { get; set; }
     }
 }

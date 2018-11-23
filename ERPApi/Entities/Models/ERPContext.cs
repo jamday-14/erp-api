@@ -17,12 +17,6 @@ namespace Entities.Models
 
         public virtual DbSet<TblAccounts> TblAccounts { get; set; }
         public virtual DbSet<TblAccountTypes> TblAccountTypes { get; set; }
-
-        public object Where(Func<object, object> p)
-        {
-            throw new NotImplementedException();
-        }
-
         public virtual DbSet<TblAreas> TblAreas { get; set; }
         public virtual DbSet<TblAuditTrailUserLogs> TblAuditTrailUserLogs { get; set; }
         public virtual DbSet<TblBanks> TblBanks { get; set; }
@@ -2348,6 +2342,18 @@ namespace Entities.Models
                 entity.ToTable("tblSecurityGroupSecurityKeys");
 
                 entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.HasOne(d => d.SecurityGroup)
+                    .WithMany(p => p.TblSecurityGroupSecurityKeys)
+                    .HasForeignKey(d => d.SecurityGroupId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_tblSecurityGroupSecurityKeys_tblSecurityGroups");
+
+                entity.HasOne(d => d.SecurityKey)
+                    .WithMany(p => p.TblSecurityGroupSecurityKeys)
+                    .HasForeignKey(d => d.SecurityKeyId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_tblSecurityGroupSecurityKeys_tblSecurityKeys");
             });
 
             modelBuilder.Entity<TblSecurityKeys>(entity =>
@@ -2447,15 +2453,13 @@ namespace Entities.Models
 
             modelBuilder.Entity<TblSecurityUserSecurityGroups>(entity =>
             {
-                entity.HasKey(e => e.SecurityGroupId);
-
                 entity.ToTable("tblSecurityUserSecurityGroups");
 
-                entity.Property(e => e.SecurityGroupId).ValueGeneratedNever();
+                entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.HasOne(d => d.SecurityGroup)
-                    .WithOne(p => p.TblSecurityUserSecurityGroups)
-                    .HasForeignKey<TblSecurityUserSecurityGroups>(d => d.SecurityGroupId)
+                    .WithMany(p => p.TblSecurityUserSecurityGroups)
+                    .HasForeignKey(d => d.SecurityGroupId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_tblSecurityUserSecurityGroups_tblSecurityGroups");
 
@@ -2471,6 +2475,18 @@ namespace Entities.Models
                 entity.ToTable("tblSecurityUserSecurityKeys");
 
                 entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.HasOne(d => d.SecurityKey)
+                    .WithMany(p => p.TblSecurityUserSecurityKeys)
+                    .HasForeignKey(d => d.SecurityKeyId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_tblSecurityUserSecurityKeys_tblSecurityKeys");
+
+                entity.HasOne(d => d.SecurityUser)
+                    .WithMany(p => p.TblSecurityUserSecurityKeys)
+                    .HasForeignKey(d => d.SecurityUserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_tblSecurityUserSecurityKeys_tblSecurityUsers");
             });
 
             modelBuilder.Entity<TblSeries>(entity =>

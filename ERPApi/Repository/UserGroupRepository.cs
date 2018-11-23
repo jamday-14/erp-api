@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Contracts;
 using Entities.Models;
 
@@ -12,12 +11,17 @@ namespace Repository
 
         }
 
-        public IEnumerable<TblSecurityGroups> GetByUserId(int userId)
+        public IQueryable<TblSecurityGroups> GetByUserId(int userId)
         {
             return RepositoryContext.TblSecurityUserSecurityGroups
                 .Where(x => x.SecurityUserId == userId)
-                .Select(x => x.SecurityGroup).AsEnumerable();
+                .Select(x => x.SecurityGroup);
 
+        }
+
+        public IQueryable<TblSecurityKeys> GetKeys(IQueryable<TblSecurityGroups> queryable)
+        {
+            return queryable.SelectMany(x => x.TblSecurityGroupSecurityKeys.Select(y => y.SecurityKey));
         }
     }
 }

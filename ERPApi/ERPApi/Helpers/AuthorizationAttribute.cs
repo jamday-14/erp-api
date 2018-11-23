@@ -2,18 +2,17 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Filters;
-using System;
 using System.Linq;
 
 namespace ERPApi.Helpers
 {
     public class AuthorizationAttribute : IAuthorizationFilter
     {
-        private IUserService _repo;
+        private IUserService _userService;
 
-        public AuthorizationAttribute(IUserService repo)
+        public AuthorizationAttribute(IUserService userService)
         {
-            _repo = repo;
+            _userService = userService;
         }
 
         public void OnAuthorization(AuthorizationFilterContext context)
@@ -28,7 +27,17 @@ namespace ERPApi.Helpers
             }
 
             var claims = context.HttpContext.User.Claims;
-            var userName = claims.FirstOrDefault(c => c.Type.ToLower() == "username").Value;
+
+            var username = claims.FirstOrDefault(c => c.Type.ToLower() == "username").Value;
+
+            var systemKeys = _userService.GetSystemKeys(username);
+
+            if (!systemKeys.Contains(((Microsoft.AspNetCore.Mvc.Controllers.ControllerActionDescriptor)context.ActionDescriptor).ActionName))
+            {
+                context.Result = new ForbidResult();
+                return;
+            }
+
         }
 
         private bool IsAnonymousFilter(AuthorizationFilterContext context)

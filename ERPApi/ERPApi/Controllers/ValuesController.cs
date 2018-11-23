@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +19,8 @@ namespace ERPApi.Controllers
         }
 
         // GET api/values
-        [HttpGet, ActionName("GetValues")]
+        //Sample Action Name configured in the database
+        [HttpGet, ActionName("Maintenance.Customer")]
         [Authorize]
         public ActionResult<IEnumerable<string>> Get()
         {
