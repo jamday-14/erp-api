@@ -1,15 +1,16 @@
 ﻿using AutoMapper;
 using Contracts;
-using Entities.ExtendedModels;
 using Entities.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ERPApi.Controllers
 {
     [Route("api/maintenance")]
     [ApiController]
+    [Authorize]
     [ProducesResponseType(401)]
     [ProducesResponseType(403)]
     public class MaintenanceController : ControllerBase
@@ -24,47 +25,388 @@ namespace ERPApi.Controllers
             _mapper = mapper;
         }
 
+        #region Customer
         [HttpGet, Route("customers")]
         [ActionName("Maintenance.Customer")]
-        [Authorize]
-        [Produces(typeof(IList<Customer>))]
+        [Produces(typeof(IList<TblCustomers>))]
         public ActionResult GetCustomers()
         {
-            var customers = _service.GetCustomers();
+            var records = _service.CustomerRepo.FindAll();
 
-            return Ok(customers);
+            return Ok(records);
         }
 
         [HttpGet, Route("customers/{id:int}")]
         [ActionName("Customer.Open")]
-        [Authorize]
-        [Produces(typeof(Customer))]
+        [Produces(typeof(TblCustomers))]
         public ActionResult GetCustomer(int id)
         {
-            CustomerDetail customer = _mapper.Map<CustomerDetail>(_service.CustomerRepo.FindById(id));
-            return Ok(customer);
+            var record = _service.CustomerRepo.FindByCondition(x => x.Id == id).FirstOrDefault();
+            return Ok(record);
         }
 
         [HttpPost, Route("customers")]
         [ActionName("Customer.New")]
-        [Authorize]
         [ProducesResponseType(201)]
-        public ActionResult PostCustomer(CustomerDetail request)
+        public ActionResult PostCustomer(TblCustomers request)
         {
-            var customer = _mapper.Map<TblCustomers>(request);
-            _service.CustomerRepo.Create(customer);
+            _service.CustomerRepo.Create(request);
             _service.Save();
 
-            return CreatedAtRoute("Customer.Open", new { id = customer.Id });
+            return CreatedAtRoute("Customer.Open", new { id = request.Id });
+        }
+        #endregion
+
+        #region Bank
+        [HttpGet, Route("banks")]
+        [ActionName("Maintenance.Bank")]
+        [Produces(typeof(IList<TblBanks>))]
+        public ActionResult GetBanks()
+        {
+            var records = _service.BankRepo.FindAll();
+
+            return Ok(records);
         }
 
-        [HttpPatch, Route("customers/{id:int}")]
-        [ActionName("Customer.Edit")]
-        [Authorize]
-        [ProducesResponseType(204)]
-        public ActionResult PatchCustomer(int id, Customer request)
+        [HttpGet, Route("banks/{id:int}")]
+        [ActionName("Bank.Open")]
+        [Produces(typeof(TblBanks))]
+        public ActionResult GetBank(int id)
         {
-            return NoContent();
+            var record = _service.BankRepo.FindByCondition(x => x.Id == id).FirstOrDefault();
+            return Ok(record);
         }
+
+        [HttpPost, Route("banks")]
+        [ActionName("Bank.New")]
+        [ProducesResponseType(201)]
+        public ActionResult PostBank(TblBanks request)
+        {
+            _service.BankRepo.Create(request);
+            _service.Save();
+
+            return CreatedAtRoute("Bank.Open", new { id = request.Id });
+        }
+        #endregion
+
+        #region Customer Type
+        [HttpGet, Route("customer-types")]
+        [ActionName("Maintenance.CustomerType")]
+        [Produces(typeof(IList<TblCustomerTypes>))]
+        public ActionResult GetCustomerTypes()
+        {
+            var records = _service.CustomerTypeRepo.FindAll();
+
+            return Ok(records);
+        }
+
+        [HttpGet, Route("customer-types/{id:int}")]
+        [ActionName("CustomerType.Open")]
+        [Produces(typeof(TblCustomerTypes))]
+        public ActionResult GetCustomerType(int id)
+        {
+            var record = _service.CustomerTypeRepo.FindByCondition(x => x.Id == id).FirstOrDefault();
+            return Ok(record);
+        }
+
+        [HttpPost, Route("customer-types")]
+        [ActionName("CustomerType.New")]
+        [ProducesResponseType(201)]
+        public ActionResult PostCustomerType(TblCustomerTypes request)
+        {
+            _service.CustomerTypeRepo.Create(request);
+            _service.Save();
+
+            return CreatedAtRoute("CustomerType.Open", new { id = request.Id });
+        }
+        #endregion
+
+        #region Employee
+        [HttpGet, Route("employees")]
+        [ActionName("Maintenance.Employee")]
+        [Produces(typeof(IList<TblEmployees>))]
+        public ActionResult GetEmployees()
+        {
+            var records = _service.EmployeeRepo.FindAll();
+
+            return Ok(records);
+        }
+
+        [HttpGet, Route("employees/{id:int}")]
+        [ActionName("Employee.Open")]
+        [Produces(typeof(TblEmployees))]
+        public ActionResult GetEmployee(int id)
+        {
+            var record = _service.EmployeeRepo.FindByCondition(x => x.Id == id).FirstOrDefault();
+            return Ok(record);
+        }
+
+        [HttpPost, Route("employees")]
+        [ActionName("Employee.New")]
+        [ProducesResponseType(201)]
+        public ActionResult PostEmployee(TblEmployees request)
+        {
+            _service.EmployeeRepo.Create(request);
+            _service.Save();
+
+            return CreatedAtRoute("Employee.Open", new { id = request.Id });
+        }
+        #endregion
+
+        #region Item
+        [HttpGet, Route("items")]
+        [ActionName("Maintenance.Item")]
+        [Produces(typeof(IList<TblItem>))]
+        public ActionResult GetItems()
+        {
+            var records = _service.ItemRepo.FindAll();
+
+            return Ok(records);
+        }
+
+        [HttpGet, Route("items/{id:int}")]
+        [ActionName("Item.Open")]
+        [Produces(typeof(TblItem))]
+        public ActionResult GetItem(int id)
+        {
+            var record = _service.ItemRepo.FindByCondition(x => x.Id == id).FirstOrDefault();
+            return Ok(record);
+        }
+
+        [HttpPost, Route("items")]
+        [ActionName("Item.New")]
+        [ProducesResponseType(201)]
+        public ActionResult PostItem(TblItem request)
+        {
+            _service.ItemRepo.Create(request);
+            _service.Save();
+
+            return CreatedAtRoute("Item.Open", new { id = request.Id });
+        }
+        #endregion
+
+        #region Mode of Payment
+        [HttpGet, Route("payment-modes")]
+        [ActionName("Maintenance.ModeOfPayment")]
+        [Produces(typeof(IList<TblMop>))]
+        public ActionResult GetModeOfPayments()
+        {
+            var records = _service.MOPRepo.FindAll();
+
+            return Ok(records);
+        }
+
+        [HttpGet, Route("payment-modes/{id:int}")]
+        [ActionName("ModeOfPayment.Open")]
+        [Produces(typeof(TblMop))]
+        public ActionResult GetModeOfPayment(int id)
+        {
+            var record = _service.MOPRepo.FindByCondition(x => x.Id == id).FirstOrDefault();
+            return Ok(record);
+        }
+
+        [HttpPost, Route("payment-modes")]
+        [ActionName("ModeOfPayment.New")]
+        [ProducesResponseType(201)]
+        public ActionResult PostModeOfPayment(TblMop request)
+        {
+            _service.MOPRepo.Create(request);
+            _service.Save();
+
+            return CreatedAtRoute("ModeOfPayment.Open", new { id = request.Id });
+        }
+        #endregion
+
+        #region Price Category
+        [HttpGet, Route("price-categories")]
+        [ActionName("Maintenance.PriceCategory")]
+        [Produces(typeof(IList<TblPriceCategory>))]
+        public ActionResult GetPriceCategories()
+        {
+            var records = _service.PriceCategoryRepo.FindAll();
+
+            return Ok(records);
+        }
+
+        [HttpGet, Route("price-categories/{id:int}")]
+        [ActionName("PriceCategory.Open")]
+        [Produces(typeof(TblPriceCategory))]
+        public ActionResult GetPriceCategory(int id)
+        {
+            var record = _service.PriceCategoryRepo.FindByCondition(x => x.Id == id).FirstOrDefault();
+            return Ok(record);
+        }
+
+        [HttpPost, Route("price-categories")]
+        [ActionName("PriceCategory.New")]
+        [ProducesResponseType(201)]
+        public ActionResult PostPriceCategory(TblPriceCategory request)
+        {
+            _service.PriceCategoryRepo.Create(request);
+            _service.Save();
+
+            return CreatedAtRoute("PriceCategory.Open", new { id = request.Id });
+        }
+        #endregion
+
+        #region Reason for Inventory Adjustment
+        [HttpGet, Route("inventory-adjustment-reason")]
+        [ActionName("Maintenance.Reason")]
+        [Produces(typeof(IList<TblReasonForInventoryAdjustments>))]
+        public ActionResult GetInventoryAdjustmentReasons()
+        {
+            var records = _service.RFIARepo.FindAll();
+
+            return Ok(records);
+        }
+
+        [HttpGet, Route("inventory-adjustment-reason/{id:int}")]
+        [ActionName("Reason.Open")]
+        [Produces(typeof(TblReasonForInventoryAdjustments))]
+        public ActionResult GetInventoryAdjustmentReason(int id)
+        {
+            var record = _service.RFIARepo.FindByCondition(x => x.Id == id).FirstOrDefault();
+            return Ok(record);
+        }
+
+        [HttpPost, Route("inventory-adjustment-reason")]
+        [ActionName("Reason.New")]
+        [ProducesResponseType(201)]
+        public ActionResult PostInventoryAdjustmentReason(TblReasonForInventoryAdjustments request)
+        {
+            _service.RFIARepo.Create(request);
+            _service.Save();
+
+            return CreatedAtRoute("Reason.Open", new { id = request.Id });
+        }
+        #endregion
+
+        #region Terms
+        [HttpGet, Route("terms")]
+        [ActionName("Maintenance.Terms")]
+        [Produces(typeof(IList<TblTerms>))]
+        public ActionResult GetTerms()
+        {
+            var records = _service.TermsRepo.FindAll();
+
+            return Ok(records);
+        }
+
+        [HttpGet, Route("terms/{id:int}")]
+        [ActionName("Terms.Open")]
+        [Produces(typeof(TblTerms))]
+        public ActionResult GetTerm(int id)
+        {
+            var record = _service.TermsRepo.FindByCondition(x => x.Id == id).FirstOrDefault();
+            return Ok(record);
+        }
+
+        [HttpPost, Route("terms")]
+        [ActionName("Terms.New")]
+        [ProducesResponseType(201)]
+        public ActionResult PostTerm(TblTerms request)
+        {
+            _service.TermsRepo.Create(request);
+            _service.Save();
+
+            return CreatedAtRoute("Terms.Open", new { id = request.Id });
+        }
+        #endregion
+
+        #region Unit
+        [HttpGet, Route("units")]
+        [ActionName("Maintenance.Unit")]
+        [Produces(typeof(IList<TblUnits>))]
+        public ActionResult GetUnits()
+        {
+            var records = _service.UnitRepo.FindAll();
+
+            return Ok(records);
+        }
+
+        [HttpGet, Route("units/{id:int}")]
+        [ActionName("Unit.Open")]
+        [Produces(typeof(TblUnits))]
+        public ActionResult GetUnit(int id)
+        {
+            var record = _service.UnitRepo.FindByCondition(x => x.Id == id).FirstOrDefault();
+            return Ok(record);
+        }
+
+        [HttpPost, Route("units")]
+        [ActionName("Unit.New")]
+        [ProducesResponseType(201)]
+        public ActionResult PostUnit(TblUnits request)
+        {
+            _service.UnitRepo.Create(request);
+            _service.Save();
+
+            return CreatedAtRoute("Unit.Open", new { id = request.Id });
+        }
+        #endregion
+
+        #region Vendor
+        [HttpGet, Route("vendors")]
+        [ActionName("Maintenance.Vendor")]
+        [Produces(typeof(IList<TblVendor>))]
+        public ActionResult GetVendors()
+        {
+            var records = _service.VendorRepo.FindAll();
+
+            return Ok(records);
+        }
+
+        [HttpGet, Route("vendors/{id:int}")]
+        [ActionName("Vendor.Open")]
+        [Produces(typeof(TblVendor))]
+        public ActionResult GetVendor(int id)
+        {
+            var record = _service.VendorRepo.FindByCondition(x => x.Id == id).FirstOrDefault();
+            return Ok(record);
+        }
+
+        [HttpPost, Route("vendors")]
+        [ActionName("Vendor.New")]
+        [ProducesResponseType(201)]
+        public ActionResult PostVendor(TblVendor request)
+        {
+            _service.VendorRepo.Create(request);
+            _service.Save();
+
+            return CreatedAtRoute("Vendor.Open", new { id = request.Id });
+        }
+        #endregion
+
+        #region Warehouse
+        [HttpGet, Route("warehouses")]
+        [ActionName("Maintenance.Warehouse")]
+        [Produces(typeof(IList<TblWarehouses>))]
+        public ActionResult GetWarehouses()
+        {
+            var records = _service.WarehouseRepo.FindAll();
+
+            return Ok(records);
+        }
+
+        [HttpGet, Route("warehouses/{id:int}")]
+        [ActionName("Warehouse.Open")]
+        [Produces(typeof(TblWarehouses))]
+        public ActionResult GetWarehouse(int id)
+        {
+            var record = _service.WarehouseRepo.FindByCondition(x => x.Id == id).FirstOrDefault();
+            return Ok(record);
+        }
+
+        [HttpPost, Route("warehouses")]
+        [ActionName("Warehouse.New")]
+        [ProducesResponseType(201)]
+        public ActionResult PostWarehouse(TblWarehouses request)
+        {
+            _service.WarehouseRepo.Create(request);
+            _service.Save();
+
+            return CreatedAtRoute("Warehouse.Open", new { id = request.Id });
+        }
+        #endregion
     }
 }
