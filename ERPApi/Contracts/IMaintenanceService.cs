@@ -5,7 +5,19 @@ namespace Contracts
 {
     public interface IMaintenanceService
     {
-        ICustomerRepository Customer { get; }
+        IBankRepository BankRepo { get; }
+        ICompanyRepository CompanyRepo { get; }
+        ICustomerRepository CustomerRepo { get; }
+        ICustomerTypeRepository CustomerTypeRepo { get; }
+        IEmployeeRepository EmployeeRepo { get; }
+        IItemRepository ItemRepo { get; }
+        IModesOfPaymentRepository MOPRepo { get; }
+        IPriceCategoryRepository PriceCategoryRepo { get; }
+        IReasonForInventoryAdjustmentRepository RFIARepo { get; }
+        ITermsRepository TermsRepo { get; }
+        IUnitRepository UnitRepo { get; }
+        IVendorRepository VendorRepo { get; }
+        IWarehouseRepository WarehouseRepo { get; }
 
         IList<Customer> GetCustomers();
 

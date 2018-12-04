@@ -41,7 +41,7 @@ namespace ERPApi.Controllers
         [Produces(typeof(Customer))]
         public ActionResult GetCustomer(int id)
         {
-            CustomerDetail customer = _mapper.Map<CustomerDetail>(_service.Customer.FindById(id));
+            CustomerDetail customer = _mapper.Map<CustomerDetail>(_service.CustomerRepo.FindById(id));
             return Ok(customer);
         }
 
@@ -52,7 +52,7 @@ namespace ERPApi.Controllers
         public ActionResult PostCustomer(CustomerDetail request)
         {
             var customer = _mapper.Map<TblCustomers>(request);
-            _service.Customer.Create(customer);
+            _service.CustomerRepo.Create(customer);
             _service.Save();
 
             return CreatedAtRoute("Customer.Open", new { id = customer.Id });
