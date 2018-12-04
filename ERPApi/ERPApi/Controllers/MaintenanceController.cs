@@ -24,7 +24,7 @@ namespace ERPApi.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet, Route("customer")]
+        [HttpGet, Route("customers")]
         [ActionName("Maintenance.Customer")]
         [Authorize]
         [Produces(typeof(IList<Customer>))]
@@ -35,31 +35,30 @@ namespace ERPApi.Controllers
             return Ok(customers);
         }
 
-        [HttpGet, Route("customer/{id:int}")]
+        [HttpGet, Route("customers/{id:int}")]
         [ActionName("Customer.Open")]
         [Authorize]
         [Produces(typeof(Customer))]
         public ActionResult GetCustomer(int id)
         {
             CustomerDetail customer = _mapper.Map<CustomerDetail>(_service.Customer.FindById(id));
-            return Ok();
+            return Ok(customer);
         }
 
-        [HttpPost, Route("customer")]
+        [HttpPost, Route("customers")]
         [ActionName("Customer.New")]
         [Authorize]
         [ProducesResponseType(201)]
         public ActionResult PostCustomer(CustomerDetail request)
         {
             var customer = _mapper.Map<TblCustomers>(request);
-
             _service.Customer.Create(customer);
             _service.Save();
 
             return CreatedAtRoute("Customer.Open", new { id = customer.Id });
         }
 
-        [HttpPatch, Route("customer/{id:int}")]
+        [HttpPatch, Route("customers/{id:int}")]
         [ActionName("Customer.Edit")]
         [Authorize]
         [ProducesResponseType(204)]
