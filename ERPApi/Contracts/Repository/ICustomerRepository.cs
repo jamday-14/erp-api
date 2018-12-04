@@ -1,5 +1,4 @@
-﻿using Entities.ExtendedModels;
-using Entities.Models;
+﻿using Entities.Models;
 using System.Linq;
 
 namespace Contracts

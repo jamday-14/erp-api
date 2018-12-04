@@ -30,7 +30,7 @@ namespace ERPApi.Controllers
             //_logger.LogWarn("Here is warn message from our values controller.");
             //_logger.LogError("Here is error message from our values controller.");
 
-            var companies = _repo.Company.FindAll();
+            var companies = _repo.CompanyRepo.FindAll();
 
             return new string[] { "value1", "value2" };
         }

@@ -13,9 +13,9 @@ namespace Services
         private ERPContext _repoContext;
         private readonly IMapper _mapper;
 
-        private ICompanyRepository _company;
-        private IUserRepository _user;
-        private IUserGroupRepository _usergroup;
+        private ICompanyRepository _companyRepo;
+        private IUserRepository _userRepo;
+        private IUserGroupRepository _usergroupRepo;
 
         public UserService(ERPContext repositoryContext, IMapper mapper)
         {
@@ -23,39 +23,39 @@ namespace Services
             _mapper = mapper;
         }
 
-        public ICompanyRepository Company
+        public ICompanyRepository CompanyRepo
         {
             get
             {
-                if (_company == null)
+                if (_companyRepo == null)
                 {
-                    _company = new CompanyRepository(_repoContext);
+                    _companyRepo = new CompanyRepository(_repoContext);
                 }
-                return _company;
+                return _companyRepo;
             }
         }
 
-        public IUserRepository User
+        public IUserRepository UserRepo
         {
             get
             {
-                if (_user == null)
+                if (_userRepo == null)
                 {
-                    _user = new UserRepository(_repoContext);
+                    _userRepo = new UserRepository(_repoContext);
                 }
-                return _user;
+                return _userRepo;
             }
         }
 
-        public IUserGroupRepository UserGroup
+        public IUserGroupRepository UserGroupRepo
         {
             get
             {
-                if (_usergroup == null)
+                if (_usergroupRepo == null)
                 {
-                    _usergroup = new UserGroupRepository(_repoContext);
+                    _usergroupRepo = new UserGroupRepository(_repoContext);
                 }
-                return _usergroup;
+                return _usergroupRepo;
             }
         }
 
@@ -63,7 +63,7 @@ namespace Services
         {
             password = $"{userName}{password}";
 
-            var user = User.FindByLoginName(userName).FirstOrDefault();
+            var user = UserRepo.FindByLoginName(userName).FirstOrDefault();
 
             if (!CryptoHelper.Crypto.VerifyHashedPassword(user.PasswordHash, password))
             {
@@ -71,7 +71,7 @@ namespace Services
                 user = new TblSecurityUsers();
             }
 
-            var groups = UserGroup.GetByUserId(user.Id);
+            var groups = UserGroupRepo.GetByUserId(user.Id);
 
             return new LoginResponse
             {
@@ -82,11 +82,13 @@ namespace Services
 
         public IList<string> GetSystemKeys(string username)
         {
-            var user = User.FindByLoginName(username);
+            var user = UserRepo.FindByLoginName(username);
 
-            var groupKeys = UserGroup.GetKeys(UserGroup.GetByUserId(user.FirstOrDefault().Id)).Select(x => x.SecurityKey).ToList();
+            var userGroups = UserGroupRepo.GetByUserId(user.FirstOrDefault().Id);
 
-            var userKeys = User.GetKeys(user).Select(x => x.SecurityKey).ToList();
+            var groupKeys = UserGroupRepo.GetKeys(userGroups).Select(x => x.SecurityKey).ToList();
+
+            var userKeys = UserRepo.GetKeys(user).Select(x => x.SecurityKey).ToList();
 
             groupKeys.AddRange(userKeys);
 
