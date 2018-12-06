@@ -70,6 +70,11 @@ namespace Services
                 return _deliveryReceiptRepo;
             }
         }
+
+        public void Save()
+        {
+            _repoContext.SaveChanges();
+        }
         #endregion
     }
 }

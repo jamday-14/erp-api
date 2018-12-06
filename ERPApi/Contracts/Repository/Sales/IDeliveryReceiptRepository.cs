@@ -2,7 +2,7 @@
 
 namespace Contracts
 {
-    public interface IDeliveryReceiptRepository : IRepositoryBase<TblDeliveryReceiptDetails>
+    public interface IDeliveryReceiptRepository : IRepositoryBase<TblDeliveryReceipts>
     {
     }
 }
