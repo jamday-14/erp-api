@@ -70,6 +70,11 @@ namespace Services
                 return _receivingReportRepo;
             }
         }
+
+        public void Save()
+        {
+            _repoContext.SaveChanges();
+        }
         #endregion
     }
 }
