@@ -45,6 +45,11 @@ namespace Services
                 return _salesInvoicePaymentRepo;
             }
         }
+
+        public void Save()
+        {
+            _repoContext.SaveChanges();
+        }
         #endregion
     }
 }
