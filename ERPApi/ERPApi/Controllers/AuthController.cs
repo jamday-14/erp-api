@@ -51,10 +51,16 @@ namespace ERPApi.Controllers
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
+            var claims = new List<Claim>
+            {
+                new Claim("username", userInfo.LoginName),
+                new Claim("userid", userInfo.Id.ToString())
+            };
+
             var token = new JwtSecurityToken(
                 _config["Jwt:Issuer"],
                 _config["Jwt:Audience"],
-                new List<Claim> { new Claim("username", userInfo.LoginName) },
+                claims,
                 expires: DateTime.Now.AddMinutes(15),
                 signingCredentials: credentials);
 

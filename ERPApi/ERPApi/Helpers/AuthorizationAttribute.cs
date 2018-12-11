@@ -1,7 +1,9 @@
 ﻿using Contracts;
+using Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Filters;
+using System;
 using System.Linq;
 
 namespace ERPApi.Helpers
@@ -29,6 +31,7 @@ namespace ERPApi.Helpers
             var claims = context.HttpContext.User.Claims;
 
             var username = claims.FirstOrDefault(c => c.Type.ToLower() == "username").Value;
+            var userId = claims.FirstOrDefault(c => c.Type.ToLower() == "userid").Value;
 
             var systemKeys = _userService.GetSystemKeys(username);
 
@@ -38,6 +41,10 @@ namespace ERPApi.Helpers
                 return;
             }
 
+            Statics.LoggedInUser = new CurrentUser {
+                userId = Convert.ToInt32(userId),
+                userName = username
+            };
         }
 
         private bool IsAnonymousFilter(AuthorizationFilterContext context)

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Contracts;
+using Entities;
 using Entities.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -50,10 +51,16 @@ namespace ERPApi.Controllers
         [ProducesResponseType(201)]
         public ActionResult PostCustomer(TblCustomers request)
         {
+            request.CreatedById = Statics.LoggedInUser.userId;
+            request.LastEditedById = Statics.LoggedInUser.userId;
+            request.CreationDate = System.DateTime.UtcNow;
+            request.LastEditedDate = System.DateTime.UtcNow;
+            request.Active = true;
+
             _service.CustomerRepo.Create(request);
             _service.Save();
 
-            return CreatedAtRoute("Customer.Open", new { id = request.Id });
+            return Created("maintenance/customers", new { id = request.Id });
         }
         #endregion
 
@@ -146,10 +153,16 @@ namespace ERPApi.Controllers
         [ProducesResponseType(201)]
         public ActionResult PostEmployee(TblEmployees request)
         {
+            request.CreatedById = Statics.LoggedInUser.userId;
+            request.LastEditedById = Statics.LoggedInUser.userId;
+            request.CreationDate = System.DateTime.UtcNow;
+            request.LastEditedDate = System.DateTime.UtcNow;
+            request.Active = true;
+
             _service.EmployeeRepo.Create(request);
             _service.Save();
 
-            return CreatedAtRoute("Employee.Open", new { id = request.Id });
+            return Created("maintenance/employees", new { id = request.Id });
         }
         #endregion
 
@@ -178,10 +191,16 @@ namespace ERPApi.Controllers
         [ProducesResponseType(201)]
         public ActionResult PostItem(TblItem request)
         {
+            request.CreatedById = Statics.LoggedInUser.userId;
+            request.LastEditedById = Statics.LoggedInUser.userId;
+            request.CreationDate = System.DateTime.UtcNow;
+            request.LastEditedDate = System.DateTime.UtcNow;
+            request.Active = true;
+
             _service.ItemRepo.Create(request);
             _service.Save();
 
-            return CreatedAtRoute("Item.Open", new { id = request.Id });
+            return Created("maintenance/items", new { id = request.Id });
         }
         #endregion
 
@@ -370,10 +389,16 @@ namespace ERPApi.Controllers
         [ProducesResponseType(201)]
         public ActionResult PostVendor(TblVendor request)
         {
+            request.CreatedById = Statics.LoggedInUser.userId;
+            request.LastEditedById = Statics.LoggedInUser.userId;
+            request.CreationDate = System.DateTime.UtcNow;
+            request.LastEditedDate = System.DateTime.UtcNow;
+            request.Active = true;
+
             _service.VendorRepo.Create(request);
             _service.Save();
 
-            return CreatedAtRoute("Vendor.Open", new { id = request.Id });
+            return Created("maintenance/vendors", new { id = request.Id });
         }
         #endregion
 
@@ -402,10 +427,16 @@ namespace ERPApi.Controllers
         [ProducesResponseType(201)]
         public ActionResult PostWarehouse(TblWarehouses request)
         {
+            request.CreatedById = Statics.LoggedInUser.userId;
+            request.LastEditedById = Statics.LoggedInUser.userId;
+            request.CreationDate = System.DateTime.UtcNow;
+            request.LastEditedDate = System.DateTime.UtcNow;
+            request.Active = true;
+
             _service.WarehouseRepo.Create(request);
             _service.Save();
 
-            return CreatedAtRoute("Warehouse.Open", new { id = request.Id });
+            return Created("maintenance/warehouses", new { id = request.Id });
         }
         #endregion
     }
