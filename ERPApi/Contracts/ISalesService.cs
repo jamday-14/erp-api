@@ -16,5 +16,7 @@ namespace Contracts
 
         void Save();
         List<TblDeliveryReceiptDetails> GetDeliveryReceiptDetails(int id);
+        List<TblSalesOrders> GetPendingSalesOrdersByCustomer(int customerId);
+        List<TblSalesOrderDetails> GetSalesOrderDetails(int id);
     }
 }

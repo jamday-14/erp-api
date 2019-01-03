@@ -87,6 +87,26 @@ namespace ERPApi.Controllers
             return Created($"sales/orders/{request.SalesOrderId}/{request.Id}", new { id = request.Id });
         }
 
+        [HttpGet, Route("orders/{customerId:int}/pending")]
+        [ActionName("Sales.SalesOrder")]
+        [Produces(typeof(IList<TblSalesOrders>))]
+        public ActionResult GetPendingSalesOrdersByCustomer(int customerId)
+        {
+            var records = _service.GetPendingSalesOrdersByCustomer(customerId);
+
+            return Ok(records);
+        }
+
+        [HttpGet, Route("orders/{id:int}/details")]
+        [ActionName("Sales.SalesOrder")]
+        [Produces(typeof(IList<TblSalesOrderDetails>))]
+        public ActionResult GetSalesOrderDetails(int id)
+        {
+            var records = _service.GetSalesOrderDetails(id);
+
+            return Ok(records);
+        }
+
         #endregion
 
         #region Sales Invoice

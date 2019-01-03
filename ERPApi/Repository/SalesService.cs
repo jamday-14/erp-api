@@ -100,6 +100,16 @@ namespace Services
         {
             return DeliveryReceiptRepo.GetDetails(id).ToList();
         }
+
+        public List<TblSalesOrders> GetPendingSalesOrdersByCustomer(int customerId)
+        {
+            return SalesOrderRepo.GetPendingByCustomer(customerId).ToList();
+        }
+
+        public List<TblSalesOrderDetails> GetSalesOrderDetails(int id)
+        {
+            return SalesOrderRepo.GetDetails(id).ToList();
+        }
         #endregion
     }
 }
