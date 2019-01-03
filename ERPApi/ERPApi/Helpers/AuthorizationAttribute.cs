@@ -35,13 +35,15 @@ namespace ERPApi.Helpers
 
             var systemKeys = _userService.GetSystemKeys(username);
 
-            if (!systemKeys.Contains(((Microsoft.AspNetCore.Mvc.Controllers.ControllerActionDescriptor)context.ActionDescriptor).ActionName))
+            if (!string.IsNullOrWhiteSpace(((Microsoft.AspNetCore.Mvc.Controllers.ControllerActionDescriptor)context.ActionDescriptor).ActionName) &&
+                !systemKeys.Contains(((Microsoft.AspNetCore.Mvc.Controllers.ControllerActionDescriptor)context.ActionDescriptor).ActionName))
             {
                 context.Result = new ForbidResult();
                 return;
             }
 
-            Statics.LoggedInUser = new CurrentUser {
+            Statics.LoggedInUser = new CurrentUser
+            {
                 userId = Convert.ToInt32(userId),
                 userName = username
             };

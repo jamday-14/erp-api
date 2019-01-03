@@ -1,4 +1,6 @@
-﻿using Contracts;
+﻿using AutoMapper;
+using Contracts;
+using Entities;
 using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -12,11 +14,16 @@ namespace ERPApi.Controllers
     {
         private ILoggerManager _logger;
         private ISalesService _service;
+        private IMapper _mapper;
 
-        public SalesController(ILoggerManager logger, ISalesService service)
+        public SalesController(
+            ILoggerManager logger,
+            ISalesService service,
+            IMapper mapper)
         {
             _logger = logger;
             _service = service;
+            _mapper = mapper;
         }
 
         #region Sales Order
@@ -44,11 +51,42 @@ namespace ERPApi.Controllers
         [ProducesResponseType(201)]
         public ActionResult PostSalesOrder(TblSalesOrders request)
         {
+            //var so = _mapper.Map<TblSalesOrders>(request);
+            //var sods = _mapper.Map<List<TblSalesOrderDetails>>(request.Details);
+
+            request.CreatedById = Statics.LoggedInUser.userId;
+            request.LastEditedById = Statics.LoggedInUser.userId;
+            request.CreationDate = System.DateTime.UtcNow;
+            request.LastEditedDate = System.DateTime.UtcNow;
+            request.IsDr = false;
+            request.IsInvoice = false;
+            request.Closed = false;
+            request.Void = false;
+            request.SystemNo = System.Guid.NewGuid().ToString();
+
             _service.SalesOrderRepo.Create(request);
+
             _service.Save();
 
-            return CreatedAtRoute("SalesOrder.Open", new { id = request.Id });
+            return Created("sales/orders", new { id = request.Id });
         }
+
+        [HttpPost, Route("order/detail")]
+        [ActionName("SalesOrder.New")]
+        [ProducesResponseType(201)]
+        public ActionResult PostSalesOrderDetail(TblSalesOrderDetails request)
+        {
+            request.QtyDr = 0;
+            request.QtyInvoice = 0;
+            request.QtyOnHand = 0;
+            request.Closed = false;
+
+            _service.SalesOrderDetailRepo.Create(request);
+            _service.Save();
+
+            return Created($"sales/orders/{request.SalesOrderId}/{request.Id}", new { id = request.Id });
+        }
+
         #endregion
 
         #region Sales Invoice

@@ -7,6 +7,7 @@
         ISalesReturnRepository SalesReturnRepo { get; }
         IDeliveryReceiptRepository DeliveryReceiptRepo { get; }
 
+        ISalesOrderDetailRepository SalesOrderDetailRepo { get; }
         void Save();
     }
 }

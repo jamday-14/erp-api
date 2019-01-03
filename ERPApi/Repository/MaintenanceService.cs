@@ -15,6 +15,7 @@ namespace Services
         #region PRIVATE REPOSITORY INTERFACES
         private IBankRepository _bankRepo;
         private ICompanyRepository _companyRepo;
+        private ICurrencyRepository _currencyRepo;
         private ICustomerRepository _customerRepo;
         private ICustomerTypeRepository _customerTypeRepo;
         private IEmployeeRepository _employeeRepo;
@@ -56,6 +57,18 @@ namespace Services
                     _companyRepo = new CompanyRepository(_repoContext);
                 }
                 return _companyRepo;
+            }
+        }
+
+        public ICurrencyRepository CurrencyRepo
+        {
+            get
+            {
+                if (_currencyRepo == null)
+                {
+                    _currencyRepo = new CurrencyRepository(_repoContext);
+                }
+                return _currencyRepo;
             }
         }
 

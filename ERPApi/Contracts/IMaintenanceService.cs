@@ -7,6 +7,7 @@ namespace Contracts
     {
         IBankRepository BankRepo { get; }
         ICompanyRepository CompanyRepo { get; }
+        ICurrencyRepository CurrencyRepo { get; }
         ICustomerRepository CustomerRepo { get; }
         ICustomerTypeRepository CustomerTypeRepo { get; }
         IEmployeeRepository EmployeeRepo { get; }

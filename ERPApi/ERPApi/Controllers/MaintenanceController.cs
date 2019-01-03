@@ -96,6 +96,16 @@ namespace ERPApi.Controllers
         }
         #endregion
 
+        [HttpGet, Route("currencies")]
+        [AllowAnonymous]
+        [Produces(typeof(IList<TblCurrencies>))]
+        public ActionResult GetCurrencies()
+        {
+            var records = _service.CurrencyRepo.FindAll();
+
+            return Ok(records);
+        }
+
         #region Customer Type
         [HttpGet, Route("customer-types")]
         [ActionName("Maintenance.CustomerType")]
