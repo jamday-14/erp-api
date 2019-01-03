@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using System.Linq;
+using AutoMapper;
 using Contracts;
 using Entities.Models;
 
@@ -87,6 +89,16 @@ namespace Services
         public void Save()
         {
             _repoContext.SaveChanges();
+        }
+
+        public List<TblDeliveryReceipts> GetPendingDeliveryReceiptsByCustomer(int customerId)
+        {
+            return DeliveryReceiptRepo.GetPendingByCustomer(customerId).ToList();
+        }
+
+        public List<TblDeliveryReceiptDetails> GetDeliveryReceiptDetails(int id)
+        {
+            return DeliveryReceiptRepo.GetDetails(id).ToList();
         }
         #endregion
     }

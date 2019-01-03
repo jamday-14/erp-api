@@ -1,4 +1,7 @@
-﻿namespace Contracts
+﻿using Entities.Models;
+using System.Collections.Generic;
+
+namespace Contracts
 {
     public interface ISalesService
     {
@@ -8,6 +11,10 @@
         IDeliveryReceiptRepository DeliveryReceiptRepo { get; }
 
         ISalesOrderDetailRepository SalesOrderDetailRepo { get; }
+
+        List<TblDeliveryReceipts> GetPendingDeliveryReceiptsByCustomer(int customerId);
+
         void Save();
+        List<TblDeliveryReceiptDetails> GetDeliveryReceiptDetails(int id);
     }
 }

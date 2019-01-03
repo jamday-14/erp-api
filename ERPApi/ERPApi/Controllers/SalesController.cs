@@ -153,7 +153,7 @@ namespace ERPApi.Controllers
         }
         #endregion
 
-        #region Sales Return
+        #region Delivery Receipts
         [HttpGet, Route("delivery-receipts")]
         [ActionName("Sales.DeliveryReceipt")]
         [Produces(typeof(IList<TblDeliveryReceipts>))]
@@ -183,6 +183,28 @@ namespace ERPApi.Controllers
 
             return CreatedAtRoute("DeliveryReceipt.Open", new { id = request.Id });
         }
+
+        [HttpGet, Route("delivery-receipts/{customerId:int}/pending")]
+        [ActionName("Sales.DeliveryReceipt")]
+        [Produces(typeof(IList<TblDeliveryReceipts>))]
+        public ActionResult GetPendingDeliveryReceiptsByCustomer(int customerId)
+        {
+            var records = _service.GetPendingDeliveryReceiptsByCustomer(customerId);
+
+            return Ok(records);
+        }
+
+        [HttpGet, Route("delivery-receipts/{id:int}/details")]
+        [ActionName("Sales.DeliveryReceipt")]
+        [Produces(typeof(IList<TblDeliveryReceiptDetails>))]
+        public ActionResult GetDeliveryReceiptDetails(int id)
+        {
+            var records = _service.GetDeliveryReceiptDetails(id);
+
+            return Ok(records);
+        }
         #endregion
+
+
     }
 }
