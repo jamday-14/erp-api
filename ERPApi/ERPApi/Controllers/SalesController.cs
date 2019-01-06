@@ -223,6 +223,22 @@ namespace ERPApi.Controllers
 
             return Ok(records);
         }
+
+        [HttpPost, Route("delivery-receipts/detail")]
+        [ActionName("DeliveryReceipt.New")]
+        [ProducesResponseType(201)]
+        public ActionResult PostDeliveryReceiptDetail(TblDeliveryReceiptDetails request)
+        {
+            request.QtyInvoice = 0;
+            request.QtyOnHand = 0;
+            request.QtyReturn = 0;
+            request.Closed = false;
+
+            _service.DeliveryReceiptDetailRepo.Create(request);
+            _service.Save();
+
+            return Created($"sales/delivery-receipts/{request.DeliveryReceiptId}/{request.Id}", new { id = request.Id });
+        }
         #endregion
 
 
