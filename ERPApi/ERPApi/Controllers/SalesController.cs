@@ -3,6 +3,7 @@ using Contracts;
 using Entities;
 using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -62,7 +63,7 @@ namespace ERPApi.Controllers
             request.IsInvoice = false;
             request.Closed = false;
             request.Void = false;
-            request.SystemNo = System.Guid.NewGuid().ToString();
+            request.SystemNo = $"SO-{DateTimeOffset.UtcNow.ToUnixTimeSeconds()}";
 
             _service.SalesOrderRepo.Create(request);
 
@@ -198,10 +199,19 @@ namespace ERPApi.Controllers
         [ProducesResponseType(201)]
         public ActionResult PostDeliveryReceipt(TblDeliveryReceipts request)
         {
+            request.CreatedById = Statics.LoggedInUser.userId;
+            request.LastEditedById = Statics.LoggedInUser.userId;
+            request.CreationDate = DateTime.UtcNow;
+            request.LastEditedDate = DateTime.UtcNow;
+            request.IsInvoice = false;
+            request.Closed = false;
+            request.Void = false;
+            request.SystemNo = $"DR-{DateTimeOffset.UtcNow.ToUnixTimeSeconds()}";
+
             _service.DeliveryReceiptRepo.Create(request);
             _service.Save();
 
-            return CreatedAtRoute("DeliveryReceipt.Open", new { id = request.Id });
+            return Created("sales/delivery-receipts", new { id = request.Id });
         }
 
         [HttpGet, Route("delivery-receipts/{customerId:int}/pending")]
