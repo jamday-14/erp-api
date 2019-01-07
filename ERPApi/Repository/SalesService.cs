@@ -24,6 +24,7 @@ namespace Services
         private IDeliveryReceiptRepository _deliveryReceiptRepo;
         private ISalesOrderDetailRepository _salesOrderDetailRepo;
         private IDeliveryReceiptDetailRepository _deliveryReceiptDetailRepo;
+        private ISalesInvoiceDetailRepository _salesInvoiceDetailRepo;
         #endregion
 
         #region REPOSITORY GETTERS
@@ -96,6 +97,18 @@ namespace Services
                     _deliveryReceiptDetailRepo = new DeliveryReceiptDetailRepository(_repoContext);
                 }
                 return _deliveryReceiptDetailRepo;
+            }
+        }
+
+        public ISalesInvoiceDetailRepository SalesInvoiceDetailRepo
+        {
+            get
+            {
+                if (_salesInvoiceDetailRepo == null)
+                {
+                    _salesInvoiceDetailRepo = new SalesInvoiceDetailRepository(_repoContext);
+                }
+                return _salesInvoiceDetailRepo;
             }
         }
 

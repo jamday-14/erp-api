@@ -12,12 +12,18 @@ namespace Services
 
         public IQueryable<TblDeliveryReceiptDetails> GetDetails(int id)
         {
-            return RepositoryContext.TblDeliveryReceiptDetails.Where(x => x.DeliveryReceiptId == id);
+            return RepositoryContext.TblDeliveryReceiptDetails.Where(x => x.DeliveryReceiptId == id && x.QtyInvoice < x.Qty && !x.Closed);
         }
 
         public IQueryable<TblDeliveryReceipts> GetPendingByCustomer(int customerId)
         {
-            return RepositoryContext.TblDeliveryReceipts.Where(x => x.CustomerId == customerId && !x.Closed);
+            var query = from receipts in RepositoryContext.TblDeliveryReceipts
+                        join details in RepositoryContext.TblDeliveryReceiptDetails on receipts.Id equals details.DeliveryReceiptId
+                        where receipts.CustomerId == customerId && details.QtyInvoice < details.Qty
+                        && !receipts.Closed && !details.Closed
+                        select receipts;
+
+            return query.Distinct();
         }
     }
 }

@@ -13,6 +13,8 @@ namespace Contracts
         ISalesOrderDetailRepository SalesOrderDetailRepo { get; }
         IDeliveryReceiptDetailRepository DeliveryReceiptDetailRepo { get; }
 
+        ISalesInvoiceDetailRepository SalesInvoiceDetailRepo { get; }
+
         List<TblDeliveryReceipts> GetPendingDeliveryReceiptsByCustomer(int customerId);
 
         void Save();

@@ -135,10 +135,40 @@ namespace ERPApi.Controllers
         [ProducesResponseType(201)]
         public ActionResult PostSalesInvoice(TblSalesInvoices request)
         {
+            request.CreatedById = Statics.LoggedInUser.userId;
+            request.LastEditedById = Statics.LoggedInUser.userId;
+            request.CreationDate = DateTime.UtcNow;
+            request.LastEditedDate = DateTime.UtcNow;
+            request.Closed = false;
+            request.Void = false;
+            request.SystemNo = $"SI-{DateTimeOffset.UtcNow.ToUnixTimeSeconds()}";
+
             _service.SalesInvoiceRepo.Create(request);
             _service.Save();
 
-            return CreatedAtRoute("SalesInvoice.Open", new { id = request.Id });
+            return Created("sales/invoices", new { id = request.Id });
+        }
+
+
+        [HttpPost, Route("invoices/detail")]
+        [ActionName("SalesInvoice.New")]
+        [ProducesResponseType(201)]
+        public ActionResult PostSalesInvoiceDetail(TblSalesInvoiceDetails request)
+        {
+            request.QtyOnHand = 0;
+            request.Closed = false;
+
+            _service.SalesInvoiceDetailRepo.Create(request);
+
+            if (request.DrdetailId != null && request.Drid != null)
+            {
+                var drDetail = _service.DeliveryReceiptDetailRepo.FindByCondition(x => x.Id == request.DrdetailId && x.DeliveryReceiptId == request.Drid).FirstOrDefault();
+                drDetail.QtyInvoice += request.Qty;
+            }
+
+            _service.Save();
+
+            return Created($"sales/invoices/{request.SalesInvoiceId}/{request.Id}", new { id = request.Id });
         }
         #endregion
 
@@ -245,6 +275,13 @@ namespace ERPApi.Controllers
             request.Closed = false;
 
             _service.DeliveryReceiptDetailRepo.Create(request);
+
+            if(request.SodetailId != null && request.Soid != null)
+            {
+                var salesOrderDetail = _service.SalesOrderDetailRepo.FindByCondition(x => x.Id == request.SodetailId && x.SalesOrderId == request.Soid).FirstOrDefault();
+                salesOrderDetail.QtyDr += request.Qty;
+            }
+
             _service.Save();
 
             return Created($"sales/delivery-receipts/{request.DeliveryReceiptId}/{request.Id}", new { id = request.Id });
