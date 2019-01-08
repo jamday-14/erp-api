@@ -25,6 +25,7 @@ namespace Services
         private ISalesOrderDetailRepository _salesOrderDetailRepo;
         private IDeliveryReceiptDetailRepository _deliveryReceiptDetailRepo;
         private ISalesInvoiceDetailRepository _salesInvoiceDetailRepo;
+        private ISalesReturnDetailRepository _salesReturnDetailRepo;
         #endregion
 
         #region REPOSITORY GETTERS
@@ -112,20 +113,23 @@ namespace Services
             }
         }
 
+        public ISalesReturnDetailRepository SalesReturnDetailRepo
+        {
+            get
+            {
+                if (_salesReturnDetailRepo == null)
+                {
+                    _salesReturnDetailRepo = new SalesReturnDetailRepository(_repoContext);
+                }
+                return _salesReturnDetailRepo;
+            }
+        }
+
         public void Save()
         {
             _repoContext.SaveChanges();
         }
 
-        public List<TblDeliveryReceipts> GetPendingDeliveryReceiptsByCustomer(int customerId)
-        {
-            return DeliveryReceiptRepo.GetPendingByCustomer(customerId).ToList();
-        }
-
-        public List<TblDeliveryReceiptDetails> GetDeliveryReceiptDetails(int id)
-        {
-            return DeliveryReceiptRepo.GetDetails(id).ToList();
-        }
 
         public List<TblSalesOrders> GetPendingSalesOrdersByCustomer(int customerId)
         {
@@ -135,6 +139,26 @@ namespace Services
         public List<TblSalesOrderDetails> GetSalesOrderDetails(int id)
         {
             return SalesOrderRepo.GetDetails(id).ToList();
+        }
+
+        public List<TblDeliveryReceipts> GetPendingDeliveryReceiptsByCustomer(int customerId)
+        {
+            return DeliveryReceiptRepo.GetPendingByCustomer(customerId).ToList();
+        }
+
+        public List<TblDeliveryReceipts> GetDeliveryReceiptsByCustomer(int customerId)
+        {
+            return DeliveryReceiptRepo.GetByCustomer(customerId).ToList();
+        }
+
+        public List<TblDeliveryReceiptDetails> GetDeliveryReceiptDetails(int id)
+        {
+            return DeliveryReceiptRepo.GetDetails(id).ToList();
+        }
+
+        public List<TblDeliveryReceiptDetails> GetDeliveryReceiptDetailsPendingInvoice(int id)
+        {
+            return DeliveryReceiptRepo.GetDetailsPendingInvoice(id).ToList();
         }
         #endregion
     }

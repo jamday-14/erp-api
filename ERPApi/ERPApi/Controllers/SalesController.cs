@@ -149,7 +149,6 @@ namespace ERPApi.Controllers
             return Created("sales/invoices", new { id = request.Id });
         }
 
-
         [HttpPost, Route("invoices/detail")]
         [ActionName("SalesInvoice.New")]
         [ProducesResponseType(201)]
@@ -164,6 +163,12 @@ namespace ERPApi.Controllers
             {
                 var drDetail = _service.DeliveryReceiptDetailRepo.FindByCondition(x => x.Id == request.DrdetailId && x.DeliveryReceiptId == request.Drid).FirstOrDefault();
                 drDetail.QtyInvoice += request.Qty;
+
+                if(drDetail.Soid != null && drDetail.SodetailId != null)
+                {
+                    var soDetail = _service.SalesOrderDetailRepo.FindByCondition(x => x.Id == drDetail.SodetailId && x.SalesOrderId == drDetail.Soid).FirstOrDefault();
+                    soDetail.QtyInvoice += request.Qty;
+                }
             }
 
             _service.Save();
@@ -197,10 +202,37 @@ namespace ERPApi.Controllers
         [ProducesResponseType(201)]
         public ActionResult PostSalesReturn(TblSalesReturns request)
         {
+            request.CreatedById = Statics.LoggedInUser.userId;
+            request.LastEditedById = Statics.LoggedInUser.userId;
+            request.CreationDate = DateTime.UtcNow;
+            request.LastEditedDate = DateTime.UtcNow;
+            request.Void = false;
+            request.SystemNo = $"SR-{DateTimeOffset.UtcNow.ToUnixTimeSeconds()}";
+
             _service.SalesReturnRepo.Create(request);
             _service.Save();
 
-            return CreatedAtRoute("SalesReturn.Open", new { id = request.Id });
+            return Created("sales/returns", new { id = request.Id });
+        }
+
+        [HttpPost, Route("returns/detail")]
+        [ActionName("SalesReturn.New")]
+        [ProducesResponseType(201)]
+        public ActionResult PostSalesReturnDetail(TblSalesReturnDetails request)
+        {
+            request.QtyOnHand = 0;
+
+            _service.SalesReturnDetailRepo.Create(request);
+
+            if (request.DrdetailId != null && request.Drid != null)
+            {
+                var drDetail = _service.DeliveryReceiptDetailRepo.FindByCondition(x => x.Id == request.DrdetailId && x.DeliveryReceiptId == request.Drid).FirstOrDefault();
+                drDetail.QtyReturn += request.Qty;
+            }
+
+            _service.Save();
+
+            return Created($"sales/returns/{request.SalesReturnId}/{request.Id}", new { id = request.Id });
         }
         #endregion
 
@@ -254,6 +286,16 @@ namespace ERPApi.Controllers
             return Ok(records);
         }
 
+        [HttpGet, Route("customers/{customerId:int}/delivery-receipts")]
+        [ActionName("Sales.DeliveryReceipt")]
+        [Produces(typeof(IList<TblDeliveryReceipts>))]
+        public ActionResult GetDeliveryReceiptsByCustomer(int customerId)
+        {
+            var records = _service.GetDeliveryReceiptsByCustomer(customerId);
+
+            return Ok(records);
+        }
+
         [HttpGet, Route("delivery-receipts/{id:int}/details")]
         [ActionName("Sales.DeliveryReceipt")]
         [Produces(typeof(IList<TblDeliveryReceiptDetails>))]
@@ -263,6 +305,17 @@ namespace ERPApi.Controllers
 
             return Ok(records);
         }
+
+        [HttpGet, Route("delivery-receipts/{id:int}/details/pending")]
+        [ActionName("Sales.DeliveryReceipt")]
+        [Produces(typeof(IList<TblDeliveryReceiptDetails>))]
+        public ActionResult GetDeliveryReceiptDetailsPendingInvoice(int id)
+        {
+            var records = _service.GetDeliveryReceiptDetailsPendingInvoice(id);
+
+            return Ok(records);
+        }
+
 
         [HttpPost, Route("delivery-receipts/detail")]
         [ActionName("DeliveryReceipt.New")]

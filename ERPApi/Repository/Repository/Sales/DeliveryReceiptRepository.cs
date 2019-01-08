@@ -10,20 +10,36 @@ namespace Services
         {
         }
 
-        public IQueryable<TblDeliveryReceiptDetails> GetDetails(int id)
-        {
-            return RepositoryContext.TblDeliveryReceiptDetails.Where(x => x.DeliveryReceiptId == id && x.QtyInvoice < x.Qty && !x.Closed);
-        }
-
         public IQueryable<TblDeliveryReceipts> GetPendingByCustomer(int customerId)
         {
             var query = from receipts in RepositoryContext.TblDeliveryReceipts
                         join details in RepositoryContext.TblDeliveryReceiptDetails on receipts.Id equals details.DeliveryReceiptId
-                        where receipts.CustomerId == customerId && details.QtyInvoice < details.Qty
+                        where receipts.CustomerId == customerId && details.QtyInvoice < (details.Qty - details.QtyReturn)
                         && !receipts.Closed && !details.Closed
                         select receipts;
 
             return query.Distinct();
+        }
+
+        public IQueryable<TblDeliveryReceipts> GetByCustomer(int customerId)
+        {
+            var query = from receipts in RepositoryContext.TblDeliveryReceipts
+                        join details in RepositoryContext.TblDeliveryReceiptDetails on receipts.Id equals details.DeliveryReceiptId
+                        where receipts.CustomerId == customerId
+                        && !receipts.Closed && !details.Closed
+                        select receipts;
+
+            return query.Distinct();
+        }
+
+        public IQueryable<TblDeliveryReceiptDetails> GetDetailsPendingInvoice(int id)
+        {
+            return RepositoryContext.TblDeliveryReceiptDetails.Where(x => x.DeliveryReceiptId == id && x.QtyInvoice < (x.Qty - x.QtyReturn) && !x.Closed);
+        }
+
+        public IQueryable<TblDeliveryReceiptDetails> GetDetails(int id)
+        {
+            return RepositoryContext.TblDeliveryReceiptDetails.Where(x => x.DeliveryReceiptId == id && !x.Closed);
         }
     }
 }
