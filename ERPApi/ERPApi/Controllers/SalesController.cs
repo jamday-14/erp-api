@@ -93,7 +93,7 @@ namespace ERPApi.Controllers
         [Produces(typeof(IList<TblSalesOrders>))]
         public ActionResult GetPendingSalesOrdersByCustomer(int customerId)
         {
-            var records = _service.GetPendingSalesOrdersByCustomer(customerId);
+            var records = _service.SalesOrderRepo.GetPendingByCustomer(customerId).ToList();
 
             return Ok(records);
         }
@@ -103,7 +103,17 @@ namespace ERPApi.Controllers
         [Produces(typeof(IList<TblSalesOrderDetails>))]
         public ActionResult GetSalesOrderDetails(int id)
         {
-            var records = _service.GetSalesOrderDetails(id);
+            var records = _service.SalesOrderDetailRepo.GetByOrderId(id).ToList();
+
+            return Ok(records);
+        }
+
+        [HttpGet, Route("orders/{id:int}/details/pending")]
+        [ActionName("Sales.SalesOrder")]
+        [Produces(typeof(IList<TblSalesOrderDetails>))]
+        public ActionResult GetSalesOrderDetailsPendingDR(int id)
+        {
+            var records = _service.SalesOrderDetailRepo.GetByPendingDeliveryReceipt(id).ToList();
 
             return Ok(records);
         }
@@ -174,6 +184,16 @@ namespace ERPApi.Controllers
             _service.Save();
 
             return Created($"sales/invoices/{request.SalesInvoiceId}/{request.Id}", new { id = request.Id });
+        }
+
+        [HttpGet, Route("invoices/{id:int}/details")]
+        [ActionName("Sales.SalesInvoice")]
+        [Produces(typeof(IList<TblSalesInvoiceDetails>))]
+        public ActionResult GetSalesInvoiceDetails(int id)
+        {
+            var records = _service.SalesInvoiceDetailRepo.GetByInvoiceId(id).ToList();
+
+            return Ok(records);
         }
         #endregion
 
@@ -281,7 +301,7 @@ namespace ERPApi.Controllers
         [Produces(typeof(IList<TblDeliveryReceipts>))]
         public ActionResult GetPendingDeliveryReceiptsByCustomer(int customerId)
         {
-            var records = _service.GetPendingDeliveryReceiptsByCustomer(customerId);
+            var records = _service.DeliveryReceiptRepo.GetPendingByCustomer(customerId);
 
             return Ok(records);
         }
@@ -291,7 +311,7 @@ namespace ERPApi.Controllers
         [Produces(typeof(IList<TblDeliveryReceipts>))]
         public ActionResult GetDeliveryReceiptsByCustomer(int customerId)
         {
-            var records = _service.GetDeliveryReceiptsByCustomer(customerId);
+            var records = _service.DeliveryReceiptRepo.GetByCustomer(customerId);
 
             return Ok(records);
         }
@@ -301,7 +321,7 @@ namespace ERPApi.Controllers
         [Produces(typeof(IList<TblDeliveryReceiptDetails>))]
         public ActionResult GetDeliveryReceiptDetails(int id)
         {
-            var records = _service.GetDeliveryReceiptDetails(id);
+            var records = _service.DeliveryReceiptDetailRepo.GetByDeliveryReceiptId(id).ToList();
 
             return Ok(records);
         }
@@ -311,7 +331,7 @@ namespace ERPApi.Controllers
         [Produces(typeof(IList<TblDeliveryReceiptDetails>))]
         public ActionResult GetDeliveryReceiptDetailsPendingInvoice(int id)
         {
-            var records = _service.GetDeliveryReceiptDetailsPendingInvoice(id);
+            var records = _service.DeliveryReceiptDetailRepo.GetByPendingInvoice(id).ToList();
 
             return Ok(records);
         }

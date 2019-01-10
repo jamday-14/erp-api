@@ -7,7 +7,5 @@ namespace Contracts
     {
         IQueryable<TblDeliveryReceipts> GetPendingByCustomer(int customerId);
         IQueryable<TblDeliveryReceipts> GetByCustomer(int customerId);
-        IQueryable<TblDeliveryReceiptDetails> GetDetails(int id);
-        IQueryable<TblDeliveryReceiptDetails> GetDetailsPendingInvoice(int id);
     }
 }

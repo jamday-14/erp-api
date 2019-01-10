@@ -130,36 +130,6 @@ namespace Services
             _repoContext.SaveChanges();
         }
 
-
-        public List<TblSalesOrders> GetPendingSalesOrdersByCustomer(int customerId)
-        {
-            return SalesOrderRepo.GetPendingByCustomer(customerId).ToList();
-        }
-
-        public List<TblSalesOrderDetails> GetSalesOrderDetails(int id)
-        {
-            return SalesOrderRepo.GetDetails(id).ToList();
-        }
-
-        public List<TblDeliveryReceipts> GetPendingDeliveryReceiptsByCustomer(int customerId)
-        {
-            return DeliveryReceiptRepo.GetPendingByCustomer(customerId).ToList();
-        }
-
-        public List<TblDeliveryReceipts> GetDeliveryReceiptsByCustomer(int customerId)
-        {
-            return DeliveryReceiptRepo.GetByCustomer(customerId).ToList();
-        }
-
-        public List<TblDeliveryReceiptDetails> GetDeliveryReceiptDetails(int id)
-        {
-            return DeliveryReceiptRepo.GetDetails(id).ToList();
-        }
-
-        public List<TblDeliveryReceiptDetails> GetDeliveryReceiptDetailsPendingInvoice(int id)
-        {
-            return DeliveryReceiptRepo.GetDetailsPendingInvoice(id).ToList();
-        }
         #endregion
     }
 }

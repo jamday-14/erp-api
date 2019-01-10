@@ -30,16 +30,6 @@ namespace Services
                         select receipts;
 
             return query.Distinct();
-        }
-
-        public IQueryable<TblDeliveryReceiptDetails> GetDetailsPendingInvoice(int id)
-        {
-            return RepositoryContext.TblDeliveryReceiptDetails.Where(x => x.DeliveryReceiptId == id && x.QtyInvoice < (x.Qty - x.QtyReturn) && !x.Closed);
-        }
-
-        public IQueryable<TblDeliveryReceiptDetails> GetDetails(int id)
-        {
-            return RepositoryContext.TblDeliveryReceiptDetails.Where(x => x.DeliveryReceiptId == id && !x.Closed);
-        }
+        }        
     }
 }

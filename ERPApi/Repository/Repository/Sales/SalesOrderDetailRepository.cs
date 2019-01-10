@@ -1,5 +1,6 @@
 ﻿using Contracts;
 using Entities.Models;
+using System.Linq;
 
 namespace Services
 {
@@ -7,6 +8,16 @@ namespace Services
     {
         public SalesOrderDetailRepository(ERPContext repositoryContext) : base(repositoryContext)
         {
+        }
+
+        public IQueryable<TblSalesOrderDetails> GetByOrderId(int id)
+        {
+            return RepositoryContext.TblSalesOrderDetails.Where(x => x.SalesOrderId == id);
+        }
+
+        public IQueryable<TblSalesOrderDetails> GetByPendingDeliveryReceipt(int id)
+        {
+            return RepositoryContext.TblSalesOrderDetails.Where(x => x.SalesOrderId == id && x.QtyDr < x.Qty && !x.Closed);
         }
     }
 }
