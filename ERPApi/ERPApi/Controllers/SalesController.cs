@@ -254,6 +254,16 @@ namespace ERPApi.Controllers
 
             return Created($"sales/returns/{request.SalesReturnId}/{request.Id}", new { id = request.Id });
         }
+
+        [HttpGet, Route("returns/{id:int}/details")]
+        [ActionName("Sales.SalesReturn")]
+        [Produces(typeof(IList<TblDeliveryReceiptDetails>))]
+        public ActionResult GetSalesReturnDetails(int id)
+        {
+            var records = _service.SalesReturnDetailRepo.GetBySalesReturnId(id).ToList();
+
+            return Ok(records);
+        }
         #endregion
 
         #region Delivery Receipts

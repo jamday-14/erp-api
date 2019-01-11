@@ -14,7 +14,7 @@ namespace Contracts
         IDeliveryReceiptDetailRepository DeliveryReceiptDetailRepo { get; }
         ISalesInvoiceDetailRepository SalesInvoiceDetailRepo { get; }
         ISalesReturnDetailRepository SalesReturnDetailRepo { get; }
-        
+
 
         void Save();
         
