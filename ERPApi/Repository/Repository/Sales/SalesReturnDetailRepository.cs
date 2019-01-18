@@ -13,7 +13,8 @@ namespace Services
 
         public IQueryable<TblSalesReturnDetails> GetBySalesReturnId(int id)
         {
-            return RepositoryContext.TblSalesReturnDetails.Where(x => x.SalesReturnId == id);
+            return RepositoryContext.TblSalesReturnDetails.Where(x => x.SalesReturnId == id)
+                .OrderBy(x => x.ReferenceDetailId).ThenBy(x => x.Id); ;
         }
     }
 }

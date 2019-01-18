@@ -18,7 +18,7 @@ namespace Services
                         && !orders.Closed && !details.Closed
                         select orders;
 
-            return query.Distinct();
+            return query.Distinct().OrderByDescending(x => x.Date);
         }
     }
 }

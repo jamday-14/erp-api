@@ -10,6 +10,7 @@ namespace Entities.Models
         public int ItemId { get; set; }
         public double Qty { get; set; }
         public double QtyOnHand { get; set; }
+        public double QtyReturn { get; set; }
         public int? UnitId { get; set; }
         public int? WarehouseId { get; set; }
         public decimal UnitPrice { get; set; }

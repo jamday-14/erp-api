@@ -18,7 +18,7 @@ namespace Services
                         && !receipts.Closed && !details.Closed
                         select receipts;
 
-            return query.Distinct();
+            return query.Distinct().OrderByDescending(x=> x.Date);
         }
 
         public IQueryable<TblDeliveryReceipts> GetByCustomer(int customerId)
@@ -29,7 +29,7 @@ namespace Services
                         && !receipts.Closed && !details.Closed
                         select receipts;
 
-            return query.Distinct();
+            return query.Distinct().OrderByDescending(x => x.Date);
         }        
     }
 }

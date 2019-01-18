@@ -12,7 +12,8 @@ namespace Services
 
         public IQueryable<TblSalesInvoiceDetails> GetByInvoiceId(int id)
         {
-            return RepositoryContext.TblSalesInvoiceDetails.Where(x => x.SalesInvoiceId == id);
+            return RepositoryContext.TblSalesInvoiceDetails.Where(x => x.SalesInvoiceId == id)
+                .OrderBy(x => x.DrdetailId).ThenBy(x => x.Id); ;
         }
     }
 }

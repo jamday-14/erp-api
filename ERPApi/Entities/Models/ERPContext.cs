@@ -79,6 +79,7 @@ namespace Entities.Models
         public virtual DbSet<TblRdo> TblRdo { get; set; }
         public virtual DbSet<TblReasonForInventoryAdjustments> TblReasonForInventoryAdjustments { get; set; }
         public virtual DbSet<TblReceivingReportDetails> TblReceivingReportDetails { get; set; }
+        public virtual DbSet<TblReferenceTypes> TblReferenceTypes { get; set; }
         public virtual DbSet<TblReminders> TblReminders { get; set; }
         public virtual DbSet<TblSalesInvoiceDetails> TblSalesInvoiceDetails { get; set; }
         public virtual DbSet<TblSalesInvoicePaymentDetails> TblSalesInvoicePaymentDetails { get; set; }
@@ -1982,6 +1983,16 @@ namespace Entities.Models
                     .HasDefaultValueSql("((0))");
             });
 
+            modelBuilder.Entity<TblReferenceTypes>(entity =>
+            {
+                entity.ToTable("tblReferenceTypes");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
             modelBuilder.Entity<TblReminders>(entity =>
             {
                 entity.ToTable("tblReminders");
@@ -2271,12 +2282,7 @@ namespace Entities.Models
 
                 entity.Property(e => e.Discount).HasColumnType("money");
 
-                entity.Property(e => e.DrdetailId).HasColumnName("DRDetailId");
-
-                entity.Property(e => e.Drid).HasColumnName("DRId");
-
-                entity.Property(e => e.DrrefNo)
-                    .HasColumnName("DRRefNo")
+                entity.Property(e => e.ReferenceNo)
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
