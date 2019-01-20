@@ -118,7 +118,7 @@ namespace ERPApi.Controllers
         #region Receiving Report
         [HttpGet, Route("receiving-reports")]
         [ActionName("Purchasing.ReceivingReport")]
-        [Produces(typeof(IList<TblReceivingReportDetails>))]
+        [Produces(typeof(IList<TblReceivingReport>))]
         public ActionResult GetReceivingReports()
         {
             var records = _service.ReceivingReportRepo.FindAll();
@@ -138,7 +138,7 @@ namespace ERPApi.Controllers
         [HttpPost, Route("receiving-reports")]
         [ActionName("ReceivingReport.New")]
         [ProducesResponseType(201)]
-        public ActionResult PostReceivingReport(TblReceivingReportDetails request)
+        public ActionResult PostReceivingReport(TblReceivingReport request)
         {
             _service.ReceivingReportRepo.Create(request);
             _service.Save();

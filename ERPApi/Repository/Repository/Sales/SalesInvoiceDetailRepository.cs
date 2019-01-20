@@ -10,10 +10,16 @@ namespace Services
         {
         }
 
+        public IQueryable<TblSalesInvoiceDetails> GetAvailableByInvoiceId(int id)
+        {
+            return RepositoryContext.TblSalesInvoiceDetails.Where(x => x.SalesInvoiceId == id && x.Qty > x.QtyReturn)
+                .OrderBy(x => x.DrdetailId).ThenBy(x => x.Id);
+        }
+
         public IQueryable<TblSalesInvoiceDetails> GetByInvoiceId(int id)
         {
             return RepositoryContext.TblSalesInvoiceDetails.Where(x => x.SalesInvoiceId == id)
-                .OrderBy(x => x.DrdetailId).ThenBy(x => x.Id); ;
+                .OrderBy(x => x.DrdetailId).ThenBy(x => x.Id);
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Contracts
 {
-    public interface IReceivingReportRepository : IRepositoryBase<TblReceivingReportDetails>
+    public interface IReceivingReportRepository : IRepositoryBase<TblReceivingReport>
     {
     }
 }

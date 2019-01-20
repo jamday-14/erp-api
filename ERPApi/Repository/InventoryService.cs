@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Contracts;
 using Entities.Models;
+using System;
+using System.Linq;
 
 namespace Services
 {
@@ -20,6 +22,8 @@ namespace Services
         private IGoodsTransferRepository _goodsTransferRepo;
         private IItemEntryRepository _itemEntryRepo;
         private IItemReleaseRepository _itemReleaseRepo;
+        private IInventoryRepository _inventoryRepo;
+        private IInventoryLedgerRepository _inventoryLedgerRepo;
         #endregion
 
         #region REPOSITORY GETTERS
@@ -71,9 +75,69 @@ namespace Services
             }
         }
 
+        public IInventoryRepository InventoryRepo
+        {
+            get
+            {
+                if (_inventoryRepo == null)
+                {
+                    _inventoryRepo = new InventoryRepository(_repoContext);
+                }
+                return _inventoryRepo;
+            }
+        }
+
+        public IInventoryLedgerRepository InventoryLedgerRepo
+        {
+            get
+            {
+                if (_inventoryLedgerRepo == null)
+                {
+                    _inventoryLedgerRepo = new InventoryLedgerRepository(_repoContext);
+                }
+                return _inventoryLedgerRepo;
+            }
+        }
+
+
         public void Save()
         {
             _repoContext.SaveChanges();
+        }
+
+        public void PostInventory(int warehouseId, int itemId, double qty, decimal unitPrice)
+        {
+            TblInventory inventory = null;
+            TblInventoryLedger ledger = null;
+            int companyId = 1;
+
+            inventory = InventoryRepo.FindByCondition(x => x.WareHouseId == warehouseId && x.ItemId == itemId).FirstOrDefault();
+            ledger = InventoryLedgerRepo.FindByCondition(x => x.CompanyId == companyId && x.ItemId == itemId && x.Date == DateTime.Today).FirstOrDefault();
+
+            if (inventory == null)
+            {
+                inventory = new TblInventory { WareHouseId = warehouseId, ItemId = itemId, CompanyId = companyId, Quantity = 0 };
+                InventoryRepo.Create(inventory);
+            }
+                
+            if (ledger == null)
+            {
+                ledger = new TblInventoryLedger { CompanyId = companyId, Date = DateTime.Today, ItemId = itemId, TotalIn = 0, TotalOut = 0 };
+                InventoryLedgerRepo.Create(ledger);
+            }
+
+            inventory.Quantity += qty;
+
+            ledger.TotalIn += qty;
+            ledger.EndQty = ledger.TotalIn - ledger.TotalOut;
+
+            var previousLedger = InventoryLedgerRepo.FindByCondition(x => x.CompanyId == companyId && x.ItemId == itemId && x.Date != DateTime.Today)
+                .OrderByDescending(x => x.Date).FirstOrDefault();
+
+            if (previousLedger != null)
+                ledger.EndQty += previousLedger.EndQty;
+
+            this.Save();
         }
         #endregion
     }

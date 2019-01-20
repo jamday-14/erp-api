@@ -78,6 +78,7 @@ namespace Entities.Models
         public virtual DbSet<TblPurchaseReturns> TblPurchaseReturns { get; set; }
         public virtual DbSet<TblRdo> TblRdo { get; set; }
         public virtual DbSet<TblReasonForInventoryAdjustments> TblReasonForInventoryAdjustments { get; set; }
+        public virtual DbSet<TblReceivingReport> TblReceivingReport { get; set; }
         public virtual DbSet<TblReceivingReportDetails> TblReceivingReportDetails { get; set; }
         public virtual DbSet<TblReferenceTypes> TblReferenceTypes { get; set; }
         public virtual DbSet<TblReminders> TblReminders { get; set; }
@@ -127,7 +128,6 @@ namespace Entities.Models
         // Unable to generate entity type for table 'dbo.tblModules'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.tblPatches'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.ItemSample'. Please see the warning messages.
-        // Unable to generate entity type for table 'dbo.tblReceivingReport'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.tblReportFolders'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.tblReportItems'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.tblReportParameters'. Please see the warning messages.
@@ -245,13 +245,11 @@ namespace Entities.Models
 
                 entity.Property(e => e.Discount).HasColumnType("money");
 
-                entity.Property(e => e.ItemId).HasColumnName("ItemID");
-
                 entity.Property(e => e.Remarks)
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
-                entity.Property(e => e.RrdetailId).HasColumnName("RRDetailID");
+                entity.Property(e => e.RrdetailId).HasColumnName("RRDetailId");
 
                 entity.Property(e => e.Rrid).HasColumnName("RRId");
 
@@ -384,12 +382,6 @@ namespace Entities.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.TermId).HasColumnName("TermID");
-
-                entity.Property(e => e.Uiselect)
-                    .HasColumnName("UISelect")
-                    .HasDefaultValueSql("((0))");
-
-                entity.Property(e => e.VendorId).HasColumnName("VendorID");
             });
 
             modelBuilder.Entity<TblBranches>(entity =>
@@ -1862,11 +1854,7 @@ namespace Entities.Models
             {
                 entity.ToTable("tblPurchaseReturnDetails");
 
-                entity.Property(e => e.Id).HasColumnName("ID");
-
                 entity.Property(e => e.Discount).HasColumnType("money");
-
-                entity.Property(e => e.PurchaseReturnId).HasColumnName("PurchaseReturnID");
 
                 entity.Property(e => e.Remarks)
                     .HasMaxLength(100)
@@ -1884,17 +1872,11 @@ namespace Entities.Models
                 entity.Property(e => e.SubTotal).HasComputedColumnSql("([Qty]*[UnitPrice]-[Discount])");
 
                 entity.Property(e => e.UnitPrice).HasColumnType("money");
-
-                entity.Property(e => e.WarehouseId).HasColumnName("WarehouseID");
             });
 
             modelBuilder.Entity<TblPurchaseReturns>(entity =>
             {
                 entity.ToTable("tblPurchaseReturns");
-
-                entity.Property(e => e.Id).HasColumnName("ID");
-
-                entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
 
                 entity.Property(e => e.CreationDate).HasColumnType("datetime");
 
@@ -1953,6 +1935,42 @@ namespace Entities.Models
                     .IsUnicode(false);
             });
 
+            modelBuilder.Entity<TblReceivingReport>(entity =>
+            {
+                entity.ToTable("tblReceivingReport");
+
+                entity.Property(e => e.Amount)
+                    .HasColumnType("money")
+                    .HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.AmountDue)
+                    .HasColumnType("money")
+                    .HasComputedColumnSql("([Amount]-[AmountPaid])");
+
+                entity.Property(e => e.AmountPaid)
+                    .HasColumnType("money")
+                    .HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.Comments)
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CreationDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Date).HasColumnType("datetime");
+
+                entity.Property(e => e.LastEditedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.RefNo)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.SystemNo)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
             modelBuilder.Entity<TblReceivingReportDetails>(entity =>
             {
                 entity.ToTable("tblReceivingReportDetails");
@@ -1961,7 +1979,7 @@ namespace Entities.Models
                     .HasColumnType("money")
                     .HasDefaultValueSql("((0))");
 
-                entity.Property(e => e.PodetailId).HasColumnName("PODetailID");
+                entity.Property(e => e.PodetailId).HasColumnName("PODetailId");
 
                 entity.Property(e => e.Poid).HasColumnName("POId");
 
@@ -1969,8 +1987,6 @@ namespace Entities.Models
                     .HasColumnName("PORefNo")
                     .HasMaxLength(50)
                     .IsUnicode(false);
-
-                entity.Property(e => e.ReceivingReportId).HasColumnName("ReceivingReportID");
 
                 entity.Property(e => e.Remarks)
                     .HasMaxLength(100)

@@ -3,7 +3,7 @@ using Entities.Models;
 
 namespace Services
 {
-    class ReceivingReportRepository : RepositoryBase<TblReceivingReportDetails>, IReceivingReportRepository
+    class ReceivingReportRepository : RepositoryBase<TblReceivingReport>, IReceivingReportRepository
     {
         public ReceivingReportRepository(ERPContext repositoryContext) : base(repositoryContext)
         {

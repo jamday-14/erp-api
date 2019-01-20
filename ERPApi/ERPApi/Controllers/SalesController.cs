@@ -14,16 +14,19 @@ namespace ERPApi.Controllers
     public class SalesController : ControllerBase
     {
         private ILoggerManager _logger;
-        private ISalesService _service;
+        private ISalesService _salesService;
+        private IInventoryService _inventoryService;
         private IMapper _mapper;
 
         public SalesController(
             ILoggerManager logger,
-            ISalesService service,
+            ISalesService salesService,
+            IInventoryService inventoryService,
             IMapper mapper)
         {
             _logger = logger;
-            _service = service;
+            _salesService = salesService;
+            _inventoryService = inventoryService;
             _mapper = mapper;
         }
 
@@ -33,7 +36,8 @@ namespace ERPApi.Controllers
         [Produces(typeof(IList<TblSalesOrders>))]
         public ActionResult GetSalesOrders()
         {
-            var records = _service.SalesOrderRepo.FindAll().OrderByDescending(x => x.Date);
+            var records = _salesService.SalesOrderRepo.FindAll()
+                .OrderByDescending(x => x.Date).ThenByDescending(x => x.SystemNo);
 
             return Ok(records);
         }
@@ -43,7 +47,7 @@ namespace ERPApi.Controllers
         [Produces(typeof(TblSalesOrders))]
         public ActionResult GetSalesOrder(int id)
         {
-            var record = _service.SalesOrderRepo.FindByCondition(x => x.Id == id).FirstOrDefault();
+            var record = _salesService.SalesOrderRepo.FindByCondition(x => x.Id == id).FirstOrDefault();
             return Ok(record);
         }
 
@@ -62,9 +66,9 @@ namespace ERPApi.Controllers
             request.Void = false;
             request.SystemNo = $"SO-{DateTimeOffset.UtcNow.ToUnixTimeSeconds()}";
 
-            _service.SalesOrderRepo.Create(request);
+            _salesService.SalesOrderRepo.Create(request);
 
-            _service.Save();
+            _salesService.Save();
 
             return Created("sales/orders", new { id = request.Id });
         }
@@ -79,8 +83,8 @@ namespace ERPApi.Controllers
             request.QtyOnHand = 0;
             request.Closed = false;
 
-            _service.SalesOrderDetailRepo.Create(request);
-            _service.Save();
+            _salesService.SalesOrderDetailRepo.Create(request);
+            _salesService.Save();
 
             return Created($"sales/orders/{request.SalesOrderId}/{request.Id}", new { id = request.Id });
         }
@@ -90,7 +94,7 @@ namespace ERPApi.Controllers
         [Produces(typeof(IList<TblSalesOrders>))]
         public ActionResult GetPendingSalesOrdersByCustomer(int customerId)
         {
-            var records = _service.SalesOrderRepo.GetPendingByCustomer(customerId).ToList();
+            var records = _salesService.SalesOrderRepo.GetPendingByCustomer(customerId).ToList();
 
             return Ok(records);
         }
@@ -100,7 +104,7 @@ namespace ERPApi.Controllers
         [Produces(typeof(IList<TblSalesOrderDetails>))]
         public ActionResult GetSalesOrderDetails(int id)
         {
-            var records = _service.SalesOrderDetailRepo.GetByOrderId(id).ToList();
+            var records = _salesService.SalesOrderDetailRepo.GetByOrderId(id).ToList();
 
             return Ok(records);
         }
@@ -110,7 +114,7 @@ namespace ERPApi.Controllers
         [Produces(typeof(IList<TblSalesOrderDetails>))]
         public ActionResult GetSalesOrderDetailsPendingDR(int id)
         {
-            var records = _service.SalesOrderDetailRepo.GetByPendingDeliveryReceipt(id).ToList();
+            var records = _salesService.SalesOrderDetailRepo.GetByPendingDeliveryReceipt(id).ToList();
 
             return Ok(records);
         }
@@ -121,14 +125,14 @@ namespace ERPApi.Controllers
         [ProducesResponseType(404)]
         public ActionResult DeleteSalesOrderDetail(int soId, int sodId)
         {
-            var record = _service.SalesOrderDetailRepo.FindByCondition(x => x.Id == sodId && x.SalesOrderId == soId).FirstOrDefault();
+            var record = _salesService.SalesOrderDetailRepo.FindByCondition(x => x.Id == sodId && x.SalesOrderId == soId).FirstOrDefault();
 
             if (record == null)
                 return NotFound();
 
-            _service.SalesOrderDetailRepo.Delete(record);
+            _salesService.SalesOrderDetailRepo.Delete(record);
 
-            _service.Save();
+            _salesService.Save();
 
             return NoContent();
         }
@@ -139,7 +143,7 @@ namespace ERPApi.Controllers
         [ProducesResponseType(404)]
         public ActionResult UpdateSalesOrder(int id, TblSalesOrders request)
         {
-            var record = _service.SalesOrderRepo.FindByCondition(x => x.Id == id).FirstOrDefault();
+            var record = _salesService.SalesOrderRepo.FindByCondition(x => x.Id == id).FirstOrDefault();
 
             if (record == null)
                 return NotFound();
@@ -157,7 +161,7 @@ namespace ERPApi.Controllers
             record.LastEditedById = Statics.LoggedInUser.userId;
             record.LastEditedDate = System.DateTime.UtcNow;
 
-            _service.Save();
+            _salesService.Save();
 
             return Ok(record);
         }
@@ -168,7 +172,7 @@ namespace ERPApi.Controllers
         [ProducesResponseType(404)]
         public ActionResult UpdateSalesOrderDetail(int soId, int sodId, TblSalesOrderDetails request)
         {
-            var record = _service.SalesOrderDetailRepo.FindByCondition(x => x.Id == sodId && x.SalesOrderId == soId).FirstOrDefault();
+            var record = _salesService.SalesOrderDetailRepo.FindByCondition(x => x.Id == sodId && x.SalesOrderId == soId).FirstOrDefault();
 
             if (record == null)
                 return NotFound();
@@ -181,7 +185,7 @@ namespace ERPApi.Controllers
             record.UnitId = request.UnitId;
             record.UnitPrice = request.UnitPrice;
 
-            _service.Save();
+            _salesService.Save();
 
             return Ok(record);
         }
@@ -194,7 +198,8 @@ namespace ERPApi.Controllers
         [Produces(typeof(IList<TblDeliveryReceipts>))]
         public ActionResult GetDeliveryReceipts()
         {
-            var records = _service.DeliveryReceiptRepo.FindAll().OrderByDescending(x => x.Date);
+            var records = _salesService.DeliveryReceiptRepo.FindAll()
+                .OrderByDescending(x => x.Date).ThenByDescending(x=> x.SystemNo);
 
             return Ok(records);
         }
@@ -204,7 +209,7 @@ namespace ERPApi.Controllers
         [Produces(typeof(TblDeliveryReceipts))]
         public ActionResult GetDeliveryReceipt(int id)
         {
-            var record = _service.DeliveryReceiptRepo.FindByCondition(x => x.Id == id).FirstOrDefault();
+            var record = _salesService.DeliveryReceiptRepo.FindByCondition(x => x.Id == id).FirstOrDefault();
             return Ok(record);
         }
 
@@ -222,8 +227,8 @@ namespace ERPApi.Controllers
             request.Void = false;
             request.SystemNo = $"DR-{DateTimeOffset.UtcNow.ToUnixTimeSeconds()}";
 
-            _service.DeliveryReceiptRepo.Create(request);
-            _service.Save();
+            _salesService.DeliveryReceiptRepo.Create(request);
+            _salesService.Save();
 
             return Created("sales/delivery-receipts", new { id = request.Id });
         }
@@ -233,7 +238,7 @@ namespace ERPApi.Controllers
         [Produces(typeof(IList<TblDeliveryReceipts>))]
         public ActionResult GetPendingDeliveryReceiptsByCustomer(int customerId)
         {
-            var records = _service.DeliveryReceiptRepo.GetPendingByCustomer(customerId);
+            var records = _salesService.DeliveryReceiptRepo.GetPendingByCustomer(customerId);
 
             return Ok(records);
         }
@@ -243,7 +248,7 @@ namespace ERPApi.Controllers
         [Produces(typeof(IList<TblDeliveryReceipts>))]
         public ActionResult GetDeliveryReceiptsByCustomer(int customerId)
         {
-            var records = _service.DeliveryReceiptRepo.GetByCustomer(customerId);
+            var records = _salesService.DeliveryReceiptRepo.GetByCustomer(customerId);
 
             return Ok(records);
         }
@@ -253,7 +258,7 @@ namespace ERPApi.Controllers
         [Produces(typeof(IList<TblDeliveryReceiptDetails>))]
         public ActionResult GetDeliveryReceiptDetails(int id)
         {
-            var records = _service.DeliveryReceiptDetailRepo.GetByDeliveryReceiptId(id).ToList();
+            var records = _salesService.DeliveryReceiptDetailRepo.GetByDeliveryReceiptId(id).ToList();
 
             return Ok(records);
         }
@@ -263,7 +268,7 @@ namespace ERPApi.Controllers
         [Produces(typeof(IList<TblDeliveryReceiptDetails>))]
         public ActionResult GetDeliveryReceiptDetailsPendingInvoice(int id)
         {
-            var records = _service.DeliveryReceiptDetailRepo.GetByPendingInvoice(id).ToList();
+            var records = _salesService.DeliveryReceiptDetailRepo.GetByPendingInvoice(id).ToList();
 
             return Ok(records);
         }
@@ -279,15 +284,17 @@ namespace ERPApi.Controllers
             request.QtyReturn = 0;
             request.Closed = false;
 
-            _service.DeliveryReceiptDetailRepo.Create(request);
+            _salesService.DeliveryReceiptDetailRepo.Create(request);
 
             if (request.SodetailId != null && request.Soid != null)
             {
-                var salesOrderDetail = _service.SalesOrderDetailRepo.FindByCondition(x => x.Id == request.SodetailId && x.SalesOrderId == request.Soid).FirstOrDefault();
+                var salesOrderDetail = _salesService.SalesOrderDetailRepo.FindByCondition(x => x.Id == request.SodetailId && x.SalesOrderId == request.Soid).FirstOrDefault();
                 salesOrderDetail.QtyDr += request.Qty;
             }
 
-            _service.Save();
+            _inventoryService.PostInventory(request.WarehouseId, request.ItemId, request.Qty, request.UnitPrice);
+
+            _salesService.Save();
 
             return Created($"sales/delivery-receipts/{request.DeliveryReceiptId}/{request.Id}", new { id = request.Id });
         }
@@ -298,7 +305,7 @@ namespace ERPApi.Controllers
         [ProducesResponseType(404)]
         public ActionResult UpdateDeliveryReceipt(int id, TblDeliveryReceipts request)
         {
-            var record = _service.DeliveryReceiptRepo.FindByCondition(x => x.Id == id).FirstOrDefault();
+            var record = _salesService.DeliveryReceiptRepo.FindByCondition(x => x.Id == id).FirstOrDefault();
 
             if (record == null)
                 return NotFound();
@@ -316,7 +323,7 @@ namespace ERPApi.Controllers
             record.LastEditedById = Statics.LoggedInUser.userId;
             record.LastEditedDate = System.DateTime.UtcNow;
 
-            _service.Save();
+            _salesService.Save();
 
             return Ok(record);
         }
@@ -327,14 +334,14 @@ namespace ERPApi.Controllers
         [ProducesResponseType(404)]
         public ActionResult UpdateDeliveryReceiptDetail(int drId, int drdId, TblDeliveryReceiptDetails request)
         {
-            var record = _service.DeliveryReceiptDetailRepo.FindByCondition(x => x.Id == drdId && x.DeliveryReceiptId == drId).FirstOrDefault();
+            var record = _salesService.DeliveryReceiptDetailRepo.FindByCondition(x => x.Id == drdId && x.DeliveryReceiptId == drId).FirstOrDefault();
 
             if (record == null)
                 return NotFound();
 
             if (request.SodetailId != null && request.Soid != null)
             {
-                var salesOrderDetail = _service.SalesOrderDetailRepo.FindByCondition(x => x.Id == request.SodetailId && x.SalesOrderId == request.Soid).FirstOrDefault();
+                var salesOrderDetail = _salesService.SalesOrderDetailRepo.FindByCondition(x => x.Id == request.SodetailId && x.SalesOrderId == request.Soid).FirstOrDefault();
                 salesOrderDetail.QtyDr -= record.Qty;
                 salesOrderDetail.QtyDr += request.Qty;
             }
@@ -349,7 +356,7 @@ namespace ERPApi.Controllers
             record.WarehouseId = request.WarehouseId;
             record.SorefNo = request.SorefNo;
 
-            _service.Save();
+            _salesService.Save();
 
             return Ok(record);
         }
@@ -360,20 +367,20 @@ namespace ERPApi.Controllers
         [ProducesResponseType(404)]
         public ActionResult DeleteDeliveryReceiptDetail(int drId, int drdId)
         {
-            var record = _service.DeliveryReceiptDetailRepo.FindByCondition(x => x.Id == drdId && x.DeliveryReceiptId == drId).FirstOrDefault();
+            var record = _salesService.DeliveryReceiptDetailRepo.FindByCondition(x => x.Id == drdId && x.DeliveryReceiptId == drId).FirstOrDefault();
 
             if (record == null)
                 return NotFound();
 
             if (record.SodetailId != null && record.Soid != null)
             {
-                var salesOrderDetail = _service.SalesOrderDetailRepo.FindByCondition(x => x.Id == record.SodetailId && x.SalesOrderId == record.Soid).FirstOrDefault();
+                var salesOrderDetail = _salesService.SalesOrderDetailRepo.FindByCondition(x => x.Id == record.SodetailId && x.SalesOrderId == record.Soid).FirstOrDefault();
                 salesOrderDetail.QtyDr -= record.Qty;
             }
 
-            _service.DeliveryReceiptDetailRepo.Delete(record);
+            _salesService.DeliveryReceiptDetailRepo.Delete(record);
 
-            _service.Save();
+            _salesService.Save();
 
             return NoContent();
         }
@@ -385,7 +392,8 @@ namespace ERPApi.Controllers
         [Produces(typeof(IList<TblSalesInvoices>))]
         public ActionResult GetSalesInvoices()
         {
-            var records = _service.SalesInvoiceRepo.FindAll().OrderByDescending(x => x.Date);
+            var records = _salesService.SalesInvoiceRepo.FindAll()
+                .OrderByDescending(x => x.Date).ThenByDescending(x => x.SystemNo);
 
             return Ok(records);
         }
@@ -395,7 +403,7 @@ namespace ERPApi.Controllers
         [Produces(typeof(TblSalesInvoices))]
         public ActionResult GetSalesInvoice(int id)
         {
-            var record = _service.SalesInvoiceRepo.FindByCondition(x => x.Id == id).FirstOrDefault();
+            var record = _salesService.SalesInvoiceRepo.FindByCondition(x => x.Id == id).FirstOrDefault();
             return Ok(record);
         }
 
@@ -412,8 +420,8 @@ namespace ERPApi.Controllers
             request.Void = false;
             request.SystemNo = $"SI-{DateTimeOffset.UtcNow.ToUnixTimeSeconds()}";
 
-            _service.SalesInvoiceRepo.Create(request);
-            _service.Save();
+            _salesService.SalesInvoiceRepo.Create(request);
+            _salesService.Save();
 
             return Created("sales/invoices", new { id = request.Id });
         }
@@ -426,21 +434,21 @@ namespace ERPApi.Controllers
             request.QtyOnHand = 0;
             request.Closed = false;
 
-            _service.SalesInvoiceDetailRepo.Create(request);
+            _salesService.SalesInvoiceDetailRepo.Create(request);
 
             if (request.DrdetailId != null && request.Drid != null)
             {
-                var drDetail = _service.DeliveryReceiptDetailRepo.FindByCondition(x => x.Id == request.DrdetailId && x.DeliveryReceiptId == request.Drid).FirstOrDefault();
+                var drDetail = _salesService.DeliveryReceiptDetailRepo.FindByCondition(x => x.Id == request.DrdetailId && x.DeliveryReceiptId == request.Drid).FirstOrDefault();
                 drDetail.QtyInvoice += request.Qty;
 
                 if (drDetail.Soid != null && drDetail.SodetailId != null)
                 {
-                    var soDetail = _service.SalesOrderDetailRepo.FindByCondition(x => x.Id == drDetail.SodetailId && x.SalesOrderId == drDetail.Soid).FirstOrDefault();
+                    var soDetail = _salesService.SalesOrderDetailRepo.FindByCondition(x => x.Id == drDetail.SodetailId && x.SalesOrderId == drDetail.Soid).FirstOrDefault();
                     soDetail.QtyInvoice += request.Qty;
                 }
             }
 
-            _service.Save();
+            _salesService.Save();
 
             return Created($"sales/invoices/{request.SalesInvoiceId}/{request.Id}", new { id = request.Id });
         }
@@ -450,7 +458,7 @@ namespace ERPApi.Controllers
         [Produces(typeof(IList<TblSalesInvoiceDetails>))]
         public ActionResult GetSalesInvoiceDetails(int id)
         {
-            var records = _service.SalesInvoiceDetailRepo.GetByInvoiceId(id).ToList();
+            var records = _salesService.SalesInvoiceDetailRepo.GetByInvoiceId(id).ToList();
 
             return Ok(records);
         }
@@ -461,7 +469,7 @@ namespace ERPApi.Controllers
         [ProducesResponseType(404)]
         public ActionResult UpdateSalesInvoice(int id, TblSalesInvoices request)
         {
-            var record = _service.SalesInvoiceRepo.FindByCondition(x => x.Id == id).FirstOrDefault();
+            var record = _salesService.SalesInvoiceRepo.FindByCondition(x => x.Id == id).FirstOrDefault();
 
             if (record == null)
                 return NotFound();
@@ -479,7 +487,7 @@ namespace ERPApi.Controllers
             record.LastEditedById = Statics.LoggedInUser.userId;
             record.LastEditedDate = System.DateTime.UtcNow;
 
-            _service.Save();
+            _salesService.Save();
 
             return Ok(record);
         }
@@ -490,14 +498,14 @@ namespace ERPApi.Controllers
         [ProducesResponseType(404)]
         public ActionResult UpdateSalesInvoiceDetail(int siId, int sidId, TblSalesInvoiceDetails request)
         {
-            var record = _service.SalesInvoiceDetailRepo.FindByCondition(x => x.Id == sidId && x.SalesInvoiceId == siId).FirstOrDefault();
+            var record = _salesService.SalesInvoiceDetailRepo.FindByCondition(x => x.Id == sidId && x.SalesInvoiceId == siId).FirstOrDefault();
 
             if (record == null)
                 return NotFound();
 
             if (request.DrdetailId != null && request.Drid != null)
             {
-                var drDetail = _service.DeliveryReceiptDetailRepo.FindByCondition(x => x.Id == request.DrdetailId && x.DeliveryReceiptId == request.Drid).FirstOrDefault();
+                var drDetail = _salesService.DeliveryReceiptDetailRepo.FindByCondition(x => x.Id == request.DrdetailId && x.DeliveryReceiptId == request.Drid).FirstOrDefault();
                 drDetail.QtyInvoice -= record.Qty;
                 drDetail.QtyInvoice += request.Qty;
             }
@@ -511,7 +519,7 @@ namespace ERPApi.Controllers
             record.WarehouseId = request.WarehouseId;
             record.DrrefNo = request.DrrefNo;
 
-            _service.Save();
+            _salesService.Save();
 
             return Ok(record);
         }
@@ -522,20 +530,20 @@ namespace ERPApi.Controllers
         [ProducesResponseType(404)]
         public ActionResult DeleteSalesInvoiceDetail(int siId, int sidId)
         {
-            var record = _service.SalesInvoiceDetailRepo.FindByCondition(x => x.Id == sidId && x.SalesInvoiceId == siId).FirstOrDefault();
+            var record = _salesService.SalesInvoiceDetailRepo.FindByCondition(x => x.Id == sidId && x.SalesInvoiceId == siId).FirstOrDefault();
 
             if (record == null)
                 return NotFound();
 
             if (record.DrdetailId != null && record.Drid != null)
             {
-                var drDetail = _service.DeliveryReceiptDetailRepo.FindByCondition(x => x.Id == record.DrdetailId && x.DeliveryReceiptId == record.Drid).FirstOrDefault();
+                var drDetail = _salesService.DeliveryReceiptDetailRepo.FindByCondition(x => x.Id == record.DrdetailId && x.DeliveryReceiptId == record.Drid).FirstOrDefault();
                 drDetail.QtyInvoice -= record.Qty;
             }
 
-            _service.SalesInvoiceDetailRepo.Delete(record);
+            _salesService.SalesInvoiceDetailRepo.Delete(record);
 
-            _service.Save();
+            _salesService.Save();
 
             return NoContent();
         }
@@ -545,10 +553,31 @@ namespace ERPApi.Controllers
         [Produces(typeof(IList<TblSalesInvoices>))]
         public ActionResult GetSalesInvoicesByCustomer(int customerId)
         {
-            var records = _service.SalesInvoiceRepo.GetByCustomer(customerId);
+            var records = _salesService.SalesInvoiceRepo.GetByCustomer(customerId);
 
             return Ok(records);
         }
+
+        [HttpGet, Route("customers/{customerId:int}/sales-invoices/available")]
+        [ActionName("Sales.SalesInvoice")]
+        [Produces(typeof(IList<TblSalesInvoices>))]
+        public ActionResult GetAvailableSalesInvoicesByCustomer(int customerId)
+        {
+            var records = _salesService.SalesInvoiceRepo.GetAvailableByCustomer(customerId);
+
+            return Ok(records);
+        }
+
+        [HttpGet, Route("invoices/{id:int}/details/available")]
+        [ActionName("Sales.SalesInvoice")]
+        [Produces(typeof(IList<TblSalesInvoiceDetails>))]
+        public ActionResult GetAvailableSalesInvoicesDetails(int id)
+        {
+            var records = _salesService.SalesInvoiceDetailRepo.GetAvailableByInvoiceId(id);
+
+            return Ok(records);
+        }
+
         #endregion
 
         #region Sales Return
@@ -557,8 +586,8 @@ namespace ERPApi.Controllers
         [Produces(typeof(IList<TblSalesReturns>))]
         public ActionResult GetSalesReturns()
         {
-            var records = _service.SalesReturnRepo.FindAll().OrderByDescending(x => x.Date);
-
+            var records = _salesService.SalesReturnRepo.FindAll()
+                .OrderByDescending(x => x.Date).ThenByDescending(x => x.SystemNo);
             return Ok(records);
         }
 
@@ -567,7 +596,7 @@ namespace ERPApi.Controllers
         [Produces(typeof(TblSalesReturns))]
         public ActionResult GetSalesReturn(int id)
         {
-            var record = _service.SalesReturnRepo.FindByCondition(x => x.Id == id).FirstOrDefault();
+            var record = _salesService.SalesReturnRepo.FindByCondition(x => x.Id == id).FirstOrDefault();
             return Ok(record);
         }
 
@@ -583,8 +612,8 @@ namespace ERPApi.Controllers
             request.Void = false;
             request.SystemNo = $"SR-{DateTimeOffset.UtcNow.ToUnixTimeSeconds()}";
 
-            _service.SalesReturnRepo.Create(request);
-            _service.Save();
+            _salesService.SalesReturnRepo.Create(request);
+            _salesService.Save();
 
             return Created("sales/returns", new { id = request.Id });
         }
@@ -596,21 +625,21 @@ namespace ERPApi.Controllers
         {
             request.QtyOnHand = 0;
 
-            _service.SalesReturnDetailRepo.Create(request);
+            _salesService.SalesReturnDetailRepo.Create(request);
 
             if (request.ReferenceDetailId != null && request.ReferenceId != null && request.ReferenceTypeId ==3)
             {
-                var drDetail = _service.DeliveryReceiptDetailRepo.FindByCondition(x => x.Id == request.ReferenceDetailId && x.DeliveryReceiptId == request.ReferenceId).FirstOrDefault();
+                var drDetail = _salesService.DeliveryReceiptDetailRepo.FindByCondition(x => x.Id == request.ReferenceDetailId && x.DeliveryReceiptId == request.ReferenceId).FirstOrDefault();
                 drDetail.QtyReturn += request.Qty;
             }
 
             if (request.ReferenceDetailId != null && request.ReferenceId != null && request.ReferenceTypeId == 4)
             {
-                var siDetail = _service.SalesInvoiceDetailRepo.FindByCondition(x => x.Id == request.ReferenceDetailId && x.SalesInvoiceId == request.ReferenceId).FirstOrDefault();
+                var siDetail = _salesService.SalesInvoiceDetailRepo.FindByCondition(x => x.Id == request.ReferenceDetailId && x.SalesInvoiceId == request.ReferenceId).FirstOrDefault();
                 siDetail.QtyReturn += request.Qty;
             }
 
-            _service.Save();
+            _salesService.Save();
 
             return Created($"sales/returns/{request.SalesReturnId}/{request.Id}", new { id = request.Id });
         }
@@ -620,7 +649,7 @@ namespace ERPApi.Controllers
         [Produces(typeof(IList<TblSalesReturnDetails>))]
         public ActionResult GetSalesReturnDetails(int id)
         {
-            var records = _service.SalesReturnDetailRepo.GetBySalesReturnId(id).ToList();
+            var records = _salesService.SalesReturnDetailRepo.GetBySalesReturnId(id).ToList();
 
             return Ok(records);
         }
@@ -631,7 +660,7 @@ namespace ERPApi.Controllers
         [ProducesResponseType(404)]
         public ActionResult UpdateSalesReturn(int id, TblSalesReturns request)
         {
-            var record = _service.SalesReturnRepo.FindByCondition(x => x.Id == id).FirstOrDefault();
+            var record = _salesService.SalesReturnRepo.FindByCondition(x => x.Id == id).FirstOrDefault();
 
             if (record == null)
                 return NotFound();
@@ -644,7 +673,7 @@ namespace ERPApi.Controllers
             record.LastEditedById = Statics.LoggedInUser.userId;
             record.LastEditedDate = System.DateTime.UtcNow;
 
-            _service.Save();
+            _salesService.Save();
 
             return Ok(record);
         }
@@ -655,21 +684,21 @@ namespace ERPApi.Controllers
         [ProducesResponseType(404)]
         public ActionResult UpdateSalesReturnDetail(int srId, int srdId, TblSalesReturnDetails request)
         {
-            var record = _service.SalesReturnDetailRepo.FindByCondition(x => x.Id == srdId && x.SalesReturnId == srId).FirstOrDefault();
+            var record = _salesService.SalesReturnDetailRepo.FindByCondition(x => x.Id == srdId && x.SalesReturnId == srId).FirstOrDefault();
 
             if (record == null)
                 return NotFound();
 
             if (request.ReferenceDetailId != null && request.ReferenceId != null && request.ReferenceTypeId == 3)
             {
-                var drDetail = _service.DeliveryReceiptDetailRepo.FindByCondition(x => x.Id == request.ReferenceDetailId && x.DeliveryReceiptId == request.ReferenceId).FirstOrDefault();
+                var drDetail = _salesService.DeliveryReceiptDetailRepo.FindByCondition(x => x.Id == request.ReferenceDetailId && x.DeliveryReceiptId == request.ReferenceId).FirstOrDefault();
                 drDetail.QtyReturn -= record.Qty;
                 drDetail.QtyReturn += request.Qty;
             }
 
             if (request.ReferenceDetailId != null && request.ReferenceId != null && request.ReferenceTypeId == 4)
             {
-                var siDetail = _service.SalesInvoiceDetailRepo.FindByCondition(x => x.Id == request.ReferenceDetailId && x.SalesInvoiceId == request.ReferenceId).FirstOrDefault();
+                var siDetail = _salesService.SalesInvoiceDetailRepo.FindByCondition(x => x.Id == request.ReferenceDetailId && x.SalesInvoiceId == request.ReferenceId).FirstOrDefault();
                 siDetail.QtyReturn -= record.Qty;
                 siDetail.QtyReturn += request.Qty;
             }
@@ -684,8 +713,9 @@ namespace ERPApi.Controllers
             record.ReferenceNo = request.ReferenceNo;
             record.ReferenceId = request.ReferenceId;
             record.ReferenceDetailId = request.ReferenceDetailId;
+            record.Remarks = request.Remarks;
 
-            _service.Save();
+            _salesService.Save();
 
             return Ok(record);
         }
@@ -696,26 +726,26 @@ namespace ERPApi.Controllers
         [ProducesResponseType(404)]
         public ActionResult DeleteSalesReturnDetail(int srId, int srdId)
         {
-            var record = _service.SalesReturnDetailRepo.FindByCondition(x => x.Id == srdId && x.SalesReturnId == srId).FirstOrDefault();
+            var record = _salesService.SalesReturnDetailRepo.FindByCondition(x => x.Id == srdId && x.SalesReturnId == srId).FirstOrDefault();
 
             if (record == null)
                 return NotFound();
 
             if (record.ReferenceDetailId != null && record.ReferenceId != null && record.ReferenceTypeId == 3)
             {
-                var drDetail = _service.DeliveryReceiptDetailRepo.FindByCondition(x => x.Id == record.ReferenceDetailId && x.DeliveryReceiptId == record.ReferenceId).FirstOrDefault();
+                var drDetail = _salesService.DeliveryReceiptDetailRepo.FindByCondition(x => x.Id == record.ReferenceDetailId && x.DeliveryReceiptId == record.ReferenceId).FirstOrDefault();
                 drDetail.QtyReturn -= record.Qty;
             }
 
             if (record.ReferenceDetailId != null && record.ReferenceId != null && record.ReferenceTypeId == 4)
             {
-                var siDetail = _service.SalesInvoiceDetailRepo.FindByCondition(x => x.Id == record.ReferenceDetailId && x.SalesInvoiceId == record.ReferenceId).FirstOrDefault();
+                var siDetail = _salesService.SalesInvoiceDetailRepo.FindByCondition(x => x.Id == record.ReferenceDetailId && x.SalesInvoiceId == record.ReferenceId).FirstOrDefault();
                 siDetail.QtyReturn -= record.Qty;
             }
 
-            _service.SalesReturnDetailRepo.Delete(record);
+            _salesService.SalesReturnDetailRepo.Delete(record);
 
-            _service.Save();
+            _salesService.Save();
 
             return NoContent();
         }
