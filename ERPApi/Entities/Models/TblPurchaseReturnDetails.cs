@@ -16,8 +16,9 @@ namespace Entities.Models
         public decimal Discount { get; set; }
         public double? SubTotal { get; set; }
         public string Remarks { get; set; }
-        public int? Rrid { get; set; }
-        public int? RrdetailId { get; set; }
-        public string RrrefNo { get; set; }
+        public int? ReferenceId { get; set; }
+        public int? ReferenceDetailId { get; set; }
+        public string ReferenceNo { get; set; }
+        public int? ReferenceTypeId { get; set; }
     }
 }

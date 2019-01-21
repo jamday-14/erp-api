@@ -11,6 +11,6 @@
         IInventoryLedgerRepository InventoryLedgerRepo { get; }
 
         void Save();
-        void PostInventory(int warehouseId, int itemId, double qty, decimal unitPrice);
+        void PostInventory(int warehouseId, int itemId, double qty, decimal unitPrice, bool isDeduction = false);
     }
 }

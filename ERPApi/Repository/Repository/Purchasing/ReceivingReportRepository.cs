@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Services
 {
-    class ReceivingReportRepository : RepositoryBase<TblReceivingReport>, IReceivingReportRepository
+    class ReceivingReportRepository : RepositoryBase<TblReceivingReports>, IReceivingReportRepository
     {
         public ReceivingReportRepository(ERPContext repositoryContext) : base(repositoryContext)
         {

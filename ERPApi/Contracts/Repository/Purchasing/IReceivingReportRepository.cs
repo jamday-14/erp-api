@@ -2,7 +2,7 @@
 
 namespace Contracts
 {
-    public interface IReceivingReportRepository : IRepositoryBase<TblReceivingReport>
+    public interface IReceivingReportRepository : IRepositoryBase<TblReceivingReports>
     {
         object GetPendingByVendor(int vendorId);
         object GetByVendor(int vendorId);

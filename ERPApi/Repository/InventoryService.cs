@@ -105,7 +105,7 @@ namespace Services
             _repoContext.SaveChanges();
         }
 
-        public void PostInventory(int warehouseId, int itemId, double qty, decimal unitPrice)
+        public void PostInventory(int warehouseId, int itemId, double qty, decimal unitPrice, bool isDeduction = false)
         {
             TblInventory inventory = null;
             TblInventoryLedger ledger = null;
@@ -126,9 +126,17 @@ namespace Services
                 InventoryLedgerRepo.Create(ledger);
             }
 
-            inventory.Quantity += qty;
+            if (isDeduction)
+            {
+                inventory.Quantity -= qty;
+                ledger.TotalOut += qty;
+            }
+            else
+            {
+                inventory.Quantity += qty;
+                ledger.TotalIn += qty;
+            }
 
-            ledger.TotalIn += qty;
             ledger.EndQty = ledger.TotalIn - ledger.TotalOut;
 
             var previousLedger = InventoryLedgerRepo.FindByCondition(x => x.CompanyId == companyId && x.ItemId == itemId && x.Date != DateTime.Today)
@@ -136,8 +144,6 @@ namespace Services
 
             if (previousLedger != null)
                 ledger.EndQty += previousLedger.EndQty;
-
-            this.Save();
         }
         #endregion
     }

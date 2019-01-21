@@ -8,8 +8,9 @@ namespace Entities.Models
         public int Id { get; set; }
         public int BillId { get; set; }
         public int ItemId { get; set; }
-        public double Quantity { get; set; }
+        public double Qty { get; set; }
         public double QtyOnHand { get; set; }
+        public double QtyReturn { get; set; }
         public int? UnitId { get; set; }
         public decimal UnitPrice { get; set; }
         public decimal Discount { get; set; }

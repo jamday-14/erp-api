@@ -292,7 +292,7 @@ namespace ERPApi.Controllers
                 salesOrderDetail.QtyDr += request.Qty;
             }
 
-            _inventoryService.PostInventory(request.WarehouseId, request.ItemId, request.Qty, request.UnitPrice);
+            _inventoryService.PostInventory(request.WarehouseId, request.ItemId, request.Qty, request.UnitPrice, true);
 
             _salesService.Save();
 

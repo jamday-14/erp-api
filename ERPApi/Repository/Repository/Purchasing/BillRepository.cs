@@ -1,4 +1,5 @@
-﻿using Contracts;
+﻿using System.Linq;
+using Contracts;
 using Entities.Models;
 
 namespace Services
@@ -7,6 +8,28 @@ namespace Services
     {
         public BillRepository(ERPContext repositoryContext) : base(repositoryContext)
         {
+        }
+
+        public IQueryable<TblBills> GetAvailableByVendor(int vendorId)
+        {
+            var query = from invoices in RepositoryContext.TblBills
+                        join details in RepositoryContext.TblBillDetails on invoices.Id equals details.BillId
+                        where invoices.VendorId == vendorId && details.Qty > details.QtyReturn
+                        && !invoices.Closed && !details.Closed
+                        select invoices;
+
+            return query.Distinct().OrderByDescending(x => x.Date);
+        }
+
+        public IQueryable<TblBills> GetByVendor(int vendorId)
+        {
+            var query = from invoices in RepositoryContext.TblBills
+                        join details in RepositoryContext.TblBillDetails on invoices.Id equals details.BillId
+                        where invoices.VendorId == vendorId
+                        && !invoices.Closed && !details.Closed
+                        select invoices;
+
+            return query.Distinct().OrderByDescending(x => x.Date);
         }
     }
 }

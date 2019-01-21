@@ -1856,17 +1856,12 @@ namespace Entities.Models
 
                 entity.Property(e => e.Discount).HasColumnType("money");
 
-                entity.Property(e => e.Remarks)
-                    .HasMaxLength(100)
+                entity.Property(e => e.ReferenceNo)
+                    .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.RrdetailId).HasColumnName("RRDetailId");
-
-                entity.Property(e => e.Rrid).HasColumnName("RRId");
-
-                entity.Property(e => e.RrrefNo)
-                    .HasColumnName("RRRefNo")
-                    .HasMaxLength(50)
+                entity.Property(e => e.Remarks)
+                    .HasMaxLength(100)
                     .IsUnicode(false);
 
                 entity.Property(e => e.SubTotal).HasComputedColumnSql("([Qty]*[UnitPrice]-[Discount])");
