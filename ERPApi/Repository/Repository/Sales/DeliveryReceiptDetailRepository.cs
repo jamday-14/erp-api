@@ -21,7 +21,7 @@ namespace Services
         {
             return RepositoryContext.TblDeliveryReceiptDetails
                 .Where(x => x.DeliveryReceiptId == id && x.QtyInvoice < (x.Qty - x.QtyReturn) && !x.Closed)
-                .OrderBy(x => x.SodetailId).ThenBy(x => x.Id); ;
+                .OrderBy(x => x.SodetailId).ThenBy(x => x.Id);
         }
     }
 }

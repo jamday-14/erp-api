@@ -20,7 +20,7 @@ namespace Services
         {
             return RepositoryContext.TblSalesOrderDetails
                 .Where(x => x.SalesOrderId == id && x.QtyDr < x.Qty && !x.Closed)
-                .OrderBy(x => x.ItemId).ThenBy(x => x.Id); ;
+                .OrderBy(x => x.ItemId).ThenBy(x => x.Id);
         }
     }
 }

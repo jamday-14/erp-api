@@ -20,6 +20,11 @@ namespace Services
         private IPurchaseReturnRepository _purchaseReturnRepo;
         private IBillRepository _billRepo;
         private IReceivingReportRepository _receivingReportRepo;
+
+        private IPurchaseOrderDetailRepository _purchaseOrderDetailRepo;
+        private IPurchaseReturnDetailRepository _purchaseReturnDetailRepo;
+        private IBillDetailRepository _billDetailRepo;
+        private IReceivingReportDetailRepository _receivingReportDetailRepo;
         #endregion
 
         #region REPOSITORY GETTERS
@@ -68,6 +73,54 @@ namespace Services
                     _receivingReportRepo = new ReceivingReportRepository(_repoContext);
                 }
                 return _receivingReportRepo;
+            }
+        }
+
+        public IPurchaseOrderDetailRepository PurchaseOrderDetailRepo
+        {
+            get
+            {
+                if (_purchaseOrderDetailRepo == null)
+                {
+                    _purchaseOrderDetailRepo = new PurchaseOrderDetailRepository(_repoContext);
+                }
+                return _purchaseOrderDetailRepo;
+            }
+        }
+
+        public IPurchaseReturnDetailRepository PurchaseReturnDetailRepo
+        {
+            get
+            {
+                if (_purchaseReturnDetailRepo == null)
+                {
+                    _purchaseReturnDetailRepo = new PurchaseReturnDetailRepository(_repoContext);
+                }
+                return _purchaseReturnDetailRepo;
+            }
+        }
+
+        public IBillDetailRepository BillDetailRepo
+        {
+            get
+            {
+                if (_billDetailRepo == null)
+                {
+                    _billDetailRepo = new BillDetailRepository(_repoContext);
+                }
+                return _billDetailRepo;
+            }
+        }
+
+        public IReceivingReportDetailRepository ReceivingReportDetailRepo
+        {
+            get
+            {
+                if (_receivingReportDetailRepo == null)
+                {
+                    _receivingReportDetailRepo = new ReceivingReportDetailRepository(_repoContext);
+                }
+                return _receivingReportDetailRepo;
             }
         }
 
