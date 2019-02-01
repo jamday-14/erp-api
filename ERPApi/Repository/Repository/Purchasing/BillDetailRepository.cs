@@ -18,7 +18,8 @@ namespace Services
 
         public IQueryable<TblBillDetails> GetByBillId(int id)
         {
-            throw new System.NotImplementedException();
+            return RepositoryContext.TblBillDetails.Where(x => x.BillId == id)
+              .OrderBy(x => x.RrdetailId).ThenBy(x => x.Id);
         }
     }
 }

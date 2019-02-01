@@ -435,12 +435,12 @@ namespace ERPApi.Controllers
             if (request.RrdetailId != null && request.Rrid != null)
             {
                 var drDetail = _purchasingService.ReceivingReportDetailRepo.FindByCondition(x => x.Id == request.RrdetailId && x.ReceivingReportId == request.Rrid).FirstOrDefault();
-                drDetail.QtyBill += request.QtyOnHand;
+                drDetail.QtyBill += request.Qty;
 
                 if (drDetail.Poid != null && drDetail.PodetailId != null)
                 {
                     var soDetail = _purchasingService.PurchaseOrderDetailRepo.FindByCondition(x => x.Id == drDetail.PodetailId && x.PurchaseOrderId == drDetail.Poid).FirstOrDefault();
-                    soDetail.QtyBilled += request.QtyOnHand;
+                    soDetail.QtyBilled += request.Qty;
                 }
             }
 
@@ -502,8 +502,8 @@ namespace ERPApi.Controllers
             if (request.RrdetailId != null && request.Rrid != null)
             {
                 var drDetail = _purchasingService.ReceivingReportDetailRepo.FindByCondition(x => x.Id == request.RrdetailId && x.ReceivingReportId == request.Rrid).FirstOrDefault();
-                drDetail.QtyBill -= record.QtyOnHand;
-                drDetail.QtyBill += request.QtyOnHand;
+                drDetail.QtyBill -= record.Qty;
+                drDetail.QtyBill += request.Qty;
             }
 
             record.Discount = request.Discount;
@@ -534,7 +534,7 @@ namespace ERPApi.Controllers
             if (record.RrdetailId != null && record.Rrid != null)
             {
                 var drDetail = _purchasingService.ReceivingReportDetailRepo.FindByCondition(x => x.Id == record.RrdetailId && x.ReceivingReportId == record.Rrid).FirstOrDefault();
-                drDetail.QtyBill -= record.QtyOnHand;
+                drDetail.QtyBill -= record.Qty;
             }
 
             _purchasingService.BillDetailRepo.Delete(record);

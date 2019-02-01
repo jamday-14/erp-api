@@ -24,6 +24,10 @@ namespace Services
         private IItemReleaseRepository _itemReleaseRepo;
         private IInventoryRepository _inventoryRepo;
         private IInventoryLedgerRepository _inventoryLedgerRepo;
+        private IItemEntryDetailRepository _itemEntryDetailRepo;
+        private IItemReleaseDetailRepository _itemReleaseDetailRepo;
+        private IGoodsTransferDetailRepository _goodsTransferDetailRepo;
+        private IGoodsTransferReceivedDetailRepository _goodsTransferReceivedDetailRepo;
         #endregion
 
         #region REPOSITORY GETTERS
@@ -96,6 +100,54 @@ namespace Services
                     _inventoryLedgerRepo = new InventoryLedgerRepository(_repoContext);
                 }
                 return _inventoryLedgerRepo;
+            }
+        }
+
+        public IItemEntryDetailRepository ItemEntryDetailRepo
+        {
+            get
+            {
+                if (_itemEntryDetailRepo == null)
+                {
+                    _itemEntryDetailRepo = new ItemEntryDetailRepository(_repoContext);
+                }
+                return _itemEntryDetailRepo;
+            }
+        }
+
+        public IItemReleaseDetailRepository ItemReleaseDetailRepo
+        {
+            get
+            {
+                if (_itemReleaseDetailRepo == null)
+                {
+                    _itemReleaseDetailRepo = new ItemReleaseDetailRepository(_repoContext);
+                }
+                return _itemReleaseDetailRepo;
+            }
+        }
+
+        public IGoodsTransferDetailRepository GoodsTransferDetailRepo
+        {
+            get
+            {
+                if (_goodsTransferDetailRepo == null)
+                {
+                    _goodsTransferDetailRepo = new GoodsTransferDetailRepository(_repoContext);
+                }
+                return _goodsTransferDetailRepo;
+            }
+        }
+
+        public IGoodsTransferReceivedDetailRepository GoodsTransferReceivedDetailRepo
+        {
+            get
+            {
+                if (_goodsTransferReceivedDetailRepo == null)
+                {
+                    _goodsTransferReceivedDetailRepo = new GoodsTransferReceivedDetailRepository(_repoContext);
+                }
+                return _goodsTransferReceivedDetailRepo;
             }
         }
 

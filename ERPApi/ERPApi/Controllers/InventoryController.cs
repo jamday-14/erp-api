@@ -1,6 +1,8 @@
 ﻿using Contracts;
+using Entities;
 using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,12 +13,14 @@ namespace ERPApi.Controllers
     public class InventoryController : ControllerBase
     {
         private ILoggerManager _logger;
-        private IInventoryService _service;
+        private IInventoryService _inventoryService;
+        private IMaintenanceService _maintenanceService;
 
-        public InventoryController(ILoggerManager logger, IInventoryService service)
+        public InventoryController(ILoggerManager logger, IInventoryService service, IMaintenanceService maintenanceService)
         {
             _logger = logger;
-            _service = service;
+            _inventoryService = service;
+            _maintenanceService = maintenanceService;
         }
 
         #region Item Entry
@@ -25,7 +29,8 @@ namespace ERPApi.Controllers
         [Produces(typeof(IList<TblItemEntries>))]
         public ActionResult GetItemEntries()
         {
-            var records = _service.ItemEntryRepo.FindAll();
+            var records = _inventoryService.ItemEntryRepo.FindAll()
+                .OrderByDescending(x => x.Date).ThenByDescending(x => x.SystemNo);
 
             return Ok(records);
         }
@@ -35,7 +40,7 @@ namespace ERPApi.Controllers
         [Produces(typeof(TblItemEntries))]
         public ActionResult GetItemEntry(int id)
         {
-            var record = _service.ItemEntryRepo.FindByCondition(x => x.Id == id).FirstOrDefault();
+            var record = _inventoryService.ItemEntryRepo.FindByCondition(x => x.Id == id).FirstOrDefault();
             return Ok(record);
         }
 
@@ -44,10 +49,40 @@ namespace ERPApi.Controllers
         [ProducesResponseType(201)]
         public ActionResult PostItemEntry(TblItemEntries request)
         {
-            _service.ItemEntryRepo.Create(request);
-            _service.Save();
+            request.CreatedById = Statics.LoggedInUser.userId;
+            request.LastEditedById = Statics.LoggedInUser.userId;
+            request.CreationDate = DateTime.UtcNow;
+            request.LastEditedDate = DateTime.UtcNow;
+            request.Void = false;
+            request.SystemNo = $"IE-{DateTimeOffset.UtcNow.ToUnixTimeSeconds()}";
 
-            return CreatedAtRoute("ItemEntry.Open", new { id = request.Id });
+            _inventoryService.ItemEntryRepo.Create(request);
+            _inventoryService.Save();
+
+            return Created("inventory/item-entries", new { id = request.Id });
+        }
+
+        [HttpGet, Route("item-entries/{id:int}/details")]
+        [ActionName("Inventory.ItemEntry")]
+        [Produces(typeof(IList<TblItemEntryDetails>))]
+        public ActionResult GetItemEntryDetails(int id)
+        {
+            var records = _inventoryService.ItemEntryDetailRepo.GetByItemEntryId(id).ToList();
+            return Ok(records);
+        }
+
+        [HttpPost, Route("item-entries/warehouse/{warehouseId:int}/details")]
+        [ActionName("ItemEntry.New")]
+        [ProducesResponseType(201)]
+        public ActionResult PostItemEntryDetail(int warehouseId, TblItemEntryDetails request)
+        {
+            request.QtyOnHand = 0;
+
+            _inventoryService.ItemEntryDetailRepo.Create(request);
+            _inventoryService.PostInventory(warehouseId, request.ItemId, request.Qty, 0, false);
+            _inventoryService.Save();
+
+            return Created($"inventory/item-entries/{request.ItemEntryId}/{request.Id}", new { id = request.Id });
         }
         #endregion
 
@@ -57,7 +92,8 @@ namespace ERPApi.Controllers
         [Produces(typeof(IList<TblItemReleases>))]
         public ActionResult GetItemReleases()
         {
-            var records = _service.ItemReleaseRepo.FindAll();
+            var records = _inventoryService.ItemReleaseRepo.FindAll()
+                .OrderByDescending(x => x.Date).ThenByDescending(x => x.SystemNo);
 
             return Ok(records);
         }
@@ -67,7 +103,7 @@ namespace ERPApi.Controllers
         [Produces(typeof(TblItemReleases))]
         public ActionResult GetItemRelease(int id)
         {
-            var record = _service.ItemReleaseRepo.FindByCondition(x => x.Id == id).FirstOrDefault();
+            var record = _inventoryService.ItemReleaseRepo.FindByCondition(x => x.Id == id).FirstOrDefault();
             return Ok(record);
         }
 
@@ -76,10 +112,40 @@ namespace ERPApi.Controllers
         [ProducesResponseType(201)]
         public ActionResult PostItemRelease(TblItemReleases request)
         {
-            _service.ItemReleaseRepo.Create(request);
-            _service.Save();
+            request.CreatedById = Statics.LoggedInUser.userId;
+            request.LastEditedById = Statics.LoggedInUser.userId;
+            request.CreationDate = DateTime.UtcNow;
+            request.LastEditedDate = DateTime.UtcNow;
+            request.Void = false;
+            request.SystemNo = $"IR-{DateTimeOffset.UtcNow.ToUnixTimeSeconds()}";
 
-            return CreatedAtRoute("ItemRelease.Open", new { id = request.Id });
+            _inventoryService.ItemReleaseRepo.Create(request);
+            _inventoryService.Save();
+
+            return Created("inventory/item-releases", new { id = request.Id });
+        }
+
+        [HttpGet, Route("item-releases/{id:int}/details")]
+        [ActionName("Inventory.ItemRelease")]
+        [Produces(typeof(IList<TblItemReleaseDetails>))]
+        public ActionResult GetItemReleaseDetails(int id)
+        {
+            var records = _inventoryService.ItemReleaseDetailRepo.GetByItemReleaseId(id).ToList();
+            return Ok(records);
+        }
+
+        [HttpPost, Route("item-releases/warehouse/{warehouseId:int}/details")]
+        [ActionName("ItemRelease.New")]
+        [ProducesResponseType(201)]
+        public ActionResult PostItemReleaseDetail(int warehouseId, TblItemReleaseDetails request)
+        {
+            request.QtyOnHand = 0;
+
+            _inventoryService.ItemReleaseDetailRepo.Create(request);
+            _inventoryService.PostInventory(warehouseId, request.ItemId, request.Qty, 0, true);
+            _inventoryService.Save();
+
+            return Created($"inventory/item-releases/{request.ItemReleaseId}/{request.Id}", new { id = request.Id });
         }
         #endregion
 
@@ -89,7 +155,8 @@ namespace ERPApi.Controllers
         [Produces(typeof(IList<TblGoodsTransfers>))]
         public ActionResult GetGoodsTransfers()
         {
-            var records = _service.GoodsTransferRepo.FindAll();
+            var records = _inventoryService.GoodsTransferRepo.FindAll()
+                .OrderByDescending(x => x.Date).ThenByDescending(x => x.SystemNo);
 
             return Ok(records);
         }
@@ -99,7 +166,7 @@ namespace ERPApi.Controllers
         [Produces(typeof(TblGoodsTransfers))]
         public ActionResult GetGoodsTransfer(int id)
         {
-            var record = _service.GoodsTransferRepo.FindByCondition(x => x.Id == id).FirstOrDefault();
+            var record = _inventoryService.GoodsTransferRepo.FindByCondition(x => x.Id == id).FirstOrDefault();
             return Ok(record);
         }
 
@@ -108,10 +175,45 @@ namespace ERPApi.Controllers
         [ProducesResponseType(201)]
         public ActionResult PostGoodsTransfer(TblGoodsTransfers request)
         {
-            _service.GoodsTransferRepo.Create(request);
-            _service.Save();
+            request.CreatedById = Statics.LoggedInUser.userId;
+            request.LastEditedById = Statics.LoggedInUser.userId;
+            request.CreationDate = DateTime.UtcNow;
+            request.LastEditedDate = DateTime.UtcNow;
+            request.Void = false;
+            request.SystemNo = $"GT-{DateTimeOffset.UtcNow.ToUnixTimeSeconds()}";
 
-            return CreatedAtRoute("GoodsTransfer.Open", new { id = request.Id });
+            _inventoryService.GoodsTransferRepo.Create(request);
+            _inventoryService.Save();
+
+            return Created("inventory/goods-transfers", new { id = request.Id });
+        }
+
+        [HttpGet, Route("goods-transfers/{id:int}/details")]
+        [ActionName("Inventory.GoodsTransfer")]
+        [Produces(typeof(IList<TblGoodsTransferDetails>))]
+        public ActionResult GetGoodsTransferDetails(int id)
+        {
+            var records = _inventoryService.GoodsTransferDetailRepo.GetByGoodsTransferId(id).ToList();
+            return Ok(records);
+        }
+
+        [HttpPost, Route("goods-transfers/{id:int}/details")]
+        [ActionName("GoodsTransfer.New")]
+        [ProducesResponseType(201)]
+        public ActionResult PostGoodsTransferDetail(int id, TblGoodsTransferDetails request)
+        {
+            request.QtyOnHand = 0;
+
+            var parent = _inventoryService.GoodsTransferRepo.FindByCondition(x => x.Id == request.GoodsTransferId).FirstOrDefault();
+
+            _inventoryService.GoodsTransferDetailRepo.Create(request);
+            _inventoryService.PostInventory(parent.FromWarehouseId, request.ItemId, request.Qty, 0, true);
+            _inventoryService.Save();
+
+            _inventoryService.PostInventory(parent.ToWarehouseId, request.ItemId, request.Qty, 0, false);
+            _inventoryService.Save();
+
+            return Created($"inventory/goods-transfers/{request.GoodsTransferId}/{request.Id}", new { id = request.Id });
         }
         #endregion
 
@@ -121,7 +223,8 @@ namespace ERPApi.Controllers
         [Produces(typeof(IList<TblGoodsTransferReceived>))]
         public ActionResult GetGoodsTransferReceives()
         {
-            var records = _service.GoodsTransferReceivedRepo.FindAll();
+            var records = _inventoryService.GoodsTransferReceivedRepo.FindAll()
+                .OrderByDescending(x => x.Date).ThenByDescending(x => x.SystemNo);
 
             return Ok(records);
         }
@@ -131,7 +234,7 @@ namespace ERPApi.Controllers
         [Produces(typeof(TblGoodsTransferReceived))]
         public ActionResult GetGoodsTransferReceive(int id)
         {
-            var record = _service.GoodsTransferReceivedRepo.FindByCondition(x => x.Id == id).FirstOrDefault();
+            var record = _inventoryService.GoodsTransferReceivedRepo.FindByCondition(x => x.Id == id).FirstOrDefault();
             return Ok(record);
         }
 
@@ -140,10 +243,42 @@ namespace ERPApi.Controllers
         [ProducesResponseType(201)]
         public ActionResult PostGoodsTransferReceive(TblGoodsTransferReceived request)
         {
-            _service.GoodsTransferReceivedRepo.Create(request);
-            _service.Save();
+            request.CreatedById = Statics.LoggedInUser.userId;
+            request.LastEditedById = Statics.LoggedInUser.userId;
+            request.CreationDate = DateTime.UtcNow;
+            request.LastEditedDate = DateTime.UtcNow;
+            request.Void = false;
+            request.SystemNo = $"GTR-{DateTimeOffset.UtcNow.ToUnixTimeSeconds()}";
 
-            return CreatedAtRoute("GoodsTransferReceive.Open", new { id = request.Id });
+            _inventoryService.GoodsTransferReceivedRepo.Create(request);
+            _inventoryService.Save();
+
+            return Created("inventory/goods-transfer-receives", new { id = request.Id });
+        }
+
+        [HttpGet, Route("goods-transfer-receives/{id:int}/details")]
+        [ActionName("Inventory.GoodsTransferReceive")]
+        [Produces(typeof(IList<TblGoodsTransferReceivedDetails>))]
+        public ActionResult GetGoodsTransferReceivedDetails(int id)
+        {
+            var records = _inventoryService.GoodsTransferReceivedDetailRepo.GetByGoodsTransferReceivedId(id).ToList();
+            return Ok(records);
+        }
+
+        [HttpPost, Route("goods-transfer-receives/{id:int}/details")]
+        [ActionName("GoodsTransferReceive.New")]
+        [ProducesResponseType(201)]
+        public ActionResult PostGoodsTransferReceivedDetail(int id, TblGoodsTransferReceivedDetails request)
+        {
+            request.QtyOnHand = 0;
+
+            var parent = _inventoryService.GoodsTransferReceivedRepo.FindByCondition(x => x.Id == request.GoodTransferReceivedId).FirstOrDefault();
+
+            _inventoryService.GoodsTransferReceivedDetailRepo.Create(request);
+            _inventoryService.PostInventory(parent.WarehouseId, request.ItemId, request.Qty, 0, false);
+            _inventoryService.Save();
+
+            return Created($"inventory/goods-transfer-receives/{request.GoodTransferReceivedId}/{request.Id}", new { id = request.Id });
         }
         #endregion
 
