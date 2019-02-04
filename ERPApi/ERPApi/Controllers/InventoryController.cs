@@ -210,10 +210,27 @@ namespace ERPApi.Controllers
             _inventoryService.PostInventory(parent.FromWarehouseId, request.ItemId, request.Qty, 0, true);
             _inventoryService.Save();
 
-            _inventoryService.PostInventory(parent.ToWarehouseId, request.ItemId, request.Qty, 0, false);
-            _inventoryService.Save();
-
             return Created($"inventory/goods-transfers/{request.GoodsTransferId}/{request.Id}", new { id = request.Id });
+        }
+
+        [HttpGet, Route("goods-transfers/{warehouseId:int}/pending")]
+        [ActionName("Inventory.GoodsTransfer")]
+        [Produces(typeof(IList<TblGoodsTransfers>))]
+        public ActionResult GetGoodsTransferPendingReceiptsByWarehouse(int warehouseId)
+        {
+            var records = _inventoryService.GoodsTransferRepo.GetPendingByWarehouse(warehouseId);
+
+            return Ok(records);
+        }
+
+        [HttpGet, Route("goods-transfers/{id:int}/details/pending")]
+        [ActionName("Inventory.GoodsTransfer")]
+        [Produces(typeof(IList<TblGoodsTransferDetails>))]
+        public ActionResult GetGoodsTransferDetailsPendingReceipt(int id)
+        {
+            var records = _inventoryService.GoodsTransferDetailRepo.GetByPendingReceipt(id).ToList();
+
+            return Ok(records);
         }
         #endregion
 
@@ -275,11 +292,19 @@ namespace ERPApi.Controllers
             var parent = _inventoryService.GoodsTransferReceivedRepo.FindByCondition(x => x.Id == request.GoodTransferReceivedId).FirstOrDefault();
 
             _inventoryService.GoodsTransferReceivedDetailRepo.Create(request);
+
+            if (request.GtdetailId != 0 && request.Gtid != 0)
+            {
+                var gtDetail = _inventoryService.GoodsTransferDetailRepo.FindByCondition(x => x.Id == request.GtdetailId && x.GoodsTransferId == request.Gtid).FirstOrDefault();
+                gtDetail.QtyReceived += request.Qty;
+            }
+
             _inventoryService.PostInventory(parent.WarehouseId, request.ItemId, request.Qty, 0, false);
             _inventoryService.Save();
 
             return Created($"inventory/goods-transfer-receives/{request.GoodTransferReceivedId}/{request.Id}", new { id = request.Id });
         }
+
         #endregion
 
     }
