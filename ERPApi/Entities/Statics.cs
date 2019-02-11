@@ -9,5 +9,6 @@
     {
         public int userId { get; set; }
         public string userName { get; set; }
+        public int companyId { get; set; }
     }
 }

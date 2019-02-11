@@ -449,5 +449,18 @@ namespace ERPApi.Controllers
             return Created("maintenance/warehouses", new { id = request.Id });
         }
         #endregion
+
+        #region AccountTypes
+        [HttpGet, Route("account-types")]
+        [AllowAnonymous]
+        [Produces(typeof(IList<TblAccountTypes>))]
+        public ActionResult GetAccountTypes()
+        {
+            var records = _service.AccountTypeRepo.FindAll()
+                .OrderBy(x=> x.Order);
+
+            return Ok(records);
+        }
+        #endregion
     }
 }

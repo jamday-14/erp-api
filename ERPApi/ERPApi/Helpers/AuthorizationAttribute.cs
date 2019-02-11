@@ -45,7 +45,8 @@ namespace ERPApi.Helpers
             Statics.LoggedInUser = new CurrentUser
             {
                 userId = Convert.ToInt32(userId),
-                userName = username
+                userName = username,
+                companyId = 1
             };
         }
 

@@ -26,7 +26,8 @@ namespace Services
         private ITermsRepository _termsRepo;
         private IUnitRepository _unitRepo;
         private IVendorRepository _vendorRepo;
-        private IWarehouseRepository _warehouseRepo; 
+        private IWarehouseRepository _warehouseRepo;
+        private IAccountTypeRepository _accountTypeRepo;
         #endregion
 
         public MaintenanceService(ERPContext repositoryContext, IMapper mapper)
@@ -202,7 +203,19 @@ namespace Services
                 }
                 return _warehouseRepo;
             }
-        } 
+        }
+
+        public IAccountTypeRepository AccountTypeRepo
+        {
+            get
+            {
+                if (_accountTypeRepo == null)
+                {
+                    _accountTypeRepo = new AccountTypeRepository(_repoContext);
+                }
+                return _accountTypeRepo;
+            }
+        }
         #endregion
 
         public IList<Customer> GetCustomers()
