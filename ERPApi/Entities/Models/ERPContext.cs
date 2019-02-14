@@ -294,12 +294,6 @@ namespace Entities.Models
 
                 entity.Property(e => e.Amount).HasColumnType("money");
 
-                entity.Property(e => e.AmountApplied).HasColumnType("money");
-
-                entity.Property(e => e.AmountAvailable)
-                    .HasColumnType("money")
-                    .HasComputedColumnSql("([Amount]-[AmountApplied])");
-
                 entity.Property(e => e.CheckDate).HasColumnType("datetime");
 
                 entity.Property(e => e.CheckRefNo)
@@ -326,10 +320,6 @@ namespace Entities.Models
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
-
-                entity.Property(e => e.UiamountApplied)
-                    .HasColumnName("UIAmountApplied")
-                    .HasColumnType("money");
             });
 
             modelBuilder.Entity<TblBills>(entity =>

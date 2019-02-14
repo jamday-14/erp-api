@@ -15,9 +15,6 @@ namespace Entities.Models
         public DateTime? CheckDate { get; set; }
         public string CheckRefNo { get; set; }
         public decimal Amount { get; set; }
-        public decimal AmountApplied { get; set; }
-        public decimal UiamountApplied { get; set; }
-        public decimal? AmountAvailable { get; set; }
         public bool Deposited { get; set; }
         public bool Cleared { get; set; }
         public bool Bounced { get; set; }

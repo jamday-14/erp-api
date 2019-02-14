@@ -31,5 +31,15 @@ namespace Services
 
             return query.Distinct().OrderByDescending(x => x.Date);
         }
+
+        public IQueryable<TblBills> GetForPaymentByVendor(int vendorId)
+        {
+            var query = from invoices in RepositoryContext.TblBills
+                        where invoices.VendorId == vendorId && invoices.AmountDue > 0
+                        && !invoices.Closed
+                        select invoices;
+
+            return query.Distinct().OrderByDescending(x => x.Date);
+        }
     }
 }

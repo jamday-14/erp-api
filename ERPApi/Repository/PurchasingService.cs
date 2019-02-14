@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
 using Contracts;
 using Entities.Models;
+using System.Linq;
 
 namespace Services
 {
-    public class PurchasingService: IPurchasingService
+    public class PurchasingService : IPurchasingService
     {
         private ERPContext _repoContext;
         private readonly IMapper _mapper;
@@ -127,6 +128,18 @@ namespace Services
         public void Save()
         {
             _repoContext.SaveChanges();
+        }
+
+        public void PayBill(int billId, decimal amount)
+        {
+            var bill = BillRepo.FindByCondition(x => x.Id == billId).FirstOrDefault();
+
+            if (bill != null)
+            {
+                bill.AmountPaid += amount;
+                bill.AmountDue -= amount;
+                bill.Closed = bill.AmountDue == 0;
+            }
         }
         #endregion
     }

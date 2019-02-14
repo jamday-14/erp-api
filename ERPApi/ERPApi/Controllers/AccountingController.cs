@@ -14,11 +14,16 @@ namespace ERPApi.Controllers
     {
         private ILoggerManager _logger;
         private IAccountingService _service;
+        private IPurchasingService _purchasingService;
 
-        public AccountingController(ILoggerManager logger, IAccountingService service)
+        public AccountingController(
+            ILoggerManager logger, 
+            IAccountingService service,
+            IPurchasingService purchasingService)
         {
             _logger = logger;
             _service = service;
+            _purchasingService = purchasingService;
         }
 
         #region Bill Payment
@@ -52,11 +57,38 @@ namespace ERPApi.Controllers
             request.LastEditedDate = DateTime.UtcNow;
             request.Void = false;
             request.SystemNo = $"BP-{DateTimeOffset.UtcNow.ToUnixTimeSeconds()}";
+            request.CompanyId = Statics.LoggedInUser.companyId;
 
             _service.BillPaymentRepo.Create(request);
+
             _service.Save();
 
             return Created("accounting/bill-payments", new { id = request.Id });
+        }
+
+        [HttpGet, Route("bill-payments/{id:int}/details")]
+        [ActionName("Accounting.BillPayment")]
+        [Produces(typeof(IList<TblBillPaymentDetails>))]
+        public ActionResult GetBillPaymentDetails(int id)
+        {
+            var records = _service.BillPaymentDetailRepo.GetByBillPaymentId(id).ToList();
+            return Ok(records);
+        }
+
+        [HttpPost, Route("bill-payments/{id:int}/details")]
+        [ActionName("BillPayment.New")]
+        [ProducesResponseType(201)]
+        public ActionResult PostBillPaymentDetail(int id, TblBillPaymentDetails request)
+        {
+            _service.BillPaymentDetailRepo.Create(request);
+
+            _service.Save();
+
+            _purchasingService.PayBill(request.BillId, request.Amount);
+
+            _purchasingService.Save();
+
+            return Created($"accounting/bill-payments/{request.BillPaymentId}/{request.Id}", new { id = request.Id });
         }
         #endregion
 

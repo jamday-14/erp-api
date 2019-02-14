@@ -12,5 +12,6 @@
         IBillDetailRepository BillDetailRepo { get; }
         IReceivingReportDetailRepository ReceivingReportDetailRepo { get; }
         void Save();
+        void PayBill(int billId, decimal amount);
     }
 }

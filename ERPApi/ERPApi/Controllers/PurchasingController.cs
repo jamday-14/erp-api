@@ -573,6 +573,16 @@ namespace ERPApi.Controllers
 
             return Ok(records);
         }
+
+        [HttpGet, Route("vendors/{vendorId:int}/bills/for-payment")]
+        [ActionName("Purchasing.Bill")]
+        [Produces(typeof(IList<TblBills>))]
+        public ActionResult GetBillsForPaymentByVendor(int vendorId)
+        {
+            var records = _purchasingService.BillRepo.GetForPaymentByVendor(vendorId);
+
+            return Ok(records);
+        }
         #endregion
 
         #region Purchase Return
