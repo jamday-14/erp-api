@@ -24,22 +24,20 @@ namespace Entities.Models
         public virtual DbSet<TblBillPaymentDetails> TblBillPaymentDetails { get; set; }
         public virtual DbSet<TblBillPayments> TblBillPayments { get; set; }
         public virtual DbSet<TblBills> TblBills { get; set; }
+        public virtual DbSet<TblBillsPaymentAdjustments> TblBillsPaymentAdjustments { get; set; }
         public virtual DbSet<TblBranches> TblBranches { get; set; }
         public virtual DbSet<TblCompanies> TblCompanies { get; set; }
         public virtual DbSet<TblCompanySeries> TblCompanySeries { get; set; }
         public virtual DbSet<TblCurrencies> TblCurrencies { get; set; }
+        public virtual DbSet<TblCustomerCreditMemo> TblCustomerCreditMemo { get; set; }
         public virtual DbSet<TblCustomers> TblCustomers { get; set; }
         public virtual DbSet<TblCustomerStatementofAccountDetails> TblCustomerStatementofAccountDetails { get; set; }
         public virtual DbSet<TblCustomerStatementofAccounts> TblCustomerStatementofAccounts { get; set; }
         public virtual DbSet<TblCustomerTypes> TblCustomerTypes { get; set; }
-        public virtual DbSet<TblCustomReports> TblCustomReports { get; set; }
-        public virtual DbSet<TblDbupdates> TblDbupdates { get; set; }
         public virtual DbSet<TblDeliveryReceiptDetails> TblDeliveryReceiptDetails { get; set; }
         public virtual DbSet<TblDeliveryReceipts> TblDeliveryReceipts { get; set; }
         public virtual DbSet<TblEditions> TblEditions { get; set; }
         public virtual DbSet<TblEmployees> TblEmployees { get; set; }
-        public virtual DbSet<TblExecutables> TblExecutables { get; set; }
-        public virtual DbSet<TblExternalTools> TblExternalTools { get; set; }
         public virtual DbSet<TblGeneralLedger> TblGeneralLedger { get; set; }
         public virtual DbSet<TblGoodsTransferDetails> TblGoodsTransferDetails { get; set; }
         public virtual DbSet<TblGoodsTransferReceived> TblGoodsTransferReceived { get; set; }
@@ -47,19 +45,14 @@ namespace Entities.Models
         public virtual DbSet<TblGoodsTransfers> TblGoodsTransfers { get; set; }
         public virtual DbSet<TblInventory> TblInventory { get; set; }
         public virtual DbSet<TblInventoryLedger> TblInventoryLedger { get; set; }
-        public virtual DbSet<TblItem> TblItem { get; set; }
         public virtual DbSet<TblItemEntries> TblItemEntries { get; set; }
         public virtual DbSet<TblItemEntryDetails> TblItemEntryDetails { get; set; }
         public virtual DbSet<TblItemReleaseDetails> TblItemReleaseDetails { get; set; }
         public virtual DbSet<TblItemReleases> TblItemReleases { get; set; }
-        public virtual DbSet<TblItemStatus> TblItemStatus { get; set; }
-        public virtual DbSet<TblJibes5categories> TblJibes5categories { get; set; }
-        public virtual DbSet<TblJibes5reports> TblJibes5reports { get; set; }
-        public virtual DbSet<TblJibes5views> TblJibes5views { get; set; }
+        public virtual DbSet<TblItems> TblItems { get; set; }
         public virtual DbSet<TblJournalDetails> TblJournalDetails { get; set; }
         public virtual DbSet<TblJournals> TblJournals { get; set; }
         public virtual DbSet<TblJournalTypes> TblJournalTypes { get; set; }
-        public virtual DbSet<TblLogs> TblLogs { get; set; }
         public virtual DbSet<TblMonths> TblMonths { get; set; }
         public virtual DbSet<TblMop> TblMop { get; set; }
         public virtual DbSet<TblOutletDeliveryReceiptDetails> TblOutletDeliveryReceiptDetails { get; set; }
@@ -69,7 +62,7 @@ namespace Entities.Models
         public virtual DbSet<TblOutletSalesInvoiceDetails> TblOutletSalesInvoiceDetails { get; set; }
         public virtual DbSet<TblOutletSalesInvoices> TblOutletSalesInvoices { get; set; }
         public virtual DbSet<TblOutletTypes> TblOutletTypes { get; set; }
-        public virtual DbSet<TblPriceCategory> TblPriceCategory { get; set; }
+        public virtual DbSet<TblPaymentAdjustmentTypes> TblPaymentAdjustmentTypes { get; set; }
         public virtual DbSet<TblPriceLevelDetails> TblPriceLevelDetails { get; set; }
         public virtual DbSet<TblPriceLevels> TblPriceLevels { get; set; }
         public virtual DbSet<TblPurchaseOrderDetails> TblPurchaseOrderDetails { get; set; }
@@ -83,6 +76,7 @@ namespace Entities.Models
         public virtual DbSet<TblReferenceTypes> TblReferenceTypes { get; set; }
         public virtual DbSet<TblReminders> TblReminders { get; set; }
         public virtual DbSet<TblSalesInvoiceDetails> TblSalesInvoiceDetails { get; set; }
+        public virtual DbSet<TblSalesInvoicePaymentAdjustments> TblSalesInvoicePaymentAdjustments { get; set; }
         public virtual DbSet<TblSalesInvoicePaymentDetails> TblSalesInvoicePaymentDetails { get; set; }
         public virtual DbSet<TblSalesInvoicePayments> TblSalesInvoicePayments { get; set; }
         public virtual DbSet<TblSalesInvoices> TblSalesInvoices { get; set; }
@@ -100,8 +94,6 @@ namespace Entities.Models
         public virtual DbSet<TblSecurityUserSecurityGroups> TblSecurityUserSecurityGroups { get; set; }
         public virtual DbSet<TblSecurityUserSecurityKeys> TblSecurityUserSecurityKeys { get; set; }
         public virtual DbSet<TblSeries> TblSeries { get; set; }
-        public virtual DbSet<TblSessionInformation> TblSessionInformation { get; set; }
-        public virtual DbSet<TblShortcuts> TblShortcuts { get; set; }
         public virtual DbSet<TblSubAreas> TblSubAreas { get; set; }
         public virtual DbSet<TblSubOutletTypes> TblSubOutletTypes { get; set; }
         public virtual DbSet<TblSubsidiaries> TblSubsidiaries { get; set; }
@@ -114,23 +106,10 @@ namespace Entities.Models
         public virtual DbSet<TblUnits> TblUnits { get; set; }
         public virtual DbSet<TblVat> TblVat { get; set; }
         public virtual DbSet<TblVendor> TblVendor { get; set; }
+        public virtual DbSet<TblVendorCreditMemo> TblVendorCreditMemo { get; set; }
         public virtual DbSet<TblVendorItems> TblVendorItems { get; set; }
         public virtual DbSet<TblWarehouseInventoryLedger> TblWarehouseInventoryLedger { get; set; }
         public virtual DbSet<TblWarehouses> TblWarehouses { get; set; }
-
-        // Unable to generate entity type for table 'dbo.tblCompanyKeys'. Please see the warning messages.
-        // Unable to generate entity type for table 'dbo.tblScripts'. Please see the warning messages.
-        // Unable to generate entity type for table 'dbo.tblHotTipDetails'. Please see the warning messages.
-        // Unable to generate entity type for table 'dbo.tblHotTips'. Please see the warning messages.
-        // Unable to generate entity type for table 'dbo.tblItemDetails'. Please see the warning messages.
-        // Unable to generate entity type for table 'dbo.tblItems'. Please see the warning messages.
-        // Unable to generate entity type for table 'dbo.tblItemSample'. Please see the warning messages.
-        // Unable to generate entity type for table 'dbo.tblModules'. Please see the warning messages.
-        // Unable to generate entity type for table 'dbo.tblPatches'. Please see the warning messages.
-        // Unable to generate entity type for table 'dbo.ItemSample'. Please see the warning messages.
-        // Unable to generate entity type for table 'dbo.tblReportFolders'. Please see the warning messages.
-        // Unable to generate entity type for table 'dbo.tblReportItems'. Please see the warning messages.
-        // Unable to generate entity type for table 'dbo.tblReportParameters'. Please see the warning messages.
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -245,6 +224,8 @@ namespace Entities.Models
 
                 entity.Property(e => e.Discount).HasColumnType("money");
 
+                entity.Property(e => e.GrossAmount).HasColumnType("money");
+
                 entity.Property(e => e.Remarks)
                     .HasMaxLength(100)
                     .IsUnicode(false);
@@ -261,6 +242,10 @@ namespace Entities.Models
                 entity.Property(e => e.SubTotal).HasColumnType("money");
 
                 entity.Property(e => e.UnitPrice).HasColumnType("money");
+
+                entity.Property(e => e.Vatamount)
+                    .HasColumnName("VATAmount")
+                    .HasColumnType("money");
             });
 
             modelBuilder.Entity<TblBillPaymentDetails>(entity =>
@@ -306,6 +291,8 @@ namespace Entities.Models
 
                 entity.Property(e => e.Date).HasColumnType("datetime");
 
+                entity.Property(e => e.DateVoided).HasColumnType("datetime");
+
                 entity.Property(e => e.LastEditedDate).HasColumnType("datetime");
 
                 entity.Property(e => e.Mopid).HasColumnName("MOPId");
@@ -334,7 +321,7 @@ namespace Entities.Models
 
                 entity.Property(e => e.AmountDue)
                     .HasColumnType("money")
-                    .HasComputedColumnSql("([Amount]-[AmountPaid])");
+                    .HasComputedColumnSql("(isnull([Amount],(0))-(isnull([AmountPaid],(0))+isnull([ReturnAmount],(0))))");
 
                 entity.Property(e => e.AmountPaid).HasColumnType("money");
 
@@ -350,9 +337,15 @@ namespace Entities.Models
 
                 entity.Property(e => e.Date).HasColumnType("datetime");
 
+                entity.Property(e => e.DateVoided).HasColumnType("datetime");
+
+                entity.Property(e => e.DiscountAmount).HasColumnType("money");
+
                 entity.Property(e => e.FaxNo)
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.Property(e => e.GrossAmount).HasColumnType("money");
 
                 entity.Property(e => e.LastEditedDate).HasColumnType("datetime");
 
@@ -361,6 +354,10 @@ namespace Entities.Models
                 entity.Property(e => e.RefNo)
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.Property(e => e.ReturnAmount)
+                    .HasColumnType("money")
+                    .HasDefaultValueSql("((0))");
 
                 entity.Property(e => e.SystemNo)
                     .IsRequired()
@@ -372,6 +369,31 @@ namespace Entities.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.TermId).HasColumnName("TermID");
+
+                entity.Property(e => e.Vatamount)
+                    .HasColumnName("VATAmount")
+                    .HasColumnType("money");
+
+                entity.Property(e => e.Vatid).HasColumnName("VATId");
+            });
+
+            modelBuilder.Entity<TblBillsPaymentAdjustments>(entity =>
+            {
+                entity.ToTable("tblBillsPaymentAdjustments");
+
+                entity.Property(e => e.Amount).HasColumnType("money");
+
+                entity.Property(e => e.CreditMemoSourceNo)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CreditMemoSystemNo)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Remarks)
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<TblBranches>(entity =>
@@ -520,6 +542,44 @@ namespace Entities.Models
                     .IsUnicode(false);
             });
 
+            modelBuilder.Entity<TblCustomerCreditMemo>(entity =>
+            {
+                entity.ToTable("tblCustomerCreditMemo");
+
+                entity.Property(e => e.Amount).HasColumnType("money");
+
+                entity.Property(e => e.AmountApplied).HasColumnType("money");
+
+                entity.Property(e => e.AmountAvailable)
+                    .HasColumnType("money")
+                    .HasComputedColumnSql("([Amount]-[AmountApplied])");
+
+                entity.Property(e => e.Date).HasColumnType("datetime");
+
+                entity.Property(e => e.DateCreated).HasColumnType("datetime");
+
+                entity.Property(e => e.DateForfeited).HasColumnType("datetime");
+
+                entity.Property(e => e.LastEditedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.ReferenceNo)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Remarks)
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.SourceSystemNo)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.SystemNo)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
             modelBuilder.Entity<TblCustomers>(entity =>
             {
                 entity.ToTable("tblCustomers");
@@ -653,49 +713,6 @@ namespace Entities.Models
                     .IsUnicode(false);
             });
 
-            modelBuilder.Entity<TblCustomReports>(entity =>
-            {
-                entity.ToTable("tblCustomReports");
-
-                entity.Property(e => e.Active)
-                    .IsRequired()
-                    .HasDefaultValueSql("((1))");
-
-                entity.Property(e => e.CreationDate).HasColumnType("datetime");
-
-                entity.Property(e => e.Description)
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.GridSetting).HasColumnType("image");
-
-                entity.Property(e => e.JibesviewName)
-                    .HasColumnName("JIBESViewName")
-                    .HasMaxLength(42)
-                    .IsUnicode(false)
-                    .HasComputedColumnSql("('CustomReport'+CONVERT([varchar],[Id],(0)))");
-
-                entity.Property(e => e.ModificationDate).HasColumnType("datetime");
-
-                entity.Property(e => e.Name)
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.ViewName)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-            });
-
-            modelBuilder.Entity<TblDbupdates>(entity =>
-            {
-                entity.ToTable("tblDBUpdates");
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(200)
-                    .IsUnicode(false);
-            });
-
             modelBuilder.Entity<TblDeliveryReceiptDetails>(entity =>
             {
                 entity.ToTable("tblDeliveryReceiptDetails");
@@ -761,6 +778,8 @@ namespace Entities.Models
                 entity.Property(e => e.CreationDate).HasColumnType("datetime");
 
                 entity.Property(e => e.Date).HasColumnType("datetime");
+
+                entity.Property(e => e.DateVoided).HasColumnType("datetime");
 
                 entity.Property(e => e.FaxNo)
                     .HasMaxLength(50)
@@ -866,61 +885,6 @@ namespace Entities.Models
                     .IsUnicode(false);
             });
 
-            modelBuilder.Entity<TblExecutables>(entity =>
-            {
-                entity.HasKey(e => e.Version);
-
-                entity.ToTable("tblExecutables");
-
-                entity.Property(e => e.Version)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasDefaultValueSql("((0))");
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Stream).HasColumnType("image");
-
-                entity.Property(e => e.TimeStamp).HasColumnType("datetime");
-
-                entity.Property(e => e.Url)
-                    .HasColumnName("URL")
-                    .IsUnicode(false);
-            });
-
-            modelBuilder.Entity<TblExternalTools>(entity =>
-            {
-                entity.ToTable("tblExternalTools");
-
-                entity.Property(e => e.Active)
-                    .IsRequired()
-                    .HasDefaultValueSql("((1))");
-
-                entity.Property(e => e.Command)
-                    .HasMaxLength(200)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Icon).HasColumnType("image");
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Parameters)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.SmallIcon).HasColumnType("image");
-
-                entity.Property(e => e.Stream).HasColumnType("image");
-
-                entity.Property(e => e.TimeStamp).HasColumnType("datetime");
-            });
-
             modelBuilder.Entity<TblGeneralLedger>(entity =>
             {
                 entity.HasKey(e => new { e.AccountId, e.Date, e.CompanyId });
@@ -958,6 +922,8 @@ namespace Entities.Models
                 entity.Property(e => e.CreationDate).HasColumnType("datetime");
 
                 entity.Property(e => e.Date).HasColumnType("datetime");
+
+                entity.Property(e => e.DateVoided).HasColumnType("datetime");
 
                 entity.Property(e => e.Description)
                     .HasMaxLength(500)
@@ -1004,6 +970,8 @@ namespace Entities.Models
 
                 entity.Property(e => e.Date).HasColumnType("datetime");
 
+                entity.Property(e => e.DateVoided).HasColumnType("datetime");
+
                 entity.Property(e => e.Description)
                     .HasMaxLength(500)
                     .IsUnicode(false);
@@ -1048,40 +1016,6 @@ namespace Entities.Models
                 entity.Property(e => e.TotalOutCost).HasColumnType("money");
             });
 
-            modelBuilder.Entity<TblItem>(entity =>
-            {
-                entity.ToTable("tblItem");
-
-                entity.Property(e => e.CostPrice).HasColumnType("money");
-
-                entity.Property(e => e.CreationDate).HasColumnType("datetime");
-
-                entity.Property(e => e.Description)
-                    .HasMaxLength(200)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Ipurchased).HasColumnName("IPurchased");
-
-                entity.Property(e => e.ItemCode)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.LastEditedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.Quantity).HasDefaultValueSql("((0))");
-
-                entity.Property(e => e.RmbcostPrice)
-                    .HasColumnName("RMBCostPrice")
-                    .HasColumnType("money");
-
-                entity.Property(e => e.UnitPrice).HasColumnType("money");
-
-                entity.Property(e => e.UsdcostPrice)
-                    .HasColumnName("USDCostPrice")
-                    .HasColumnType("money");
-            });
-
             modelBuilder.Entity<TblItemEntries>(entity =>
             {
                 entity.ToTable("tblItemEntries");
@@ -1091,6 +1025,8 @@ namespace Entities.Models
                 entity.Property(e => e.CreationDate).HasColumnType("datetime");
 
                 entity.Property(e => e.Date).HasColumnType("datetime");
+
+                entity.Property(e => e.DateVoided).HasColumnType("datetime");
 
                 entity.Property(e => e.Description)
                     .HasMaxLength(200)
@@ -1142,6 +1078,8 @@ namespace Entities.Models
 
                 entity.Property(e => e.Date).HasColumnType("datetime");
 
+                entity.Property(e => e.DateVoided).HasColumnType("datetime");
+
                 entity.Property(e => e.Description)
                     .HasMaxLength(200)
                     .IsUnicode(false);
@@ -1160,83 +1098,38 @@ namespace Entities.Models
                     .IsUnicode(false);
             });
 
-            modelBuilder.Entity<TblItemStatus>(entity =>
+            modelBuilder.Entity<TblItems>(entity =>
             {
-                entity.ToTable("tblItemStatus");
+                entity.ToTable("tblItems");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-            });
+                entity.Property(e => e.CostPrice).HasColumnType("money");
 
-            modelBuilder.Entity<TblJibes5categories>(entity =>
-            {
-                entity.ToTable("tblJIBES5Categories");
-
-                entity.Property(e => e.AccessKey)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Caption)
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Category)
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Modified).HasColumnType("datetime");
-
-                entity.Property(e => e.Visible)
-                    .IsRequired()
-                    .HasDefaultValueSql("((1))");
-            });
-
-            modelBuilder.Entity<TblJibes5reports>(entity =>
-            {
-                entity.ToTable("tblJIBES5Reports");
-
-                entity.Property(e => e.Bitmap).HasColumnType("image");
-
-                entity.Property(e => e.Category)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                entity.Property(e => e.CreationDate).HasColumnType("datetime");
 
                 entity.Property(e => e.Description)
                     .HasMaxLength(200)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Jibes5viewId).HasColumnName("JIBES5ViewId");
+                entity.Property(e => e.Ipurchased).HasColumnName("IPurchased");
 
-                entity.Property(e => e.Modified).HasColumnType("datetime");
-
-                entity.Property(e => e.Report)
-                    .HasMaxLength(200)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Title)
-                    .HasMaxLength(200)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Visible)
+                entity.Property(e => e.ItemCode)
                     .IsRequired()
-                    .HasDefaultValueSql("((1))");
-            });
-
-            modelBuilder.Entity<TblJibes5views>(entity =>
-            {
-                entity.ToTable("tblJIBES5Views");
-
-                entity.Property(e => e.Jibes5viewId).HasColumnName("JIBES5ViewId");
-
-                entity.Property(e => e.Modified).HasColumnType("datetime");
-
-                entity.Property(e => e.Name)
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Template).HasColumnType("image");
+                entity.Property(e => e.LastEditedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Quantity).HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.RmbcostPrice)
+                    .HasColumnName("RMBCostPrice")
+                    .HasColumnType("money");
+
+                entity.Property(e => e.UnitPrice).HasColumnType("money");
+
+                entity.Property(e => e.UsdcostPrice)
+                    .HasColumnName("USDCostPrice")
+                    .HasColumnType("money");
             });
 
             modelBuilder.Entity<TblJournalDetails>(entity =>
@@ -1341,6 +1234,8 @@ namespace Entities.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
+                entity.Property(e => e.CheckVoucherTypeId).HasDefaultValueSql("((1))");
+
                 entity.Property(e => e.ContactPerson)
                     .HasMaxLength(250)
                     .IsUnicode(false);
@@ -1359,6 +1254,8 @@ namespace Entities.Models
 
                 entity.Property(e => e.DateReleased).HasColumnType("datetime");
 
+                entity.Property(e => e.DateVoided).HasColumnType("datetime");
+
                 entity.Property(e => e.DepositSlipNo)
                     .HasMaxLength(50)
                     .IsUnicode(false);
@@ -1368,6 +1265,10 @@ namespace Entities.Models
                 entity.Property(e => e.DueDate).HasColumnType("datetime");
 
                 entity.Property(e => e.HasDeferred).HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.IsSystemGenerated)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.ModificationDate).HasColumnType("datetime");
 
@@ -1413,15 +1314,6 @@ namespace Entities.Models
                 entity.Property(e => e.Name)
                     .HasMaxLength(50)
                     .IsUnicode(false);
-            });
-
-            modelBuilder.Entity<TblLogs>(entity =>
-            {
-                entity.ToTable("tblLogs");
-
-                entity.Property(e => e.Date).HasColumnType("datetime");
-
-                entity.Property(e => e.Message).IsUnicode(false);
             });
 
             modelBuilder.Entity<TblMonths>(entity =>
@@ -1719,17 +1611,34 @@ namespace Entities.Models
                     .IsUnicode(false);
             });
 
-            modelBuilder.Entity<TblPriceCategory>(entity =>
+            modelBuilder.Entity<TblPaymentAdjustmentTypes>(entity =>
             {
-                entity.ToTable("tblPriceCategory");
+                entity.ToTable("tblPaymentAdjustmentTypes");
 
                 entity.Property(e => e.Active)
                     .IsRequired()
                     .HasDefaultValueSql("((1))");
 
-                entity.Property(e => e.Name)
+                entity.Property(e => e.Code)
                     .IsRequired()
                     .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CreationDate).HasColumnType("datetime");
+
+                entity.Property(e => e.ForAp).HasColumnName("ForAP");
+
+                entity.Property(e => e.ForAr).HasColumnName("ForAR");
+
+                entity.Property(e => e.LastEditedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Remarks)
+                    .HasMaxLength(500)
                     .IsUnicode(false);
             });
 
@@ -1846,6 +1755,10 @@ namespace Entities.Models
 
                 entity.Property(e => e.Discount).HasColumnType("money");
 
+                entity.Property(e => e.GrossAmount)
+                    .HasColumnType("money")
+                    .HasDefaultValueSql("((0))");
+
                 entity.Property(e => e.ReferenceNo)
                     .HasMaxLength(50)
                     .IsUnicode(false);
@@ -1857,15 +1770,34 @@ namespace Entities.Models
                 entity.Property(e => e.SubTotal).HasComputedColumnSql("([Qty]*[UnitPrice]-[Discount])");
 
                 entity.Property(e => e.UnitPrice).HasColumnType("money");
+
+                entity.Property(e => e.Vatamount)
+                    .HasColumnName("VATAmount")
+                    .HasColumnType("money")
+                    .HasDefaultValueSql("((0))");
             });
 
             modelBuilder.Entity<TblPurchaseReturns>(entity =>
             {
                 entity.ToTable("tblPurchaseReturns");
 
+                entity.Property(e => e.Amount)
+                    .HasColumnType("money")
+                    .HasDefaultValueSql("((0))");
+
                 entity.Property(e => e.CreationDate).HasColumnType("datetime");
 
                 entity.Property(e => e.Date).HasColumnType("datetime");
+
+                entity.Property(e => e.DateVoided).HasColumnType("datetime");
+
+                entity.Property(e => e.DiscountAmount)
+                    .HasColumnType("money")
+                    .HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.GrossAmount)
+                    .HasColumnType("money")
+                    .HasDefaultValueSql("((0))");
 
                 entity.Property(e => e.LastEditedDate).HasColumnType("datetime");
 
@@ -1881,6 +1813,13 @@ namespace Entities.Models
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.Property(e => e.Vatamount)
+                    .HasColumnName("VATAmount")
+                    .HasColumnType("money")
+                    .HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.Vatid).HasColumnName("VATId");
             });
 
             modelBuilder.Entity<TblRdo>(entity =>
@@ -1972,6 +1911,8 @@ namespace Entities.Models
 
                 entity.Property(e => e.Date).HasColumnType("datetime");
 
+                entity.Property(e => e.DateVoided).HasColumnType("datetime");
+
                 entity.Property(e => e.LastEditedDate).HasColumnType("datetime");
 
                 entity.Property(e => e.RefNo)
@@ -2034,6 +1975,8 @@ namespace Entities.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
+                entity.Property(e => e.GrossAmount).HasColumnType("money");
+
                 entity.Property(e => e.ItemId).HasColumnName("ItemID");
 
                 entity.Property(e => e.SalesInvoiceId).HasColumnName("SalesInvoiceID");
@@ -2044,7 +1987,30 @@ namespace Entities.Models
 
                 entity.Property(e => e.UnitPrice).HasColumnType("money");
 
+                entity.Property(e => e.Vatamount)
+                    .HasColumnName("VATAmount")
+                    .HasColumnType("money");
+
                 entity.Property(e => e.WarehouseId).HasColumnName("WarehouseID");
+            });
+
+            modelBuilder.Entity<TblSalesInvoicePaymentAdjustments>(entity =>
+            {
+                entity.ToTable("tblSalesInvoicePaymentAdjustments");
+
+                entity.Property(e => e.Amount).HasColumnType("money");
+
+                entity.Property(e => e.CreditMemoSourceNo)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CreditMemoSystemNo)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Remarks)
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<TblSalesInvoicePaymentDetails>(entity =>
@@ -2106,6 +2072,8 @@ namespace Entities.Models
 
                 entity.Property(e => e.Date).HasColumnType("datetime");
 
+                entity.Property(e => e.DateVoided).HasColumnType("datetime");
+
                 entity.Property(e => e.LastEditedDate).HasColumnType("datetime");
 
                 entity.Property(e => e.Mopid).HasColumnName("MOPId");
@@ -2140,7 +2108,7 @@ namespace Entities.Models
 
                 entity.Property(e => e.AmountDue)
                     .HasColumnType("money")
-                    .HasComputedColumnSql("([Amount]-[AmountPaid])");
+                    .HasComputedColumnSql("(isnull([Amount],(0))-(isnull([AmountPaid],(0))+isnull([ReturnAmount],(0))))");
 
                 entity.Property(e => e.AmountPaid)
                     .HasColumnType("money")
@@ -2160,9 +2128,15 @@ namespace Entities.Models
 
                 entity.Property(e => e.Date).HasColumnType("datetime");
 
+                entity.Property(e => e.DateVoided).HasColumnType("datetime");
+
+                entity.Property(e => e.DiscountAmount).HasColumnType("money");
+
                 entity.Property(e => e.FaxNo)
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.Property(e => e.GrossAmount).HasColumnType("money");
 
                 entity.Property(e => e.LastEditedById).HasColumnName("LastEditedByID");
 
@@ -2170,11 +2144,11 @@ namespace Entities.Models
 
                 entity.Property(e => e.Mopid).HasColumnName("MOPId");
 
-                entity.Property(e => e.PreparedById).HasColumnName("PreparedByID");
-
                 entity.Property(e => e.RefNo)
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.Property(e => e.ReturnAmount).HasColumnType("money");
 
                 entity.Property(e => e.SystemNo)
                     .IsRequired()
@@ -2187,9 +2161,11 @@ namespace Entities.Models
 
                 entity.Property(e => e.TermId).HasColumnName("TermID");
 
-                entity.Property(e => e.Uiselect)
-                    .HasColumnName("UISelect")
-                    .HasDefaultValueSql("((0))");
+                entity.Property(e => e.Vatamount)
+                    .HasColumnName("VATAmount")
+                    .HasColumnType("money");
+
+                entity.Property(e => e.Vatid).HasColumnName("VATId");
             });
 
             modelBuilder.Entity<TblSalesOrderDetails>(entity =>
@@ -2303,6 +2279,8 @@ namespace Entities.Models
                 entity.Property(e => e.CreationDate).HasColumnType("datetime");
 
                 entity.Property(e => e.Date).HasColumnType("datetime");
+
+                entity.Property(e => e.DateVoided).HasColumnType("datetime");
 
                 entity.Property(e => e.LastEditedDate).HasColumnType("datetime");
 
@@ -2509,34 +2487,6 @@ namespace Entities.Models
 
                 entity.Property(e => e.NumberFormat)
                     .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-            });
-
-            modelBuilder.Entity<TblSessionInformation>(entity =>
-            {
-                entity.ToTable("tblSessionInformation");
-
-                entity.HasIndex(e => e.Spid)
-                    .HasName("UX_tblSessionInformation_SPID")
-                    .IsUnique();
-
-                entity.Property(e => e.Date).HasColumnType("datetime");
-
-                entity.Property(e => e.LogIn).HasColumnType("datetime");
-
-                entity.Property(e => e.Spid).HasColumnName("SPID");
-            });
-
-            modelBuilder.Entity<TblShortcuts>(entity =>
-            {
-                entity.ToTable("tblShortcuts");
-
-                entity.Property(e => e.Name)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.ViewName)
                     .HasMaxLength(50)
                     .IsUnicode(false);
             });
@@ -2796,6 +2746,44 @@ namespace Entities.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.TelNo)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<TblVendorCreditMemo>(entity =>
+            {
+                entity.ToTable("tblVendorCreditMemo");
+
+                entity.Property(e => e.Amount).HasColumnType("money");
+
+                entity.Property(e => e.AmountApplied).HasColumnType("money");
+
+                entity.Property(e => e.AmountAvailable)
+                    .HasColumnType("money")
+                    .HasComputedColumnSql("([Amount]-[AmountApplied])");
+
+                entity.Property(e => e.Date).HasColumnType("datetime");
+
+                entity.Property(e => e.DateCreated).HasColumnType("datetime");
+
+                entity.Property(e => e.DateForfeited).HasColumnType("datetime");
+
+                entity.Property(e => e.LastEditedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.ReferenceNo)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Remarks)
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.SourceSystemNo)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.SystemNo)
+                    .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
             });

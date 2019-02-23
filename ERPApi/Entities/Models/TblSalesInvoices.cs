@@ -18,8 +18,6 @@ namespace Entities.Models
         public int? Mopid { get; set; }
         public decimal Amount { get; set; }
         public string Comments { get; set; }
-        public int? PreparedById { get; set; }
-        public int? ApprovedById { get; set; }
         public bool Closed { get; set; }
         public bool Void { get; set; }
         public int? CreatedById { get; set; }
@@ -28,7 +26,14 @@ namespace Entities.Models
         public DateTime? LastEditedDate { get; set; }
         public int? CompanyId { get; set; }
         public decimal? AmountPaid { get; set; }
+        public int? JournalId { get; set; }
+        public int? Vatid { get; set; }
+        public decimal? GrossAmount { get; set; }
+        public decimal? Vatamount { get; set; }
+        public decimal? DiscountAmount { get; set; }
+        public DateTime? DateVoided { get; set; }
+        public int? VoidedById { get; set; }
+        public decimal ReturnAmount { get; set; }
         public decimal? AmountDue { get; set; }
-        public bool? Uiselect { get; set; }
     }
 }

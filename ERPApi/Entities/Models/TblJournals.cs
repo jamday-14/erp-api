@@ -51,5 +51,9 @@ namespace Entities.Models
         public DateTime? SearchToDate { get; set; }
         public double? AdminFeePercentage { get; set; }
         public string ContactPerson { get; set; }
+        public int CheckVoucherTypeId { get; set; }
+        public DateTime? DateVoided { get; set; }
+        public int? VoidedById { get; set; }
+        public bool? IsSystemGenerated { get; set; }
     }
 }

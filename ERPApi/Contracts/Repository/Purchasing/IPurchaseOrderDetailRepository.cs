@@ -7,5 +7,7 @@ namespace Contracts
     {
         IQueryable<TblPurchaseOrderDetails> GetByOrderId(int id);
         IQueryable<TblPurchaseOrderDetails> GetByPendingReceivingReport(int id);
+        TblPurchaseOrderDetails PostBill(int podetailId, int poid, double qty);
+        TblPurchaseOrderDetails PostReceipt(int podetailId, int poid, double? newQty, double? originalQty);
     }
 }

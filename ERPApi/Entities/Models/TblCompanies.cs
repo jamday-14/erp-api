@@ -35,5 +35,8 @@ namespace Entities.Models
         public string RegisteredAddress1 { get; set; }
         public string RegisteredAddress2 { get; set; }
         public string RegisteredAddress { get; set; }
+        public int? CustomerOverPaymentAccountId { get; set; }
+        public int? CustomerCreditMemoAccountId { get; set; }
+        public int? VendorCreditMemoAccountId { get; set; }
     }
 }

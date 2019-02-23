@@ -8,5 +8,6 @@ namespace Contracts
         IQueryable<TblBills> GetByVendor(int vendorId);
         IQueryable<TblBills> GetAvailableByVendor(int vendorId);
         IQueryable<TblBills> GetForPaymentByVendor(int vendorId);
+        void DeductAmount(int referenceId, decimal subTotal);
     }
 }

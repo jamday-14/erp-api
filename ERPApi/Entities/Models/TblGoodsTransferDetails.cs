@@ -15,5 +15,6 @@ namespace Entities.Models
         public int? UnitId { get; set; }
         public int? ReasonId { get; set; }
         public string Remarks { get; set; }
+        public double Closed { get; set; }
     }
 }

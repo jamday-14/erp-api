@@ -7,5 +7,6 @@ namespace Contracts
     {
         IQueryable<TblBillDetails> GetAvailableByBillId(int id);
         IQueryable<TblBillDetails> GetByBillId(int id);
+        TblBillDetails Return(int referenceDetailId, int ReferenceId, double qty);
     }
 }

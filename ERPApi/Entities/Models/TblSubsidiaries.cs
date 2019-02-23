@@ -23,5 +23,6 @@ namespace Entities.Models
         public string NameTemp { get; set; }
         public double? AdminFeePercentage { get; set; }
         public string ContactPerson { get; set; }
+        public int? SourceId { get; set; }
     }
 }

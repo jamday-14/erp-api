@@ -26,5 +26,7 @@ namespace Entities.Models
         public int? LastEditedById { get; set; }
         public DateTime? LastEditedDate { get; set; }
         public int? CompanyId { get; set; }
+        public DateTime? DateVoided { get; set; }
+        public int? VoidedById { get; set; }
     }
 }

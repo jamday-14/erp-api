@@ -20,5 +20,8 @@ namespace Entities.Models
         public int? CompanyId { get; set; }
         public int? PreparedById { get; set; }
         public int? ApprovedById { get; set; }
+        public DateTime? DateVoided { get; set; }
+        public int? VoidedById { get; set; }
+        public int? JournalId { get; set; }
     }
 }

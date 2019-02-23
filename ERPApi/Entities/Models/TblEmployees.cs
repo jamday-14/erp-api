@@ -30,5 +30,6 @@ namespace Entities.Models
         public DateTime? LastEditedDate { get; set; }
         public int? CompanyId { get; set; }
         public bool IsSalesPerson { get; set; }
+        public int? SubsidiaryId { get; set; }
     }
 }

@@ -41,5 +41,13 @@ namespace Services
 
             return query.Distinct().OrderByDescending(x => x.Date);
         }
+
+        public void DeductAmount(int referenceId, decimal subTotal)
+        {
+            var data = RepositoryContext.TblBills.FirstOrDefault(x => x.Id == referenceId);
+
+            data.Amount -= subTotal;
+
+        }
     }
 }

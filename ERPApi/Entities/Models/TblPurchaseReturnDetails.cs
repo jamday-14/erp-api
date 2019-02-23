@@ -20,5 +20,7 @@ namespace Entities.Models
         public int? ReferenceDetailId { get; set; }
         public string ReferenceNo { get; set; }
         public int? ReferenceTypeId { get; set; }
+        public decimal? GrossAmount { get; set; }
+        public decimal? Vatamount { get; set; }
     }
 }

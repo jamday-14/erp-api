@@ -21,5 +21,14 @@ namespace Entities.Models
         public int? PreparedById { get; set; }
         public int? ApprovedById { get; set; }
         public int? CurrencyId { get; set; }
+        public DateTime? DateVoided { get; set; }
+        public int? VoidedById { get; set; }
+        public int? BranchId { get; set; }
+        public int? JournalId { get; set; }
+        public int? Vatid { get; set; }
+        public decimal? Amount { get; set; }
+        public decimal? Vatamount { get; set; }
+        public decimal? GrossAmount { get; set; }
+        public decimal? DiscountAmount { get; set; }
     }
 }

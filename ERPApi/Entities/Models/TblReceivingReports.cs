@@ -28,5 +28,7 @@ namespace Entities.Models
         public decimal? AmountPaid { get; set; }
         public decimal? AmountDue { get; set; }
         public int? CurrencyId { get; set; }
+        public DateTime? DateVoided { get; set; }
+        public int? VoidedById { get; set; }
     }
 }

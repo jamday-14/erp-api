@@ -21,5 +21,14 @@ namespace Services
             return RepositoryContext.TblBillDetails.Where(x => x.BillId == id)
               .OrderBy(x => x.RrdetailId).ThenBy(x => x.Id);
         }
+
+        public TblBillDetails Return(int referenceDetailId, int referenceId, double qty)
+        {
+            var siDetail = RepositoryContext.TblBillDetails.Where(x => x.Id == referenceDetailId && x.BillId == referenceId).FirstOrDefault();
+            siDetail.QtyReturn += qty;
+            siDetail.Closed = siDetail.Qty - siDetail.QtyReturn == 0;
+
+            return siDetail;
+        }
     }
 }

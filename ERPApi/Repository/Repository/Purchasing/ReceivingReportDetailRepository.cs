@@ -22,5 +22,33 @@ namespace Services
             return RepositoryContext.TblReceivingReportDetails.Where(x => x.ReceivingReportId == id)
                 .OrderBy(x => x.PodetailId).ThenBy(x => x.Id);
         }
+
+        public TblReceivingReportDetails PostBill(int rrdetailId, int rrid, double? newQty, double? originalQty)
+        {
+            TblReceivingReportDetails detail = Find(rrdetailId, rrid);
+
+            if (originalQty.HasValue)
+                detail.QtyBill -= originalQty.Value;
+            if (newQty.HasValue)
+                detail.QtyBill += newQty.Value;
+
+            detail.Closed = detail.Qty - (detail.QtyBill + detail.QtyReturn) == 0;
+
+            return detail;
+        }
+
+        public TblReceivingReportDetails Return(int rrdetailId, int rrid, double qty)
+        {
+            TblReceivingReportDetails detail = Find(rrdetailId, rrid);
+            detail.QtyReturn += qty;
+            detail.Closed = detail.Qty - (detail.QtyBill + detail.QtyReturn) == 0;
+
+            return detail;
+        }
+
+        private TblReceivingReportDetails Find(int rrdetailId, int rrid)
+        {
+            return RepositoryContext.TblReceivingReportDetails.Where(x => x.Id == rrdetailId && x.ReceivingReportId == rrid).FirstOrDefault();
+        }
     }
 }

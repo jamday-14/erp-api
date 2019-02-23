@@ -20,5 +20,7 @@ namespace Entities.Models
         public int? DrdetailId { get; set; }
         public string DrrefNo { get; set; }
         public bool Closed { get; set; }
+        public decimal? GrossAmount { get; set; }
+        public decimal? Vatamount { get; set; }
     }
 }
