@@ -38,5 +38,12 @@ namespace Entities.Models
         public int? CustomerOverPaymentAccountId { get; set; }
         public int? CustomerCreditMemoAccountId { get; set; }
         public int? VendorCreditMemoAccountId { get; set; }
+        public int? IncomeAccountId { get; set; }
+        public int? SalesDiscountAccountId { get; set; }
+        public int? SalesReturnAccountId { get; set; }
+        public int? CostOfSalesAccountId { get; set; }
+        public int? PurchaseAccountId { get; set; }
+        public int? PurchaseDiscountAccountId { get; set; }
+        public int? PurchaseReturnAccountId { get; set; }
     }
 }
