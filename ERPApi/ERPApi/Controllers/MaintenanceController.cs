@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Contracts;
 using Entities;
+using Entities.ExtendedModels;
 using Entities.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -179,27 +180,27 @@ namespace ERPApi.Controllers
         #region Item
         [HttpGet, Route("items")]
         [ActionName("Maintenance.Item")]
-        [Produces(typeof(IList<TblItem>))]
+        [Produces(typeof(IList<Item>))]
         public ActionResult GetItems()
         {
             var records = _service.ItemRepo.FindAll();
 
-            return Ok(records);
+            return Ok(_mapper.Map<IList<Item>>(records));
         }
 
         [HttpGet, Route("items/{id:int}")]
         [ActionName("Item.Open")]
-        [Produces(typeof(TblItem))]
+        [Produces(typeof(Item))]
         public ActionResult GetItem(int id)
         {
             var record = _service.ItemRepo.FindByCondition(x => x.Id == id).FirstOrDefault();
-            return Ok(record);
+            return Ok(_mapper.Map<Item>(record));
         }
 
         [HttpPost, Route("items")]
         [ActionName("Item.New")]
         [ProducesResponseType(201)]
-        public ActionResult PostItem(TblItem request)
+        public ActionResult PostItem(Item request)
         {
             request.CreatedById = Statics.LoggedInUser.userId;
             request.LastEditedById = Statics.LoggedInUser.userId;
@@ -207,10 +208,20 @@ namespace ERPApi.Controllers
             request.LastEditedDate = System.DateTime.UtcNow;
             request.Active = true;
 
-            _service.ItemRepo.Create(request);
+            _service.ItemRepo.Create(_mapper.Map<TblItems>(request));
             _service.Save();
 
             return Created("maintenance/items", new { id = request.Id });
+        }
+
+        [HttpGet, Route("vendors/{id}/items")]
+        [ActionName("Maintenance.Item")]
+        [Produces(typeof(IList<VendorItem>))]
+        public ActionResult GetVendorItems(int vendorId)
+        {
+            var records = _service.ItemRepo.FindByVendor(vendorId);
+
+            return Ok(records);
         }
         #endregion
 
@@ -457,7 +468,7 @@ namespace ERPApi.Controllers
         public ActionResult GetAccountTypes()
         {
             var records = _service.AccountTypeRepo.FindAll()
-                .OrderBy(x=> x.Order);
+                .OrderBy(x => x.Order);
 
             return Ok(records);
         }

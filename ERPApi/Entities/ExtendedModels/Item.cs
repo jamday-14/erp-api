@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 
-namespace Entities.Models
+namespace Entities.ExtendedModels
 {
-    public partial class TblItem
+    public class Item
     {
         public int Id { get; set; }
         public string ItemCode { get; set; }

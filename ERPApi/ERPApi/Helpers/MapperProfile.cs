@@ -13,6 +13,8 @@ namespace ERPApi.Helpers
             CreateMap<UserGroup, TblSecurityGroups>();
             CreateMap<Customer, TblCustomers>();
             CreateMap<CustomerDetail, TblCustomers>();
+            CreateMap<TblItems, Item>();
+            CreateMap<Item, TblItems>();
         }
     }
 }

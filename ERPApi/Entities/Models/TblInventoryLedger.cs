@@ -14,5 +14,7 @@ namespace Entities.Models
         public decimal TotalInCost { get; set; }
         public decimal TotalOutCost { get; set; }
         public decimal EndTotalCost { get; set; }
+
+        public TblItems Item { get; set; }
     }
 }

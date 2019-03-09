@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
 using Contracts;
 using Entities;
+using Entities.ExtendedModels;
 using Entities.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -111,13 +114,33 @@ namespace ERPApi.Controllers
         }
 
         [HttpGet, Route("orders/{id:int}/details/pending")]
-        [ActionName("Purchasing.PurchaseOrder")]
-        [Produces(typeof(IList<TblPurchaseOrderDetails>))]
+        //[ActionName("Purchasing.PurchaseOrder")]
+        [AllowAnonymous()]
+        [Produces(typeof(IList<PurchaseOrderDetails>))]
         public ActionResult GetPurchaseOrderDetailsPendingRR(int id)
         {
-            var records = _purchasingService.PurchaseOrderDetailRepo.GetByPendingReceivingReport(id).ToList();
+            var records = _purchasingService.PurchaseOrderDetailRepo.GetByPendingReceivingReport(id);
 
-            return Ok(records);
+            var results = records.Include(x => x.Item).Include(x=> x.Item.TblInventoryLedger).ToList()
+                .Select(x => new PurchaseOrderDetails
+                {
+                    Id = x.Id,
+                    Closed = x.Closed,
+                    Discount = x.Discount,
+                    ItemId = x.ItemId,
+                    PurchaseOrderId = x.PurchaseOrderId,
+                    Qty = x.Qty,
+                    QtyBilled = x.QtyBilled,
+                    QtyLeft = x.QtyLeft,
+                    QtyOnHand = x.Item.TblInventoryLedger.OrderByDescending(y => y.Date).DefaultIfEmpty(new TblInventoryLedger()).First().EndQty,
+                    QtyReceived = x.QtyReceived,
+                    Remarks = x.Remarks,
+                    SubTotal = x.SubTotal,
+                    UnitId = x.UnitId,
+                    UnitPrice = x.UnitPrice
+                });
+
+            return Ok(results);
         }
 
         [HttpDelete, Route("orders/{poId:int}/details/{podId:int}")]
@@ -636,7 +659,7 @@ namespace ERPApi.Controllers
                 var siDetail = _purchasingService.BillDetailRepo.Return(request.ReferenceDetailId.Value, request.ReferenceId.Value, request.Qty);
 
                 // TODO: Add Return Amount field on Bill Repo and add the subtotal
-                //_purchasingService.BillRepo.DeductAmount(request.ReferenceId.Value, Convert.ToDecimal(request.SubTotal.Value));
+                _purchasingService.BillRepo.DeductAmount(request.ReferenceId.Value, Convert.ToDecimal(request.SubTotal.Value));
 
                 if (siDetail.RrdetailId != null && siDetail.Rrid != null)
                 {

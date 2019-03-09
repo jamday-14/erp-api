@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Entities.Models
+﻿namespace Entities.ExtendedModels
 {
-    public partial class TblPurchaseOrderDetails
+    public class PurchaseOrderDetails
     {
         public int Id { get; set; }
         public int PurchaseOrderId { get; set; }
@@ -19,7 +16,5 @@ namespace Entities.Models
         public double? SubTotal { get; set; }
         public string Remarks { get; set; }
         public bool Closed { get; set; }
-
-        public TblItems Item { get; set; }
     }
 }

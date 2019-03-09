@@ -1014,6 +1014,12 @@ namespace Entities.Models
                 entity.Property(e => e.TotalInCost).HasColumnType("money");
 
                 entity.Property(e => e.TotalOutCost).HasColumnType("money");
+
+                entity.HasOne(d => d.Item)
+                    .WithMany(p => p.TblInventoryLedger)
+                    .HasForeignKey(d => d.ItemId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_tblInventoryLedger_tblItems");
             });
 
             modelBuilder.Entity<TblItemEntries>(entity =>
@@ -1102,6 +1108,8 @@ namespace Entities.Models
             {
                 entity.ToTable("tblItems");
 
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+
                 entity.Property(e => e.CostPrice).HasColumnType("money");
 
                 entity.Property(e => e.CreationDate).HasColumnType("datetime");
@@ -1130,6 +1138,12 @@ namespace Entities.Models
                 entity.Property(e => e.UsdcostPrice)
                     .HasColumnName("USDCostPrice")
                     .HasColumnType("money");
+
+                entity.HasOne(d => d.IdNavigation)
+                    .WithOne(p => p.InverseIdNavigation)
+                    .HasForeignKey<TblItems>(d => d.Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_tblItems_tblItems");
             });
 
             modelBuilder.Entity<TblJournalDetails>(entity =>
@@ -1695,6 +1709,12 @@ namespace Entities.Models
                 entity.Property(e => e.SubTotal).HasComputedColumnSql("([Qty]*[UnitPrice]-[Discount])");
 
                 entity.Property(e => e.UnitPrice).HasColumnType("money");
+
+                entity.HasOne(d => d.Item)
+                    .WithMany(p => p.TblPurchaseOrderDetails)
+                    .HasForeignKey(d => d.ItemId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_tblPurchaseOrderDetails_tblItems");
             });
 
             modelBuilder.Entity<TblPurchaseOrders>(entity =>

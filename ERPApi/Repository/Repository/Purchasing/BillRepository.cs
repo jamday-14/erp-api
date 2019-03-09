@@ -46,7 +46,7 @@ namespace Services
         {
             var data = RepositoryContext.TblBills.FirstOrDefault(x => x.Id == referenceId);
 
-            data.Amount -= subTotal;
+            data.ReturnAmount += subTotal;
 
         }
     }
