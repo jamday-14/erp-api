@@ -28,6 +28,7 @@ namespace Services
         private IVendorRepository _vendorRepo;
         private IWarehouseRepository _warehouseRepo;
         private IAccountTypeRepository _accountTypeRepo;
+        private IVendorItemRepository _vendorItemRepo;
         #endregion
 
         public MaintenanceService(ERPContext repositoryContext, IMapper mapper)
@@ -214,6 +215,19 @@ namespace Services
                     _accountTypeRepo = new AccountTypeRepository(_repoContext);
                 }
                 return _accountTypeRepo;
+            }
+        }
+
+        public IVendorItemRepository VendorItemRepo
+        {
+            get
+            {
+                if(_vendorItemRepo == null)
+                {
+                    _vendorItemRepo = new VendorItemRepository(_repoContext);
+                }
+
+                return _vendorItemRepo;
             }
         }
         #endregion

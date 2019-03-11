@@ -20,6 +20,7 @@ namespace Contracts
         IVendorRepository VendorRepo { get; }
         IWarehouseRepository WarehouseRepo { get; }
         IAccountTypeRepository AccountTypeRepo { get; }
+        IVendorItemRepository VendorItemRepo { get; }
 
         IList<Customer> GetCustomers();
 

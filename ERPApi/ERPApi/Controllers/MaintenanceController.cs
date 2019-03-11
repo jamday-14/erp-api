@@ -223,6 +223,35 @@ namespace ERPApi.Controllers
 
             return Ok(records);
         }
+
+        [HttpPost, Route("vendors/{id}/items")]
+        [ActionName("Maintenance.Item")]
+        [ProducesResponseType(201)]
+        public ActionResult PostVendorItems(NewVendorItem request)
+        {
+            _service.VendorItemRepo.Create(_mapper.Map<TblVendorItems>(request));
+            _service.Save();
+
+            return Created("maintenance/{id}/items", new { id = request.VendorId });
+        }
+
+        [HttpGet, Route("items/category")]
+        [ActionName("Maintenance.Item")]
+        [AllowAnonymous]
+        [Produces(typeof(IList<Item>))]
+        public ActionResult GetItemsByCategory(bool? isPurchased, bool? isForSale)
+        {
+            IEnumerable<TblItems> records = new List<TblItems>();
+
+            if (isPurchased.HasValue && isPurchased.Value)
+                records = _service.ItemRepo.FindByCondition(x => x.Ipurchased && x.Active && x.CompanyId == Statics.LoggedInUser.companyId);
+
+            if (isForSale.HasValue && isForSale.Value)
+                records = _service.ItemRepo.FindByCondition(x => x.IsForSale && x.Active && x.CompanyId == Statics.LoggedInUser.companyId);
+
+            return Ok(_mapper.Map<IList<Item>>(records));
+        }
+
         #endregion
 
         #region Mode of Payment
