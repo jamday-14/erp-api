@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2026
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERPApi", "ERPApi\ERPApi.csproj", "{E139DED9-C9DF-4507-968A-C12C106F2C6F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ERPApi", "ERPApi\ERPApi.csproj", "{E139DED9-C9DF-4507-968A-C12C106F2C6F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entities", "Entities\Entities.csproj", "{BDE65C58-37AD-4079-8509-14412C232194}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities", "Entities\Entities.csproj", "{BDE65C58-37AD-4079-8509-14412C232194}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts", "Contracts\Contracts.csproj", "{BC6321E8-FA9F-4F50-A4F2-4CE64E3E61F6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contracts", "Contracts\Contracts.csproj", "{BC6321E8-FA9F-4F50-A4F2-4CE64E3E61F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoggerService", "LoggerService\LoggerService.csproj", "{F43686E0-6237-4ECD-AF11-9E908803A1FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoggerService", "LoggerService\LoggerService.csproj", "{F43686E0-6237-4ECD-AF11-9E908803A1FF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Repository\Services.csproj", "{9BF44200-2C42-4C54-81E0-030EDD091B2E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{F43686E0-6237-4ECD-AF11-9E908803A1FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F43686E0-6237-4ECD-AF11-9E908803A1FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F43686E0-6237-4ECD-AF11-9E908803A1FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BF44200-2C42-4C54-81E0-030EDD091B2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BF44200-2C42-4C54-81E0-030EDD091B2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BF44200-2C42-4C54-81E0-030EDD091B2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BF44200-2C42-4C54-81E0-030EDD091B2E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

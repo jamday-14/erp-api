@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ERPApi.Controllers
@@ -12,20 +10,27 @@ namespace ERPApi.Controllers
     public class ValuesController : ControllerBase
     {
         private ILoggerManager _logger;
+        private IUserService _repo;
 
-        public ValuesController(ILoggerManager logger)
+        public ValuesController(ILoggerManager logger, IUserService repo)
         {
             _logger = logger;
+            _repo = repo;
         }
 
         // GET api/values
-        [HttpGet]
+        //Sample Action Name configured in the database
+        [HttpGet, ActionName("Maintenance.Customer")]
+        [Authorize]
         public ActionResult<IEnumerable<string>> Get()
         {
-            _logger.LogInfo("Here is info message from our values controller.");
-            _logger.LogDebug("Here is debug message from our values controller.");
-            _logger.LogWarn("Here is warn message from our values controller.");
-            _logger.LogError("Here is error message from our values controller.");
+            var password = CryptoHelper.Crypto.HashPassword("adminPassword1");
+            //_logger.LogInfo("Here is info message from our values controller.");
+            //_logger.LogDebug("Here is debug message from our values controller.");
+            //_logger.LogWarn("Here is warn message from our values controller.");
+            //_logger.LogError("Here is error message from our values controller.");
+
+            var companies = _repo.CompanyRepo.FindAll();
 
             return new string[] { "value1", "value2" };
         }

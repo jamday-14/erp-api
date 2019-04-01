@@ -1,4 +1,6 @@
-﻿using ERPApi.Extensions;
+﻿using AutoMapper;
+using ERPApi.Extensions;
+using ERPApi.Helpers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -30,7 +32,20 @@ namespace ERPApi
 
             services.ConfigureLoggerService();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.ConfigureDBContext(Configuration);
+
+            services.ConfigureBusinessService();
+
+            services.ConfigureModelValidation();
+
+            services.ConfigureAuthentication(Configuration);
+
+            services.AddAutoMapper(cfg => new MapperConfiguration(mc => { mc.AddProfile(new MapperProfile()); }));
+
+            services.ConfigureSwagger();
+
+            services.AddMvc(options => options.Filters.Add(typeof(AuthorizationAttribute)))
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,7 +60,15 @@ namespace ERPApi
                 app.UseHsts();
             }
 
+            app.ConfigureCustomExceptionMiddleware();
+
+            app.UseAuthentication();
+
             app.UseHttpsRedirection();
+
+            app.UseSwagger();
+
+            app.ConfigureSwaggerUI();
 
             app.UseMvc();
         }
