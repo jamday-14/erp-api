@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Contracts;
-using Entities;
 using Entities.ExtendedModels;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +18,8 @@ namespace Services
 
             var result = RepositoryContext.TblItems
                    .Include(x => x.TblInventoryLedger)
+                   .Include(x => x.TblVendorItems)
+                   .Where(x=> x.Ipurchased && x.Active)
                    .ToList()
                    .Select(z => new VendorItem
                    {
@@ -27,7 +28,8 @@ namespace Services
                        QtyOnHand = z.TblInventoryLedger.OrderByDescending(y => y.Date).DefaultIfEmpty(new TblInventoryLedger()).First().EndQty,
                        Description = z.Description,
                        UnitId = z.UnitId,
-                       UnitPrice = z.UnitPrice
+                       UnitPrice = z.UnitPrice,
+                       CostPrice = z.TblVendorItems.Where(x => x.VendorId == vendorId).DefaultIfEmpty(new TblVendorItems { CostPrice = z.CostPrice }).First().CostPrice
                    });
 
             return result;

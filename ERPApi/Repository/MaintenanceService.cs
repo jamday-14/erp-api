@@ -222,7 +222,7 @@ namespace Services
         {
             get
             {
-                if(_vendorItemRepo == null)
+                if (_vendorItemRepo == null)
                 {
                     _vendorItemRepo = new VendorItemRepository(_repoContext);
                 }
@@ -242,6 +242,14 @@ namespace Services
         public void Save()
         {
             _repoContext.SaveChanges();
+        }
+
+        public void SaveVendorItem(int vendorId, int itemId, decimal costPrice)
+        {
+            var vendorItem = VendorItemRepo.Get(vendorId, itemId);
+            if (vendorItem != null)
+                vendorItem.CostPrice = costPrice;
+            else VendorItemRepo.Create(new TblVendorItems { ItemId = itemId, CostPrice = costPrice, VendorId = vendorId });
         }
     }
 }

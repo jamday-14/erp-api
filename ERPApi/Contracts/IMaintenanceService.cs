@@ -25,5 +25,6 @@ namespace Contracts
         IList<Customer> GetCustomers();
 
         void Save();
+        void SaveVendorItem(int vendorId, int itemId, decimal costPrice);
     }
 }

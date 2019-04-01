@@ -214,12 +214,13 @@ namespace ERPApi.Controllers
             return Created("maintenance/items", new { id = request.Id });
         }
 
-        [HttpGet, Route("vendors/{id}/items")]
-        [ActionName("Maintenance.Item")]
+        [HttpGet, Route("vendors/{vendorId}/items")]
+        //[ActionName("Maintenance.Item")]
+        [AllowAnonymous]
         [Produces(typeof(IList<VendorItem>))]
-        public ActionResult GetVendorItems(int vendorId)
+        public ActionResult GetVendorItems(int? vendorId)
         {
-            var records = _service.ItemRepo.FindByVendor(vendorId);
+            var records = _service.ItemRepo.FindByVendor(vendorId.Value);
 
             return Ok(records);
         }

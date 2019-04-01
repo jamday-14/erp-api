@@ -2819,6 +2819,18 @@ namespace Entities.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.VendorId).HasColumnName("VendorID");
+
+                entity.HasOne(d => d.Item)
+                    .WithMany(p => p.TblVendorItems)
+                    .HasForeignKey(d => d.ItemId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_tblVendorItems_tblItems");
+
+                entity.HasOne(d => d.Vendor)
+                    .WithMany(p => p.TblVendorItems)
+                    .HasForeignKey(d => d.VendorId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_tblVendorItems_tblVendor");
             });
 
             modelBuilder.Entity<TblWarehouseInventoryLedger>(entity =>

@@ -19,17 +19,20 @@ namespace ERPApi.Controllers
         private ILoggerManager _logger;
         private IPurchasingService _purchasingService;
         private IInventoryService _inventoryService;
+        private IMaintenanceService _maintenanceService;
         private IMapper _mapper;
 
         public PurchasingController(
             ILoggerManager logger,
             IPurchasingService purchasingService,
             IInventoryService inventoryService,
+            IMaintenanceService maintenanceService,
             IMapper mapper)
         {
             _logger = logger;
             _purchasingService = purchasingService;
             _inventoryService = inventoryService;
+            _maintenanceService = maintenanceService;
             _mapper = mapper;
         }
 
@@ -88,6 +91,11 @@ namespace ERPApi.Controllers
             request.Closed = false;
 
             _purchasingService.PurchaseOrderDetailRepo.Create(request);
+
+            var order = _purchasingService.PurchaseOrderRepo.FindByCondition(x => x.Id == request.PurchaseOrderId).FirstOrDefault();
+
+            _maintenanceService.SaveVendorItem(order.VendorId, request.ItemId, request.UnitPrice);
+
             _purchasingService.Save();
 
             return Created($"purchasing/orders/{request.PurchaseOrderId}/{request.Id}", new { id = request.Id });

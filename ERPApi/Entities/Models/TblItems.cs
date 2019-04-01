@@ -9,6 +9,7 @@ namespace Entities.Models
         {
             TblInventoryLedger = new HashSet<TblInventoryLedger>();
             TblPurchaseOrderDetails = new HashSet<TblPurchaseOrderDetails>();
+            TblVendorItems = new HashSet<TblVendorItems>();
         }
 
         public int Id { get; set; }
@@ -35,5 +36,6 @@ namespace Entities.Models
         public TblItems InverseIdNavigation { get; set; }
         public ICollection<TblInventoryLedger> TblInventoryLedger { get; set; }
         public ICollection<TblPurchaseOrderDetails> TblPurchaseOrderDetails { get; set; }
+        public ICollection<TblVendorItems> TblVendorItems { get; set; }
     }
 }

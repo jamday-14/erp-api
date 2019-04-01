@@ -10,5 +10,8 @@ namespace Entities.Models
         public int ItemId { get; set; }
         public decimal CostPrice { get; set; }
         public string Remarks { get; set; }
+
+        public TblItems Item { get; set; }
+        public TblVendor Vendor { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Contracts;
 using Entities.Models;
+using System.Linq;
 
 namespace Services
 {
@@ -7,6 +8,11 @@ namespace Services
     {
         public VendorItemRepository(ERPContext repositoryContext) : base(repositoryContext)
         {
+        }
+
+        public TblVendorItems Get(int vendorId, int itemId)
+        {
+            return RepositoryContext.TblVendorItems.Where(x => x.VendorId == vendorId && x.ItemId == itemId).FirstOrDefault();
         }
     }
 }

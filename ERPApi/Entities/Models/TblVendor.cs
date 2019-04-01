@@ -5,6 +5,11 @@ namespace Entities.Models
 {
     public partial class TblVendor
     {
+        public TblVendor()
+        {
+            TblVendorItems = new HashSet<TblVendorItems>();
+        }
+
         public int Id { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
@@ -18,5 +23,7 @@ namespace Entities.Models
         public DateTime? LastEditedDate { get; set; }
         public int? CompanyId { get; set; }
         public int? CurrencyId { get; set; }
+
+        public ICollection<TblVendorItems> TblVendorItems { get; set; }
     }
 }

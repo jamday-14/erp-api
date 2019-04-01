@@ -39,7 +39,7 @@ namespace ERPApi.Helpers
             return context.Response.WriteAsync(new ErrorDetails()
             {
                 StatusCode = context.Response.StatusCode,
-                Message = $"Internal Server Error. {exception.InnerException} \n {exception.StackTrace}"
+                Message = $"Internal Server Error. {exception.Message} \n {exception.InnerException} \n {exception.StackTrace}"
             }.ToString());
         }
     }
